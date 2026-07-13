@@ -489,8 +489,8 @@ function sendOrder() {
         salesRepresentative: {
             telegramId: telegramUser?.id ?? null,
             username: telegramUser?.username ?? null,
-            firstName: telegramUser?.first_name ?? "Тестовый",
-            lastName: telegramUser?.last_name ?? "пользователь"
+            firstName: telegramUser?.first_name ?? "Не указан",
+            lastName: telegramUser?.last_name ?? ""
         },
 
         items: state.cart.map((item) => ({
@@ -511,7 +511,14 @@ function sendOrder() {
     console.log("Заказ:", order);
     console.log("JSON:", json);
 
-    if (!telegram || !telegram.initData) {
+    /*
+     * При обычном открытии через браузер
+     * telegram.platform обычно равен "unknown".
+     */
+    const openedOutsideTelegram =
+        !telegram || telegram.platform === "unknown";
+
+    if (openedOutsideTelegram) {
         showOrderForBrowserTesting(json);
         return;
     }
@@ -521,16 +528,20 @@ function sendOrder() {
 
         state.cart = [];
         saveCart();
+        renderCart();
+        renderProducts();
+
+        elements.orderComment.value = "";
 
         triggerHaptic("success");
-
-        /*
-         * Telegram обычно закрывает Mini App после sendData.
-         * Поэтому дополнительный close() не обязателен.
-         */
     } catch (error) {
-        console.error("Ошибка отправки:", error);
-        showToast("Не удалось отправить заказ", "error");
+        console.error("Ошибка отправки заказа:", error);
+
+        showToast(
+            "Не удалось отправить заказ",
+            "error"
+        );
+
         triggerHaptic("error");
     }
 }

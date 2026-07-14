@@ -1209,8 +1209,6 @@ function triggerHaptic(type) {
 
 let toastTimer;
 
-let toastTimer;
-
 function showToast(message, type = "") {
     clearTimeout(toastTimer);
 

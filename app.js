@@ -609,6 +609,7 @@ function addToCart(
     saveCart();
     renderCart();
     renderProducts();
+    updateSummary();
 
     triggerHaptic("success");
 
@@ -618,7 +619,7 @@ function addToCart(
             : "в заказ";
 
     showToast(
-        `${product.name} добавлен ${operationText}`,
+        `${product.name} добавлено ${operationText}`,
         "success"
     );
 }
@@ -1205,6 +1206,8 @@ function triggerHaptic(type) {
 
     telegram.HapticFeedback.impactOccurred("light");
 }
+
+let toastTimer;
 
 let toastTimer;
 

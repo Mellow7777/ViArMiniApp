@@ -8,7 +8,165 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no"
     >
 
+    <title>Заказ продукции</title><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no"
+    >
+
     <title>Заказ продукции</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Официальный скрипт Telegram Mini Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+    <header class="app-header">
+        <div>
+            <h1>ВіАр</h1>
+            <p>Создание заказа</p>
+        </div>
+
+        <div class="cart-badge" id="cartBadge">
+            0
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Информация о торговом -->
+        <section class="card user-card">
+            <span class="section-label">Торговый представитель</span>
+            <strong id="userName">Загрузка...</strong>
+        </section>
+
+        <!-- Выбор торговой точки -->
+        <section class="card">
+            <label class="section-label" for="shopSelect">
+                Торговая точка
+            </label>
+
+            <select id="shopSelect">
+                <option value="">Выберите торговую точку</option>
+            </select>
+        </section>
+
+        <!-- Тип операции -->
+        <section class="card">
+            <span class="section-label">Тип операции</span>
+
+            <div class="operation-switch">
+                <button
+                    type="button"
+                    class="operation-button active"
+                    data-operation="order"
+                >
+                    📦 Заказ
+                </button>
+
+                <button
+                    type="button"
+                    class="operation-button"
+                    data-operation="return"
+                >
+                    ↩️ Возврат
+                </button>
+            </div>
+        </section>
+
+        <!-- Поиск товара -->
+        <section class="search-section">
+            <input
+                type="search"
+                id="productSearch"
+                placeholder="Поиск товара..."
+                autocomplete="off"
+            >
+        </section>
+
+
+        <!-- Список товаров -->
+        <section>
+            <div class="section-title-row">
+                <h2>Товары</h2>
+                <span id="productsCount"></span>
+            </div>
+
+            <div class="products-list" id="productsList"></div>
+        </section>
+
+        <!-- Корзина -->
+        <section class="cart-section">
+            <div class="section-title-row">
+                <h2>Корзина</h2>
+
+                <button
+                    type="button"
+                    class="clear-cart-button"
+                    id="clearCartButton"
+                >
+                    Очистить
+                </button>
+            </div>
+
+            <div id="cartList" class="cart-list"></div>
+
+            <div id="emptyCart" class="empty-cart">
+                Корзина пока пустая
+            </div>
+        </section>
+
+        <!-- Комментарий -->
+        <section class="card">
+            <label class="section-label" for="orderComment">
+                Комментарий
+            </label>
+
+            <textarea
+                id="orderComment"
+                rows="3"
+                maxlength="300"
+                placeholder="Например: доставка до 12:00"
+            ></textarea>
+        </section>
+
+        <!-- Итоги -->
+        <section class="order-summary">
+            <div>
+                <span>Позиций</span>
+                <strong id="totalPositions">0</strong>
+            </div>
+
+            <div>
+                <span>Общее количество</span>
+                <strong id="totalQuantity">0</strong>
+            </div>
+        </section>
+
+        <!-- Кнопка для проверки в браузере -->
+        <button
+            type="button"
+            class="send-button"
+            id="sendOrderButton"
+        >
+            Отправить заказ
+        </button>
+
+        <div class="bottom-space"></div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+   <script src="products.js?v=5"></script>
+<script src="app.js?v=5"></script>
+</body>
+</html> 
 
     <link rel="stylesheet" href="style.css">
 

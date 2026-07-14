@@ -52,7 +52,7 @@ async function loadProducts() {
         `;
 
         const response = await fetch(
-            `products.json?v=${Date.now()}`,
+            `./products.json?v=${Date.now()}`,
             {
                 cache: "no-store"
             }
@@ -68,7 +68,7 @@ async function loadProducts() {
 
         if (!Array.isArray(loadedProducts)) {
             throw new Error(
-                "Неправильный формат products.json"
+                "products.json должен содержать массив"
             );
         }
 
@@ -90,13 +90,8 @@ async function loadProducts() {
                 Не удалось загрузить товары
             </div>
         `;
-
-        showToast(
-            "Не удалось загрузить товары",
-            "error"
-        );
     }
-}   
+}
 
 function initializeTelegram() {
     if (!telegram) {

@@ -542,3 +542,32 @@ textarea:focus {
         width: 100%;
     }
 }
+
+.availability {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.availability.available {
+    color: #22c55e;
+}
+
+.availability.unavailable {
+    color: #ef4444;
+}
+
+.product-unavailable {
+    opacity: 0.65;
+}
+
+.product-unavailable .add-button {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.product-unavailable .quantity-button,
+.product-unavailable .quantity-input {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

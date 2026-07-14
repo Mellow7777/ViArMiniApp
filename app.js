@@ -804,27 +804,31 @@ function renderCart() {
 function updateSummary() {
     const activeCart = getActiveCart();
 
-    const activePositions =
-        activeCart.length;
+    const activePositions = activeCart.length;
 
-    const activeQuantity =
-        activeCart.reduce(
-            (sum, item) =>
-                sum + item.quantity,
-            0
-        );
+    const activeQuantity = activeCart.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
 
     const totalItemsCount =
-        getAllItemsCount();
+        state.orderCart.length +
+        state.returnCart.length;
 
-    elements.cartBadge.textContent =
-        totalItemsCount;
+    if (elements.cartBadge) {
+        elements.cartBadge.textContent =
+            totalItemsCount;
+    }
 
-    elements.totalPositions.textContent =
-        activePositions;
+    if (elements.totalPositions) {
+        elements.totalPositions.textContent =
+            activePositions;
+    }
 
-    elements.totalQuantity.textContent =
-        formatQuantity(activeQuantity);
+    if (elements.totalQuantity) {
+        elements.totalQuantity.textContent =
+            formatQuantity(activeQuantity);
+    }
 
     if (elements.totalPrice) {
         const orderTotal =
@@ -838,8 +842,10 @@ function updateSummary() {
         state.orderCart.length === 0 &&
         state.returnCart.length === 0;
 
-    elements.sendOrderButton.disabled =
-        nothingToSend;
+    if (elements.sendOrderButton) {
+        elements.sendOrderButton.disabled =
+            nothingToSend;
+    }
 
     if (telegram?.MainButton) {
         if (nothingToSend) {
@@ -849,7 +855,6 @@ function updateSummary() {
             );
         } else {
             telegram.MainButton.enable();
-
             telegram.MainButton.setText(
                 `ОТПРАВИТЬ · ${totalItemsCount}`
             );

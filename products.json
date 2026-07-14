@@ -1,0 +1,283 @@
+[products.json](https://github.com/user-attachments/files/29988758/products.json)
+[
+  {
+    "id": 1,
+    "article": "1001",
+    "name": "Баликова (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 2,
+    "article": "1002",
+    "name": "Баликова (ціла)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 3,
+    "article": "1003",
+    "name": "Барбадос",
+    "unit": "кг",
+    "isAvailable": false,
+    "step": 0.1
+  },
+  {
+    "id": 4,
+    "article": "1004",
+    "name": "Брізоло",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 5,
+    "article": "1005",
+    "name": "Віденська (кільце)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 6,
+    "article": "1006",
+    "name": "Гранд - Філе ( круп )",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 7,
+    "article": "1007",
+    "name": "Дикий Кабан (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 8,
+    "article": "1008",
+    "name": "Домашня на соломі (кільце)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 9,
+    "article": "1009",
+    "name": "Європейська (ціла)",
+    "unit": "кг",
+    "isAvailable": false,
+    "step": 0.1
+  },
+  {
+    "id": 10,
+    "article": "1010",
+    "name": "Європейська  (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 11,
+    "article": "1011",
+    "name": "Карпачо",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 12,
+    "article": "1012",
+    "name": "Королівська Варена",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 13,
+    "article": "1013",
+    "name": "На Дровах",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 14,
+    "article": "1014",
+    "name": "Рулет Альмі Варений",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 15,
+    "article": "1015",
+    "name": "Рулет Равлик копчений",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 16,
+    "article": "1016",
+    "name": "Салямі Гольштейн",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 17,
+    "article": "1017",
+    "name": "Салямі Горіхова",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 18,
+    "article": "1018",
+    "name": "Салямі з Гарячим Копченням",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 19,
+    "article": "1019",
+    "name": "Салямі Зернятко",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 20,
+    "article": "1020",
+    "name": "Салямі Карибська",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 21,
+    "article": "1021",
+    "name": "Салямі Посольська",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 22,
+    "article": "1022",
+    "name": "Салямі Робінгуд",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 23,
+    "article": "1023",
+    "name": "Салямі Фірмова (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 24,
+    "article": "1024",
+    "name": "Салямі Фірмова (ціла)",
+    "unit": "кг",
+    "isAvailable": false,
+    "step": 0.1
+  },
+  {
+    "id": 25,
+    "article": "1025",
+    "name": "Салямчик з Сиром 8% (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 26,
+    "article": "1026",
+    "name": "Салямчик з Сиром 8% (ціла)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 27,
+    "article": "1027",
+    "name": "Сардельки карапузик",
+    "unit": "кг",
+    "isAvailable": false,
+    "step": 0.1
+  },
+  {
+    "id": 28,
+    "article": "1028",
+    "name": "Сервелат з цукром (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 29,
+    "article": "1029",
+    "name": "Сервелат з цукром (трикутник)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 30,
+    "article": "1030",
+    "name": "Сервелат з цукром (ціла)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 31,
+    "article": "1031",
+    "name": "Філей домашній варений",
+    "unit": "кг",
+    "isAvailable": false,
+    "step": 0.1
+  },
+  {
+    "id": 32,
+    "article": "1032",
+    "name": "Шинка Брістоль",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 33,
+    "article": "1033",
+    "name": "Шинка Королівська",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 34,
+    "article": "1034",
+    "name": "Шинка Фермерська (1/2)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  },
+  {
+    "id": 35,
+    "article": "1035",
+    "name": "Шинка Фермерська (ціла)",
+    "unit": "кг",
+    "isAvailable": true,
+    "step": 0.1
+  }
+]

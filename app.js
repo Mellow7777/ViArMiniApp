@@ -11,6 +11,7 @@ const state = {
 };
 
 const elements = {
+    totalPrice: document.getElementById("totalPrice"),
     userName: document.getElementById("userName"),
     shopSelect: document.getElementById("shopSelect"),
     productSearch: document.getElementById("productSearch"),
@@ -232,30 +233,33 @@ function createProductElement(product) {
     const card = document.createElement("article");
     card.className = "product-card";
 
-    const itemInCart = state.cart.find(
-        (item) => item.productId === product.id
-    );
+    const isAvailable =
+        product.isAvailable === true;
 
-    const isAvailable = product.isAvailable === true;
+    let selectedUnit = "кг";
 
-    const availabilityHtml = isAvailable
+    const canOrderByPiece =
+        product.canOrderByPiece === true &&
+        Number(product.approximateWeightPerPiece) > 0;
+
+    const unitSwitchHtml = canOrderByPiece
         ? `
-            <div class="availability available">
-                🟢 В наличии
-            </div>
-        `
-        : `
-            <div class="availability unavailable">
-                🔴 Нет в наличии
-            </div>
-        `;
+            <div class="unit-switch">
+                <button
+                    type="button"
+                    class="unit-switch-button active"
+                    data-unit="кг"
+                >
+                    кг
+                </button>
 
-    const cartInfo = itemInCart
-        ? `
-            <div class="product-in-cart">
-                В корзине:
-                ${formatQuantity(itemInCart.quantity)}
-                ${escapeHtml(product.unit)}
+                <button
+                    type="button"
+                    class="unit-switch-button"
+                    data-unit="шт"
+                >
+                    шт
+                </button>
             </div>
         `
         : "";
@@ -269,20 +273,42 @@ function createProductElement(product) {
 
                 <div class="product-meta">
                     <span class="product-code">
-                        Артикул:
-                        ${escapeHtml(product.article)}
+                        Артикул: ${escapeHtml(product.article)}
                     </span>
 
                     <span class="product-unit">
-                        Ед.:
-                        ${escapeHtml(product.unit)}
+                        Цена: ${formatMoney(product.price)} грн/кг
                     </span>
                 </div>
 
-                ${availabilityHtml}
-                ${cartInfo}
+                ${
+                    canOrderByPiece
+                        ? `
+                            <div class="product-weight">
+                                Примерный вес 1 шт:
+                                ${formatQuantity(
+                                    product.approximateWeightPerPiece
+                                )} кг
+                            </div>
+                        `
+                        : ""
+                }
+
+                <div class="availability ${
+                    isAvailable
+                        ? "available"
+                        : "unavailable"
+                }">
+                    ${
+                        isAvailable
+                            ? "🟢 В наличии"
+                            : "🔴 Нет в наличии"
+                    }
+                </div>
             </div>
         </div>
+
+        ${unitSwitchHtml}
 
         <div class="product-controls">
             <div class="quantity-control">
@@ -297,9 +323,9 @@ function createProductElement(product) {
                 <input
                     type="number"
                     class="quantity-input"
-                    value="${product.step}"
-                    min="${product.step}"
-                    step="${product.step}"
+                    value="0.1"
+                    min="0.1"
+                    step="0.1"
                     inputmode="decimal"
                     ${isAvailable ? "" : "disabled"}
                 >
@@ -311,6 +337,10 @@ function createProductElement(product) {
                 >
                     +
                 </button>
+            </div>
+
+            <div class="product-estimated-total">
+                ≈ 0 грн
             </div>
 
             <button
@@ -344,92 +374,261 @@ function createProductElement(product) {
     const addButton =
         card.querySelector(".add-button");
 
+    const estimatedTotalElement =
+        card.querySelector(
+            ".product-estimated-total"
+        );
+
+    const unitButtons =
+        card.querySelectorAll(
+            ".unit-switch-button"
+        );
+
+    function getStep() {
+        return selectedUnit === "шт"
+            ? 1
+            : 0.1;
+    }
+
+    function updateQuantitySettings() {
+        const step = getStep();
+
+        quantityInput.step = step;
+        quantityInput.min = step;
+        quantityInput.value =
+            selectedUnit === "шт"
+                ? "1"
+                : "0.1";
+
+        updateEstimatedTotal();
+    }
+
+    function calculateEstimatedTotal() {
+        const quantity =
+            parseQuantity(quantityInput.value);
+
+        let estimatedWeight;
+
+        if (selectedUnit === "шт") {
+            estimatedWeight =
+                quantity *
+                Number(
+                    product.approximateWeightPerPiece || 0
+                );
+        } else {
+            estimatedWeight = quantity;
+        }
+
+        return roundMoney(
+            estimatedWeight *
+            Number(product.price || 0)
+        );
+    }
+
+    function updateEstimatedTotal() {
+        const total =
+            calculateEstimatedTotal();
+
+        estimatedTotalElement.textContent =
+            `≈ ${formatMoney(total)} грн`;
+    }
+
+    unitButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            unitButtons.forEach((item) =>
+                item.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+            selectedUnit =
+                button.dataset.unit;
+
+            updateQuantitySettings();
+        });
+    });
+
     minusButton.addEventListener("click", () => {
-        const currentValue = parseQuantity(
-            quantityInput.value
-        );
+        const step = getStep();
 
-        const newValue = Math.max(
-            product.step,
-            currentValue - product.step
-        );
+        const currentValue =
+            parseQuantity(quantityInput.value);
 
-        quantityInput.value = formatInputQuantity(
-            newValue,
-            product.step
-        );
+        const newValue =
+            Math.max(step, currentValue - step);
+
+        quantityInput.value =
+            formatInputQuantity(
+                newValue,
+                step
+            );
+
+        updateEstimatedTotal();
     });
 
     plusButton.addEventListener("click", () => {
-        const currentValue = parseQuantity(
-            quantityInput.value
-        );
+        const step = getStep();
+
+        const currentValue =
+            parseQuantity(quantityInput.value);
 
         const newValue =
-            currentValue + product.step;
+            currentValue + step;
 
-        quantityInput.value = formatInputQuantity(
-            newValue,
-            product.step
-        );
+        quantityInput.value =
+            formatInputQuantity(
+                newValue,
+                step
+            );
+
+        updateEstimatedTotal();
     });
 
-    quantityInput.addEventListener("change", () => {
-        let quantity = parseQuantity(
-            quantityInput.value
-        );
+    quantityInput.addEventListener(
+        "input",
+        updateEstimatedTotal
+    );
 
-        if (quantity < product.step) {
-            quantity = product.step;
+    quantityInput.addEventListener("change", () => {
+        const step = getStep();
+
+        let quantity =
+            parseQuantity(quantityInput.value);
+
+        if (quantity < step) {
+            quantity = step;
         }
 
-        quantityInput.value = formatInputQuantity(
-            quantity,
-            product.step
-        );
+        quantityInput.value =
+            formatInputQuantity(
+                quantity,
+                step
+            );
+
+        updateEstimatedTotal();
     });
 
     addButton.addEventListener("click", () => {
-        const quantity = parseQuantity(
-            quantityInput.value
-        );
+        const quantity =
+            parseQuantity(quantityInput.value);
 
-        addToCart(product, quantity);
+        addToCart(
+            product,
+            quantity,
+            selectedUnit
+        );
     });
+
+    updateEstimatedTotal();
 
     return card;
 }
 
-function addToCart(product, quantity) {
-    if (!Number.isFinite(quantity) || quantity <= 0) {
-        showToast("Введите правильное количество", "error");
+function addToCart(
+    product,
+    quantity,
+    selectedUnit
+) {
+    if (!Number.isFinite(quantity) ||
+        quantity <= 0) {
+        showToast(
+            "Введите правильное количество",
+            "error"
+        );
+
         return;
     }
 
-    const existingItem = state.cart.find(
-        (item) => item.productId === product.id
-    );
+    const cartKey =
+        `${product.id}-${selectedUnit}`;
+
+    const existingItem =
+        state.cart.find(
+            (item) =>
+                item.cartKey === cartKey
+        );
 
     if (existingItem) {
-        existingItem.quantity = roundQuantity(
-            existingItem.quantity + quantity
-        );
+        existingItem.quantity =
+            roundQuantity(
+                existingItem.quantity +
+                quantity
+            );
     } else {
         state.cart.push({
+            cartKey: cartKey,
             productId: product.id,
             article: product.article,
             name: product.name,
-            unit: product.unit,
-            quantity: roundQuantity(quantity)
+            unit: selectedUnit,
+            quantity:
+                roundQuantity(quantity),
+            price:
+                Number(product.price || 0),
+            approximateWeightPerPiece:
+                Number(
+                    product
+                        .approximateWeightPerPiece || 0
+                )
         });
     }
 
     saveCart();
     renderCart();
-    renderProducts();
+    updateSummary();
 
     triggerHaptic("success");
-    showToast(`${product.name} добавлен`, "success");
+
+    showToast(
+        `${product.name} добавлен`,
+        "success"
+    );
+}
+
+function calculateItemEstimatedWeight(item) {
+    if (item.unit === "шт") {
+        return roundQuantity(
+            item.quantity *
+            Number(
+                item.approximateWeightPerPiece || 0
+            )
+        );
+    }
+
+    return roundQuantity(item.quantity);
+}
+
+function calculateItemEstimatedTotal(item) {
+    const estimatedWeight =
+        calculateItemEstimatedWeight(item);
+
+    return roundMoney(
+        estimatedWeight *
+        Number(item.price || 0)
+    );
+}
+
+function calculateCartTotal() {
+    return state.cart.reduce(
+        (total, item) =>
+            total +
+            calculateItemEstimatedTotal(item),
+        0
+    );
+}
+
+function roundMoney(value) {
+    return Math.round(
+        (Number(value) +
+            Number.EPSILON) * 100
+    ) / 100;
+}
+
+function formatMoney(value) {
+    return new Intl.NumberFormat("ru-RU", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(Number(value || 0));
 }
 
 function renderCart() {
@@ -447,6 +646,12 @@ function renderCart() {
         const cartItem = document.createElement("div");
         cartItem.className = "cart-item";
 
+        const estimatedWeight =
+    calculateItemEstimatedWeight(item);
+
+const estimatedTotal =
+    calculateItemEstimatedTotal(item);
+
         cartItem.innerHTML = `
             <div class="cart-item-info">
                 <div class="cart-item-name">
@@ -454,9 +659,26 @@ function renderCart() {
                 </div>
 
                 <div class="cart-item-quantity">
-                    ${formatQuantity(item.quantity)}
-                    ${escapeHtml(item.unit)}
-                </div>
+    ${formatQuantity(item.quantity)}
+    ${escapeHtml(item.unit)}
+
+    ${
+        item.unit === "шт"
+            ? `
+                <br>
+                ≈ ${formatQuantity(
+                    estimatedWeight
+                )} кг
+            `
+            : ""
+    }
+</div>
+
+<div class="cart-item-price">
+    ≈ ${formatMoney(
+        estimatedTotal
+    )} грн
+</div>
             </div>
 
             <button
@@ -521,6 +743,12 @@ function updateSummary() {
         (sum, item) => sum + item.quantity,
         0
     );
+
+    const cartTotal =
+    calculateCartTotal();
+
+elements.totalPrice.textContent =
+    `≈ ${formatMoney(cartTotal)} грн`;
 
     elements.cartBadge.textContent = totalPositions;
     elements.totalPositions.textContent = totalPositions;

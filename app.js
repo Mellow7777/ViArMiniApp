@@ -5,12 +5,13 @@ const telegram = window.Telegram?.WebApp;
 let products = [];
 
 const state = {
-    selectedCategory: "Все",
-    selectedOperation: "order",
-    cart: []
+    activeMode: "order",
+    orderCart: [],
+    returnCart: []
 };
 
 const elements = {
+    cartTitle: document.getElementById("cartTitle"),
     totalPrice: document.getElementById("totalPrice"),
     userName: document.getElementById("userName"),
     shopSelect: document.getElementById("shopSelect"),
@@ -28,6 +29,25 @@ const elements = {
     orderComment: document.getElementById("orderComment"),
     toast: document.getElementById("toast")
 };
+
+function getActiveCart() {
+    return state.activeMode === "return"
+        ? state.returnCart
+        : state.orderCart;
+}
+
+function getActiveModeTitle() {
+    return state.activeMode === "return"
+        ? "возврат"
+        : "заказ";
+}
+
+function getAllItemsCount() {
+    return (
+        state.orderCart.length +
+        state.returnCart.length
+    );
+}
 
 initializeApp();
 
@@ -236,6 +256,10 @@ function createProductElement(product) {
     const isAvailable =
         product.isAvailable === true;
 
+    const canAddProduct =
+    state.activeMode === "return" ||
+    isAvailable;
+
     let selectedUnit = "кг";
 
     const canOrderByPiece =
@@ -315,7 +339,7 @@ function createProductElement(product) {
                 <button
                     type="button"
                     class="quantity-button minus-button"
-                    ${isAvailable ? "" : "disabled"}
+                    ${canAddProduct ? "" : "disabled"}
                 >
                     −
                 </button>
@@ -327,13 +351,13 @@ function createProductElement(product) {
                     min="0.1"
                     step="0.1"
                     inputmode="decimal"
-                    ${isAvailable ? "" : "disabled"}
+                    ${canAddProduct ? "" : "disabled"}
                 >
 
                 <button
                     type="button"
                     class="quantity-button plus-button"
-                    ${isAvailable ? "" : "disabled"}
+                    ${canAddProduct ? "" : "disabled"}
                 >
                     +
                 </button>
@@ -343,24 +367,26 @@ function createProductElement(product) {
                 ≈ 0 грн
             </div>
 
-            <button
-                type="button"
-                class="add-button"
-                ${isAvailable ? "" : "disabled"}
-            >
-                ${
-                    isAvailable
-                        ? "Добавить"
-                        : "Нет в наличии"
-                }
-            </button>
+           <button
+    type="button"
+    class="add-button"
+    ${canAddProduct ? "" : "disabled"}
+>
+    ${
+        canAddProduct
+            ? state.activeMode === "return"
+                ? "Добавить в возврат"
+                : "Добавить в заказ"
+            : "Нет в наличии"
+    }
+</button>
         </div>
     `;
 
-    if (!isAvailable) {
-        card.classList.add("product-unavailable");
-        return card;
-    }
+  if (!canAddProduct) {
+    card.classList.add("product-unavailable");
+    return card;
+}
 
     const quantityInput =
         card.querySelector(".quantity-input");
@@ -529,8 +555,10 @@ function addToCart(
     quantity,
     selectedUnit
 ) {
-    if (!Number.isFinite(quantity) ||
-        quantity <= 0) {
+    if (
+        !Number.isFinite(quantity) ||
+        quantity <= 0
+    ) {
         showToast(
             "Введите правильное количество",
             "error"
@@ -539,14 +567,14 @@ function addToCart(
         return;
     }
 
+    const activeCart = getActiveCart();
+
     const cartKey =
         `${product.id}-${selectedUnit}`;
 
-    const existingItem =
-        state.cart.find(
-            (item) =>
-                item.cartKey === cartKey
-        );
+    const existingItem = activeCart.find(
+        (item) => item.cartKey === cartKey
+    );
 
     if (existingItem) {
         existingItem.quantity =
@@ -554,33 +582,43 @@ function addToCart(
                 existingItem.quantity +
                 quantity
             );
+
+        existingItem.price =
+            Number(product.price || 0);
+
+        existingItem.approximateWeightPerPiece =
+            Number(
+                product.approximateWeightPerPiece || 0
+            );
     } else {
-        state.cart.push({
+        activeCart.push({
             cartKey: cartKey,
             productId: product.id,
             article: product.article,
             name: product.name,
             unit: selectedUnit,
-            quantity:
-                roundQuantity(quantity),
-            price:
-                Number(product.price || 0),
+            quantity: roundQuantity(quantity),
+            price: Number(product.price || 0),
             approximateWeightPerPiece:
                 Number(
-                    product
-                        .approximateWeightPerPiece || 0
+                    product.approximateWeightPerPiece || 0
                 )
         });
     }
 
     saveCart();
     renderCart();
-    updateSummary();
+    renderProducts();
 
     triggerHaptic("success");
 
+    const operationText =
+        state.activeMode === "return"
+            ? "в возврат"
+            : "в заказ";
+
     showToast(
-        `${product.name} добавлен`,
+        `${product.name} добавлен ${operationText}`,
         "success"
     );
 }
@@ -609,13 +647,17 @@ function calculateItemEstimatedTotal(item) {
 }
 
 function calculateCartTotal() {
-    return state.cart.reduce(
-        (total, item) =>
-            total +
-            calculateItemEstimatedTotal(item),
+    return state.orderCart.reduce(
+        (total, item) => {
+            return (
+                total +
+                calculateItemEstimatedTotal(item)
+            );
+        },
         0
     );
 }
+
 
 function roundMoney(value) {
     return Math.round(
@@ -632,25 +674,53 @@ function formatMoney(value) {
 }
 
 function renderCart() {
+    const activeCart = getActiveCart();
+
     elements.cartList.innerHTML = "";
 
-    const cartIsEmpty = state.cart.length === 0;
+    elements.cartTitle.textContent =
+        state.activeMode === "return"
+            ? "Корзина возврата"
+            : "Корзина заказа";
+
+    const cartIsEmpty =
+        activeCart.length === 0;
 
     elements.emptyCart.style.display =
         cartIsEmpty ? "block" : "none";
 
-    elements.clearCartButton.style.display =
-        cartIsEmpty ? "none" : "inline-block";
+    elements.emptyCart.textContent =
+        state.activeMode === "return"
+            ? "Возврат пока пустой"
+            : "Заказ пока пустой";
 
-    state.cart.forEach((item) => {
-        const cartItem = document.createElement("div");
+    elements.clearCartButton.style.display =
+        cartIsEmpty
+            ? "none"
+            : "inline-block";
+
+    activeCart.forEach((item) => {
+        const cartItem =
+            document.createElement("div");
+
         cartItem.className = "cart-item";
 
         const estimatedWeight =
-    calculateItemEstimatedWeight(item);
+            calculateItemEstimatedWeight(item);
 
-const estimatedTotal =
-    calculateItemEstimatedTotal(item);
+        const estimatedTotal =
+            calculateItemEstimatedTotal(item);
+
+        const priceHtml =
+            state.activeMode === "order"
+                ? `
+                    <div class="cart-item-price">
+                        ≈ ${formatMoney(
+                            estimatedTotal
+                        )} грн
+                    </div>
+                `
+                : "";
 
         cartItem.innerHTML = `
             <div class="cart-item-info">
@@ -659,26 +729,22 @@ const estimatedTotal =
                 </div>
 
                 <div class="cart-item-quantity">
-    ${formatQuantity(item.quantity)}
-    ${escapeHtml(item.unit)}
+                    ${formatQuantity(item.quantity)}
+                    ${escapeHtml(item.unit)}
 
-    ${
-        item.unit === "шт"
-            ? `
-                <br>
-                ≈ ${formatQuantity(
-                    estimatedWeight
-                )} кг
-            `
-            : ""
-    }
-</div>
+                    ${
+                        item.unit === "шт"
+                            ? `
+                                <br>
+                                ≈ ${formatQuantity(
+                                    estimatedWeight
+                                )} кг
+                            `
+                            : ""
+                    }
+                </div>
 
-<div class="cart-item-price">
-    ≈ ${formatMoney(
-        estimatedTotal
-    )} грн
-</div>
+                ${priceHtml}
             </div>
 
             <button
@@ -690,24 +756,42 @@ const estimatedTotal =
             </button>
         `;
 
-        const removeButton = cartItem.querySelector(
-            ".remove-cart-button"
+        const removeButton =
+            cartItem.querySelector(
+                ".remove-cart-button"
+            );
+
+        removeButton.addEventListener(
+            "click",
+            () => {
+                removeFromCart(
+                    item.cartKey
+                );
+            }
         );
 
-        removeButton.addEventListener("click", () => {
-            removeFromCart(item.productId);
-        });
-
-        elements.cartList.appendChild(cartItem);
+        elements.cartList.appendChild(
+            cartItem
+        );
     });
 
     updateSummary();
 }
 
-function removeFromCart(productId) {
-    state.cart = state.cart.filter(
-        (item) => item.productId !== productId
-    );
+   function removeFromCart(cartKey) {
+    if (state.activeMode === "return") {
+        state.returnCart =
+            state.returnCart.filter(
+                (item) =>
+                    item.cartKey !== cartKey
+            );
+    } else {
+        state.orderCart =
+            state.orderCart.filter(
+                (item) =>
+                    item.cartKey !== cartKey
+            );
+    }
 
     saveCart();
     renderCart();
@@ -716,60 +800,97 @@ function removeFromCart(productId) {
     triggerHaptic("warning");
 }
 
+function updateSummary() {
+    const activeCart = getActiveCart();
+
+    const activePositions =
+        activeCart.length;
+
+    const activeQuantity =
+        activeCart.reduce(
+            (sum, item) =>
+                sum + item.quantity,
+            0
+        );
+
+    const totalItemsCount =
+        getAllItemsCount();
+
+    elements.cartBadge.textContent =
+        totalItemsCount;
+
+    elements.totalPositions.textContent =
+        activePositions;
+
+    elements.totalQuantity.textContent =
+        formatQuantity(activeQuantity);
+
+    if (elements.totalPrice) {
+        const orderTotal =
+            calculateCartTotal();
+
+        elements.totalPrice.textContent =
+            `≈ ${formatMoney(orderTotal)} грн`;
+    }
+
+    const nothingToSend =
+        state.orderCart.length === 0 &&
+        state.returnCart.length === 0;
+
+    elements.sendOrderButton.disabled =
+        nothingToSend;
+
+    if (telegram?.MainButton) {
+        if (nothingToSend) {
+            telegram.MainButton.disable();
+            telegram.MainButton.setText(
+                "КОРЗИНЫ ПУСТЫ"
+            );
+        } else {
+            telegram.MainButton.enable();
+
+            telegram.MainButton.setText(
+                `ОТПРАВИТЬ · ${totalItemsCount}`
+            );
+        }
+    }
+}
+
 function clearCart() {
-    if (state.cart.length === 0) {
+    const activeCart = getActiveCart();
+
+    if (activeCart.length === 0) {
         return;
     }
 
-    const confirmed = confirm("Очистить всю корзину?");
+    const operationTitle =
+        state.activeMode === "return"
+            ? "возврат"
+            : "заказ";
+
+    const confirmed = confirm(
+        `Очистить весь ${operationTitle}?`
+    );
 
     if (!confirmed) {
         return;
     }
 
-    state.cart = [];
+    if (state.activeMode === "return") {
+        state.returnCart = [];
+    } else {
+        state.orderCart = [];
+    }
 
     saveCart();
     renderCart();
     renderProducts();
 
-    showToast("Корзина очищена");
-}
-
-function updateSummary() {
-    const totalPositions = state.cart.length;
-
-    const totalQuantity = state.cart.reduce(
-        (sum, item) => sum + item.quantity,
-        0
+    showToast(
+        state.activeMode === "return"
+            ? "Возврат очищен"
+            : "Заказ очищен"
     );
-
-    const cartTotal =
-    calculateCartTotal();
-
-elements.totalPrice.textContent =
-    `≈ ${formatMoney(cartTotal)} грн`;
-
-    elements.cartBadge.textContent = totalPositions;
-    elements.totalPositions.textContent = totalPositions;
-    elements.totalQuantity.textContent =
-        formatQuantity(totalQuantity);
-
-    elements.sendOrderButton.disabled = totalPositions === 0;
-
-    if (telegram?.MainButton) {
-        if (totalPositions === 0) {
-            telegram.MainButton.disable();
-        } else {
-            telegram.MainButton.enable();
-        }
-
-        telegram.MainButton.setText(
-            totalPositions === 0
-                ? "КОРЗИНА ПУСТА"
-                : `ОТПРАВИТЬ ЗАКАЗ · ${totalPositions}`
-        );
-    }
 }
 
 function bindEvents() {
@@ -779,48 +900,81 @@ function bindEvents() {
 
     elements.sendOrderButton.addEventListener("click", sendOrder);
 
-    document
-        .querySelectorAll(".operation-button")
-        .forEach((button) => {
-            button.addEventListener("click", () => {
-                document
-                    .querySelectorAll(".operation-button")
-                    .forEach((item) => item.classList.remove("active"));
+   document
+    .querySelectorAll(".operation-button")
+    .forEach((button) => {
+        button.addEventListener("click", () => {
+            document
+                .querySelectorAll(".operation-button")
+                .forEach((item) => {
+                    item.classList.remove("active");
+                });
 
-                button.classList.add("active");
+            button.classList.add("active");
 
-                state.selectedOperation =
-                    button.dataset.operation;
-            });
+            state.activeMode =
+                button.dataset.operation;
+
+            renderProducts();
+            renderCart();
+            updateSummary();
         });
+    });
 }
 
 function sendOrder() {
-    const selectedShopId = Number(elements.shopSelect.value);
+    const selectedShopId =
+        Number(
+            elements.shopSelect.value
+        );
 
-    const selectedShop = shops.find(
-        (shop) => shop.id === selectedShopId
-    );
+    const selectedShop =
+        shops.find(
+            (shop) =>
+                shop.id ===
+                selectedShopId
+        );
 
     if (!selectedShop) {
-        showToast("Выберите торговую точку", "error");
+        showToast(
+            "Выберите торговую точку",
+            "error"
+        );
+
         elements.shopSelect.focus();
         triggerHaptic("error");
         return;
     }
 
-    if (state.cart.length === 0) {
-        showToast("Добавьте товары в корзину", "error");
+    const orderIsEmpty =
+        state.orderCart.length === 0;
+
+    const returnIsEmpty =
+        state.returnCart.length === 0;
+
+    if (orderIsEmpty && returnIsEmpty) {
+        showToast(
+            "Добавьте заказ или возврат",
+            "error"
+        );
+
         triggerHaptic("error");
         return;
     }
 
-    const telegramUser = telegram?.initDataUnsafe?.user;
+    const telegramUser =
+        telegram?.initDataUnsafe?.user;
+
+    const mapCartItem = (item) => ({
+        productId: item.productId,
+        article: item.article,
+        name: item.name,
+        unit: item.unit,
+        quantity: item.quantity
+    });
 
     const order = {
         orderId: createOrderId(),
-
-        operationType: state.selectedOperation,
 
         shop: {
             id: selectedShop.id,
@@ -828,36 +982,47 @@ function sendOrder() {
         },
 
         salesRepresentative: {
-            telegramId: telegramUser?.id ?? null,
-            username: telegramUser?.username ?? null,
-            firstName: telegramUser?.first_name ?? "Не указан",
-            lastName: telegramUser?.last_name ?? ""
+            telegramId:
+                telegramUser?.id ?? null,
+
+            username:
+                telegramUser?.username ?? null,
+
+            firstName:
+                telegramUser?.first_name ??
+                "Не указан",
+
+            lastName:
+                telegramUser?.last_name ?? ""
         },
 
-        items: state.cart.map((item) => ({
-            productId: item.productId,
-            article: item.article,
-            name: item.name,
-            unit: item.unit,
-            quantity: item.quantity
-        })),
+        orderItems:
+            state.orderCart.map(
+                mapCartItem
+            ),
 
-        comment: elements.orderComment.value.trim(),
+        returnItems:
+            state.returnCart.map(
+                mapCartItem
+            ),
 
-        createdAt: new Date().toISOString()
+        comment:
+            elements.orderComment
+                .value
+                .trim(),
+
+        createdAt:
+            new Date().toISOString()
     };
 
-    const json = JSON.stringify(order);
+    const json =
+        JSON.stringify(order);
 
-    console.log("Заказ:", order);
-    console.log("JSON:", json);
+    console.log("Отправляем:", order);
 
-    /*
-     * При обычном открытии через браузер
-     * telegram.platform обычно равен "unknown".
-     */
     const openedOutsideTelegram =
-        !telegram || telegram.platform === "unknown";
+        !telegram ||
+        telegram.platform === "unknown";
 
     if (openedOutsideTelegram) {
         showOrderForBrowserTesting(json);
@@ -867,19 +1032,25 @@ function sendOrder() {
     try {
         telegram.sendData(json);
 
-        state.cart = [];
+        state.orderCart = [];
+        state.returnCart = [];
+
         saveCart();
-        renderCart();
-        renderProducts();
 
         elements.orderComment.value = "";
 
+        renderCart();
+        renderProducts();
+
         triggerHaptic("success");
     } catch (error) {
-        console.error("Ошибка отправки заказа:", error);
+        console.error(
+            "Ошибка отправки:",
+            error
+        );
 
         showToast(
-            "Не удалось отправить заказ",
+            "Не удалось отправить",
             "error"
         );
 
@@ -907,33 +1078,60 @@ function showOrderForBrowserTesting(json) {
 
 function saveCart() {
     try {
+        const cartData = {
+            orderCart: state.orderCart,
+            returnCart: state.returnCart
+        };
+
         localStorage.setItem(
-            "viar-mini-app-cart",
-            JSON.stringify(state.cart)
+            "viar-mini-app-carts-v2",
+            JSON.stringify(cartData)
         );
     } catch (error) {
-        console.warn("Не удалось сохранить корзину:", error);
+        console.warn(
+            "Не удалось сохранить корзины:",
+            error
+        );
     }
 }
 
 function loadCart() {
     try {
-        const savedCart = localStorage.getItem(
-            "viar-mini-app-cart"
-        );
+        const savedData =
+            localStorage.getItem(
+                "viar-mini-app-carts-v2"
+            );
 
-        if (!savedCart) {
+        if (!savedData) {
+            state.orderCart = [];
+            state.returnCart = [];
             return;
         }
 
-        const parsedCart = JSON.parse(savedCart);
+        const parsedData =
+            JSON.parse(savedData);
 
-        if (Array.isArray(parsedCart)) {
-            state.cart = parsedCart;
-        }
+        state.orderCart =
+            Array.isArray(
+                parsedData.orderCart
+            )
+                ? parsedData.orderCart
+                : [];
+
+        state.returnCart =
+            Array.isArray(
+                parsedData.returnCart
+            )
+                ? parsedData.returnCart
+                : [];
     } catch (error) {
-        console.warn("Не удалось загрузить корзину:", error);
-        state.cart = [];
+        console.warn(
+            "Не удалось загрузить корзины:",
+            error
+        );
+
+        state.orderCart = [];
+        state.returnCart = [];
     }
 }
 

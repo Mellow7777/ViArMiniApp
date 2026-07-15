@@ -564,43 +564,6 @@ if (infoButton) {
         );
     }
 
-    function scrollToFirstFoundProduct() {
-    const filteredProducts =
-        getFilteredProducts();
-
-    if (filteredProducts.length === 0) {
-        return;
-    }
-
-    const firstProduct =
-        filteredProducts[0];
-
-    requestAnimationFrame(() => {
-        const productElement =
-            document.getElementById(
-                `product-${firstProduct.id}`
-            );
-
-        if (!productElement) {
-            return;
-        }
-
-        productElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-        productElement.classList.add(
-            "search-highlight"
-        );
-
-        setTimeout(() => {
-            productElement.classList.remove(
-                "search-highlight"
-            );
-        }, 1200);
-    });
-}
 
     function updateEstimatedTotal() {
         const total =
@@ -1065,28 +1028,58 @@ function clearCart() {
 function bindEvents() {
 let searchScrollTimer;
 
-elements.productSearch.addEventListener(
-    "input",
-    () => {
-        const searchText =
-            elements.productSearch.value.trim();
+elements.productSearch.addEventListener("input", () => {
+    const searchText =
+        elements.productSearch.value.trim();
 
-        if (searchText.length > 0) {
-            state.selectedGroup = "Все";
-            renderGroups();
-        }
-
-        renderProducts();
-
-        clearTimeout(searchScrollTimer);
-
-        if (searchText.length >= 2) {
-            searchScrollTimer = setTimeout(() => {
-                scrollToFirstFoundProduct();
-            }, 250);
-        }
+    if (searchText.length > 0) {
+        state.selectedGroup = "Все";
+        renderGroups();
     }
-);
+
+    renderProducts();
+
+    clearTimeout(searchScrollTimer);
+
+    if (searchText.length < 2) {
+        return;
+    }
+
+    searchScrollTimer = setTimeout(() => {
+        const firstProductCard =
+            document.querySelector(
+                "#productsList .product-card"
+            );
+
+        if (!firstProductCard) {
+            return;
+        }
+
+        const cardPosition =
+            firstProductCard.getBoundingClientRect().top +
+            window.scrollY;
+
+        const topOffset = 150;
+
+        window.scrollTo({
+            top: Math.max(
+                0,
+                cardPosition - topOffset
+            ),
+            behavior: "smooth"
+        });
+
+        firstProductCard.classList.add(
+            "search-highlight"
+        );
+
+        setTimeout(() => {
+            firstProductCard.classList.remove(
+                "search-highlight"
+            );
+        }, 1500);
+    }, 350);
+});
 
 
     elements.clearCartButton.addEventListener("click", clearCart);

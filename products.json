@@ -8,7 +8,8 @@
     "step": 0.1,
     "price": 397.60,
     "approximateWeightPerPiece": 0.240,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1001.png"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "step": 0.1,
     "price": 353.75,
     "approximateWeightPerPiece": 0.500,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1002.png"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "step": 0.1,
     "price": 343.40,
     "approximateWeightPerPiece": 0.420,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1003.png"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "step": 0.1,
     "price": 250.30,
     "approximateWeightPerPiece": 0.320,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1004.png"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "step": 0.1,
     "price": 549.70,
     "approximateWeightPerPiece": 0.300,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1005.png"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "step": 0.1,
     "price": 222.85,
     "approximateWeightPerPiece": 0.320,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1006.png"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "step": 0.1,
     "price": 578.40,
     "approximateWeightPerPiece": 0.230,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1007.png"
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
     "step": 0.1,
     "price": 487.20,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": "images/1008.png"
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
     "step": 0.1,
     "price": 231.05,
     "approximateWeightPerPiece": 0.420,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
     "step": 0.1,
     "price": 216.05,
     "approximateWeightPerPiece": 0.220,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
     "step": 0.1,
     "price": 216.05,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 12,
@@ -129,7 +140,8 @@
     "step": 0.1,
     "price": 266.05,
     "approximateWeightPerPiece": 0.650,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 13,
@@ -140,7 +152,8 @@
     "step": 0.1,
     "price": 204.40,
     "approximateWeightPerPiece": 0.520,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 14,
@@ -151,7 +164,8 @@
     "step": 0.1,
     "price": 200.30,
     "approximateWeightPerPiece": 0.300,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 15,
@@ -162,7 +176,8 @@
     "step": 0.1,
     "price": 371.55,
     "approximateWeightPerPiece": 0.300,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 16,
@@ -173,7 +188,8 @@
     "step": 0.1,
     "price": 337.40,
     "approximateWeightPerPiece": 0.330,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
     "step": 0.1,
     "price": 226.35,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 18,
@@ -195,7 +212,8 @@
     "step": 0.1,
     "price": 235.90,
     "approximateWeightPerPiece": 0.420,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 19,
@@ -206,7 +224,8 @@
     "step": 0.1,
     "price": 222.20,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 20,
@@ -217,7 +236,8 @@
     "step": 0.1,
     "price": 226.35,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 21,
@@ -228,7 +248,8 @@
     "step": 0.1,
     "price": 235.90,
     "approximateWeightPerPiece": 0.320,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 22,
@@ -239,7 +260,8 @@
     "step": 0.1,
     "price": 233.80,
     "approximateWeightPerPiece": 0.410,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 23,
@@ -250,7 +272,8 @@
     "step": 0.1,
     "price": 246.90,
     "approximateWeightPerPiece": 0.220,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 24,
@@ -261,7 +284,8 @@
     "step": 0.1,
     "price": 320.90,
     "approximateWeightPerPiece": 0.450,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 25,
@@ -272,7 +296,8 @@
     "step": 0.1,
     "price": 311.90,
     "approximateWeightPerPiece": 0.220,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 26,
@@ -283,7 +308,8 @@
     "step": 0.1,
     "price": 259.20,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 27,
@@ -294,7 +320,8 @@
     "step": 0.1,
     "price": 259.20,
     "approximateWeightPerPiece": 0,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 28,
@@ -305,7 +332,8 @@
     "step": 0.1,
     "price": 172.15,
     "approximateWeightPerPiece": 0.220,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 29,
@@ -316,7 +344,8 @@
     "step": 0.1,
     "price": 398.95,
     "approximateWeightPerPiece": 0.320,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 30,
@@ -327,7 +356,8 @@
     "step": 0.1,
     "price": 398.95,
     "approximateWeightPerPiece": 0.350,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 31,
@@ -338,7 +368,8 @@
     "step": 0.1,
     "price": 388.60,
     "approximateWeightPerPiece": 0,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 32,
@@ -349,7 +380,8 @@
     "step": 0.1,
     "price": 322.85,
     "approximateWeightPerPiece": 0.350,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 33,
@@ -360,7 +392,8 @@
     "step": 0.1,
     "price": 283.85,
     "approximateWeightPerPiece": 0.750,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 34,
@@ -371,7 +404,8 @@
     "step": 0.1,
     "price": 186.50,
     "approximateWeightPerPiece": 0.340,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   },
   {
     "id": 35,
@@ -382,6 +416,7 @@
     "step": 0.1,
     "price": 287.95,
     "approximateWeightPerPiece": 0.450,
-    "canOrderByPiece": true
+    "canOrderByPiece": true,
+    "imageUrl": ""
   }
 ]

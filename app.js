@@ -1254,99 +1254,93 @@ function removeFromDrawerCart(cartKey) {
 }
 
 function bindEvents() {
-if (elements.floatingCartButton) {
-    elements.floatingCartButton.onclick =
-        openCartDrawer;
-}
+    if (elements.floatingCartButton) {
+        elements.floatingCartButton.onclick =
+            openCartDrawer;
+    }
 
-if (elements.cartDrawerClose) {
-    elements.cartDrawerClose.onclick =
-        closeCartDrawer;
-}
+    if (elements.cartDrawerClose) {
+        elements.cartDrawerClose.onclick =
+            closeCartDrawer;
+    }
 
-if (elements.cartDrawerOverlay) {
-    elements.cartDrawerOverlay.onclick =
-        closeCartDrawer;
-}
+    if (elements.cartDrawerOverlay) {
+        elements.cartDrawerOverlay.onclick =
+            closeCartDrawer;
+    }
 
-if (elements.drawerSendButton) {
-    elements.drawerSendButton.onclick =
-        sendOrder;
-}
+    if (elements.drawerSendButton) {
+        elements.drawerSendButton.onclick =
+            sendOrder;
+    }
 
-document
-    .querySelectorAll(".drawer-mode-button")
-    .forEach((button) => {
-        button.addEventListener("click", () => {
-            document
-                .querySelectorAll(".drawer-mode-button")
-                .forEach((item) => {
-                    item.classList.remove("active");
-                });
+    document
+        .querySelectorAll(".drawer-mode-button")
+        .forEach((button) => {
+            button.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".drawer-mode-button")
+                    .forEach((item) => {
+                        item.classList.remove("active");
+                    });
 
-            button.classList.add("active");
+                button.classList.add("active");
 
-            state.drawerMode =
-                button.dataset.drawerMode;
+                state.drawerMode =
+                    button.dataset.drawerMode;
 
-            renderDrawerCart();
+                renderDrawerCart();
+            });
         });
-    });
 
+    if (elements.clearCartButton) {
+        elements.clearCartButton.addEventListener(
+            "click",
+            clearCart
+        );
+    }
 
-    elements.clearCartButton.addEventListener("click", clearCart);
-
-    elements.sendOrderButton.addEventListener("click", sendOrder);
+    if (elements.sendOrderButton) {
+        elements.sendOrderButton.addEventListener(
+            "click",
+            sendOrder
+        );
+    }
 
     if (elements.productModalClose) {
-    elements.productModalClose.addEventListener(
-        "click",
-        closeProductModal
-    );
-}
+        elements.productModalClose.addEventListener(
+            "click",
+            closeProductModal
+        );
+    }
 
-if (elements.productModalOverlay) {
-    elements.productModalOverlay.addEventListener(
-        "click",
-        closeProductModal
-    );
-}
+    if (elements.productModalOverlay) {
+        elements.productModalOverlay.addEventListener(
+            "click",
+            closeProductModal
+        );
+    }
 
-   document
-    .querySelectorAll(".operation-button")
-    .forEach((button) => {
-        button.addEventListener("click", () => {
-            document
-                .querySelectorAll(".operation-button")
-                .forEach((item) => {
-                    item.classList.remove("active");
-                });
+    document
+        .querySelectorAll(".operation-button")
+        .forEach((button) => {
+            button.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".operation-button")
+                    .forEach((item) => {
+                        item.classList.remove("active");
+                    });
 
-            button.classList.add("active");
+                button.classList.add("active");
 
-            state.activeMode =
-                button.dataset.operation;
+                state.activeMode =
+                    button.dataset.operation;
 
-            renderProducts();
-            renderCart();
-            updateSummary();
+                renderProducts();
+                renderCart();
+                updateSummary();
+            });
         });
-    });
-
-    const floatingCartButton =
-    document.getElementById("floatingCartButton");
-
-const cartSection =
-    document.getElementById("cartSection");
-
-if (floatingCartButton && cartSection) {
-    floatingCartButton.onclick = () => {
-        cartSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    };
-}
 }
 
 function sendOrder() {

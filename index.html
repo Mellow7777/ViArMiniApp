@@ -210,6 +210,81 @@
     </div>
 </div>
 
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+
+    <div class="cart-drawer-content">
+        <div class="cart-drawer-header">
+            <div>
+                <h2>Корзина</h2>
+                <span id="drawerCartSummary">
+                    Заказ: 0 · Возврат: 0
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="cart-drawer-close"
+                id="cartDrawerClose"
+                aria-label="Закрыть корзину"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="drawer-mode-switch">
+            <button
+                type="button"
+                class="drawer-mode-button active"
+                data-drawer-mode="order"
+            >
+                📦 Заказ
+                <span id="drawerOrderCount">0</span>
+            </button>
+
+            <button
+                type="button"
+                class="drawer-mode-button"
+                data-drawer-mode="return"
+            >
+                ↩️ Возврат
+                <span id="drawerReturnCount">0</span>
+            </button>
+        </div>
+
+        <div class="drawer-cart-list" id="drawerCartList"></div>
+
+        <div class="drawer-empty-cart" id="drawerEmptyCart">
+            Корзина заказа пока пустая
+        </div>
+
+        <div class="drawer-summary">
+            <div>
+                <span>Позиций</span>
+                <strong id="drawerPositions">0</strong>
+            </div>
+
+            <div>
+                <span>Количество</span>
+                <strong id="drawerQuantity">0</strong>
+            </div>
+
+            <div>
+                <span>Примерная сумма заказа</span>
+                <strong id="drawerTotalPrice">≈ 0 грн</strong>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="drawer-send-button"
+            id="drawerSendButton"
+        >
+            Отправить
+        </button>
+    </div>
+</div>
+
 <button
     type="button"
     class="floating-cart-button"

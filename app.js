@@ -372,13 +372,6 @@ function createProductElement(product) {
             </div>
         </div>
 
-        const infoButton =
-    card.querySelector(".info-button");
-
-if (infoButton) {
-    infoButton.addEventListener("click", () => {
-        openProductModal(product);
-    });
 }
 
         ${unitSwitchHtml}
@@ -431,6 +424,15 @@ if (infoButton) {
 </button>
         </div>
     `;
+
+    const infoButton =
+    card.querySelector(".info-button");
+
+if (infoButton) {
+    infoButton.addEventListener("click", () => {
+        openProductModal(product);
+    });
+}
 
   if (!canAddProduct) {
     card.classList.add("product-unavailable");

@@ -269,11 +269,20 @@ function initializeTelegram() {
     telegram.ready();
     telegram.expand();
 
-    if (typeof telegram.disableVerticalSwipes === "function") {
+    const telegramVersion =
+        Number.parseFloat(telegram.version || "0");
+
+    if (
+        telegramVersion >= 7.7 &&
+        typeof telegram.disableVerticalSwipes === "function"
+    ) {
         telegram.disableVerticalSwipes();
     }
 
-    configureTelegramMainButton();
+    if (telegram.MainButton) {
+        telegram.MainButton.hide();
+        telegram.MainButton.offClick(sendOrder);
+    }
 }
 
 function configureTelegramMainButton() {
@@ -281,17 +290,8 @@ function configureTelegramMainButton() {
         return;
     }
 
-    telegram.MainButton.setText("ОТПРАВИТЬ ЗАКАЗ");
-    telegram.MainButton.setParams({
-        color: "#2d8cff",
-        text_color: "#ffffff",
-        is_active: true,
-        is_visible: true
-    });
-
-    telegram.MainButton.onClick(sendOrder);
+    telegram.MainButton.hide();
 }
-
 function renderUser() {
     const telegramUser = telegram?.initDataUnsafe?.user;
 

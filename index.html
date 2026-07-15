@@ -152,7 +152,63 @@
 
     <div class="toast" id="toast"></div>
 
-   <script src="products.js?v=20"></script>
-<script src="app.js?v=23"></script>
+    <div class="product-modal" id="productModal">
+    <div
+        class="product-modal-overlay"
+        id="productModalOverlay"
+    ></div>
+
+    <div class="product-modal-content">
+        <button
+            type="button"
+            class="product-modal-close"
+            id="productModalClose"
+        >
+            ✕
+        </button>
+
+        <div class="product-modal-image-wrapper">
+            <div
+                class="product-image-loading"
+                id="productImageLoading"
+            >
+                Загрузка фото...
+            </div>
+
+            <img
+                id="productModalImage"
+                class="product-modal-image"
+                alt="Фото товара"
+            >
+        </div>
+
+        <h2 id="productModalName"></h2>
+
+        <div class="product-modal-details">
+            <div>
+                <span>Артикул</span>
+                <strong id="productModalArticle"></strong>
+            </div>
+
+            <div>
+                <span>Цена</span>
+                <strong id="productModalPrice"></strong>
+            </div>
+
+            <div>
+                <span>Примерный вес</span>
+                <strong id="productModalWeight"></strong>
+            </div>
+
+            <div>
+                <span>Наличие</span>
+                <strong id="productModalAvailability"></strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <script src="products.js?v=30"></script>
+<script src="app.js?v=30"></script>
 </body>
 </html> 

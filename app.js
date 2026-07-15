@@ -71,7 +71,16 @@ productModalWeight:
     document.getElementById("productModalWeight"),
 
 productModalAvailability:
-    document.getElementById("productModalAvailability")
+    document.getElementById("productModalAvailability"),
+
+floatingCartButton:
+    document.getElementById("floatingCartButton"),
+
+floatingCartCount:
+    document.getElementById("floatingCartCount"),
+
+cartSection:
+    document.getElementById("cartSection"),
 };
     
 
@@ -918,6 +927,18 @@ function updateSummary() {
         state.orderCart.length +
         state.returnCart.length;
 
+    if (elements.floatingCartCount) {
+    elements.floatingCartCount.textContent =
+        totalItemsCount;
+}
+
+if (elements.floatingCartButton) {
+    elements.floatingCartButton.classList.toggle(
+        "has-items",
+        totalItemsCount > 0
+    );
+}    
+
     if (elements.cartBadge) {
         elements.cartBadge.textContent =
             totalItemsCount;
@@ -1011,6 +1032,21 @@ function bindEvents() {
         state.selectedGroup = "Все";
         renderGroups();
     }
+
+    if (
+    elements.floatingCartButton &&
+    elements.cartSection
+) {
+    elements.floatingCartButton.addEventListener(
+        "click",
+        () => {
+            elements.cartSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    );
+}
 
     renderProducts();
 });

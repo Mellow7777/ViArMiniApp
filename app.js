@@ -1033,28 +1033,7 @@ function bindEvents() {
         renderGroups();
     }
 
-    if (elements.floatingCartButton) {
-    elements.floatingCartButton.addEventListener(
-        "click",
-        () => {
-            const cartSection =
-                document.getElementById("cartSection");
-
-            if (!cartSection) {
-                console.error(
-                    "Не найден элемент #cartSection"
-                );
-
-                return;
-            }
-
-            cartSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    );
-}
+   
 
 console.log(
     "Плавающая корзина:",
@@ -1107,6 +1086,21 @@ if (elements.productModalOverlay) {
             updateSummary();
         });
     });
+
+    const floatingCartButton =
+    document.getElementById("floatingCartButton");
+
+const cartSection =
+    document.getElementById("cartSection");
+
+if (floatingCartButton && cartSection) {
+    floatingCartButton.onclick = () => {
+        cartSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    };
+}
 }
 
 function sendOrder() {
@@ -1507,3 +1501,36 @@ function closeProductModal() {
     elements.productModalImage.removeAttribute("src");
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const floatingCartButton =
+        document.getElementById("floatingCartButton");
+
+    const cartSection =
+        document.getElementById("cartSection");
+
+    console.log("Кнопка корзины:", floatingCartButton);
+    console.log("Секция корзины:", cartSection);
+
+    if (!floatingCartButton) {
+        console.error(
+            "Не найдена кнопка #floatingCartButton"
+        );
+        return;
+    }
+
+    if (!cartSection) {
+        console.error(
+            "Не найдена секция #cartSection"
+        );
+        return;
+    }
+
+    floatingCartButton.addEventListener("click", () => {
+        console.log("Нажата плавающая корзина");
+
+        cartSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    });
+});

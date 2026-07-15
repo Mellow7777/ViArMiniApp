@@ -1254,6 +1254,20 @@ function removeFromDrawerCart(cartKey) {
 }
 
 function bindEvents() {
+    if (elements.productSearch) {
+    elements.productSearch.addEventListener("input", () => {
+        const searchText =
+            elements.productSearch.value.trim();
+
+        // При поиске ищем сразу среди всех групп
+        if (searchText.length > 0) {
+            state.selectedGroup = "Все";
+            renderGroups();
+        }
+
+        renderProducts();
+    });
+}
     if (elements.floatingCartButton) {
         elements.floatingCartButton.onclick =
             openCartDrawer;

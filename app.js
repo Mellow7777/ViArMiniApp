@@ -18,6 +18,7 @@ const productGroups = [
 const state = {
     activeMode: "order",
     selectedGroup: "Все",
+    drawerMode: "order",
     orderCart: [],
     returnCart: []
 };
@@ -81,6 +82,41 @@ floatingCartCount:
 
 cartSection:
     document.getElementById("cartSection"),
+    cartDrawer:
+    document.getElementById("cartDrawer"),
+
+cartDrawerOverlay:
+    document.getElementById("cartDrawerOverlay"),
+
+cartDrawerClose:
+    document.getElementById("cartDrawerClose"),
+
+drawerCartList:
+    document.getElementById("drawerCartList"),
+
+drawerEmptyCart:
+    document.getElementById("drawerEmptyCart"),
+
+drawerOrderCount:
+    document.getElementById("drawerOrderCount"),
+
+drawerReturnCount:
+    document.getElementById("drawerReturnCount"),
+
+drawerCartSummary:
+    document.getElementById("drawerCartSummary"),
+
+drawerPositions:
+    document.getElementById("drawerPositions"),
+
+drawerQuantity:
+    document.getElementById("drawerQuantity"),
+
+drawerTotalPrice:
+    document.getElementById("drawerTotalPrice"),
+
+drawerSendButton:
+    document.getElementById("drawerSendButton"),
 };
     
 
@@ -117,6 +153,32 @@ async function initializeApp() {
     renderGroups();
     renderProducts();
     renderCart();
+}
+
+function openCartDrawer() {
+    if (!elements.cartDrawer) {
+        return;
+    }
+
+    renderDrawerCart();
+
+    elements.cartDrawer.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+function closeCartDrawer() {
+    if (!elements.cartDrawer) {
+        return;
+    }
+
+    elements.cartDrawer.classList.remove("show");
+    document.body.style.overflow = "";
+}
+
+function getDrawerCart() {
+    return state.drawerMode === "return"
+        ? state.returnCart
+        : state.orderCart;
 }
 
 function renderGroups() {
@@ -724,6 +786,7 @@ function addToCart(
     renderCart();
     renderProducts();
     updateSummary();
+    renderDrawerCart();
 
     triggerHaptic("success");
 
@@ -911,6 +974,7 @@ function renderCart() {
     saveCart();
     renderCart();
     renderProducts();
+    renderDrawerCart();
 
     triggerHaptic("warning");
 }
@@ -1017,6 +1081,7 @@ function clearCart() {
     saveCart();
     renderCart();
     renderProducts();
+    renderDrawerCart();
 
     showToast(
         state.activeMode === "return"
@@ -1025,61 +1090,208 @@ function clearCart() {
     );
 }
 
-function bindEvents() {
-let searchScrollTimer;
-
-elements.productSearch.addEventListener("input", () => {
-    const searchText =
-        elements.productSearch.value.trim();
-
-    if (searchText.length > 0) {
-        state.selectedGroup = "Все";
-        renderGroups();
-    }
-
-    renderProducts();
-
-    clearTimeout(searchScrollTimer);
-
-    if (searchText.length < 2) {
+function renderDrawerCart() {
+    if (!elements.drawerCartList) {
         return;
     }
 
-    searchScrollTimer = setTimeout(() => {
-        const firstProductCard =
-            document.querySelector(
-                "#productsList .product-card"
+    const activeCart = getDrawerCart();
+
+    elements.drawerCartList.innerHTML = "";
+
+    const isEmpty = activeCart.length === 0;
+
+    if (elements.drawerEmptyCart) {
+        elements.drawerEmptyCart.style.display =
+            isEmpty ? "block" : "none";
+
+        elements.drawerEmptyCart.textContent =
+            state.drawerMode === "return"
+                ? "Корзина возврата пока пустая"
+                : "Корзина заказа пока пустая";
+    }
+
+    activeCart.forEach((item) => {
+        const row = document.createElement("div");
+
+        row.className = "drawer-cart-item";
+
+        const estimatedWeight =
+            calculateItemEstimatedWeight(item);
+
+        const estimatedTotal =
+            calculateItemEstimatedTotal(item);
+
+        const priceHtml =
+            state.drawerMode === "order"
+                ? `
+                    <div class="drawer-cart-item-price">
+                        ≈ ${formatMoney(
+                            estimatedTotal
+                        )} грн
+                    </div>
+                `
+                : "";
+
+        row.innerHTML = `
+            <div class="drawer-cart-item-info">
+                <strong>
+                    ${escapeHtml(item.name)}
+                </strong>
+
+                <span>
+                    ${formatQuantity(item.quantity)}
+                    ${escapeHtml(item.unit)}
+                </span>
+
+                ${
+                    item.unit === "шт"
+                        ? `
+                            <small>
+                                ≈ ${formatQuantity(
+                                    estimatedWeight
+                                )} кг
+                            </small>
+                        `
+                        : ""
+                }
+
+                ${priceHtml}
+            </div>
+
+            <button
+                type="button"
+                class="drawer-remove-button"
+            >
+                ✕
+            </button>
+        `;
+
+        const removeButton =
+            row.querySelector(
+                ".drawer-remove-button"
             );
 
-        if (!firstProductCard) {
-            return;
-        }
-
-        const cardPosition =
-            firstProductCard.getBoundingClientRect().top +
-            window.scrollY;
-
-        const topOffset = 150;
-
-        window.scrollTo({
-            top: Math.max(
-                0,
-                cardPosition - topOffset
-            ),
-            behavior: "smooth"
+        removeButton.addEventListener("click", () => {
+            removeFromDrawerCart(item.cartKey);
         });
 
-        firstProductCard.classList.add(
-            "search-highlight"
-        );
+        elements.drawerCartList.appendChild(row);
+    });
 
-        setTimeout(() => {
-            firstProductCard.classList.remove(
-                "search-highlight"
+    const positions = activeCart.length;
+
+    const quantity = activeCart.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
+
+    if (elements.drawerOrderCount) {
+        elements.drawerOrderCount.textContent =
+            state.orderCart.length;
+    }
+
+    if (elements.drawerReturnCount) {
+        elements.drawerReturnCount.textContent =
+            state.returnCart.length;
+    }
+
+    if (elements.drawerCartSummary) {
+        elements.drawerCartSummary.textContent =
+            `Заказ: ${state.orderCart.length} · ` +
+            `Возврат: ${state.returnCart.length}`;
+    }
+
+    if (elements.drawerPositions) {
+        elements.drawerPositions.textContent =
+            positions;
+    }
+
+    if (elements.drawerQuantity) {
+        elements.drawerQuantity.textContent =
+            formatQuantity(quantity);
+    }
+
+    if (elements.drawerTotalPrice) {
+        elements.drawerTotalPrice.textContent =
+            `≈ ${formatMoney(
+                calculateCartTotal()
+            )} грн`;
+    }
+
+    const nothingToSend =
+        state.orderCart.length === 0 &&
+        state.returnCart.length === 0;
+
+    if (elements.drawerSendButton) {
+        elements.drawerSendButton.disabled =
+            nothingToSend;
+    }
+}
+
+function removeFromDrawerCart(cartKey) {
+    if (state.drawerMode === "return") {
+        state.returnCart =
+            state.returnCart.filter(
+                (item) =>
+                    item.cartKey !== cartKey
             );
-        }, 1500);
-    }, 350);
-});
+    } else {
+        state.orderCart =
+            state.orderCart.filter(
+                (item) =>
+                    item.cartKey !== cartKey
+            );
+    }
+
+    saveCart();
+    renderDrawerCart();
+    renderCart();
+    renderProducts();
+    updateSummary();
+
+    triggerHaptic("warning");
+}
+
+function bindEvents() {
+if (elements.floatingCartButton) {
+    elements.floatingCartButton.onclick =
+        openCartDrawer;
+}
+
+if (elements.cartDrawerClose) {
+    elements.cartDrawerClose.onclick =
+        closeCartDrawer;
+}
+
+if (elements.cartDrawerOverlay) {
+    elements.cartDrawerOverlay.onclick =
+        closeCartDrawer;
+}
+
+if (elements.drawerSendButton) {
+    elements.drawerSendButton.onclick =
+        sendOrder;
+}
+
+document
+    .querySelectorAll(".drawer-mode-button")
+    .forEach((button) => {
+        button.addEventListener("click", () => {
+            document
+                .querySelectorAll(".drawer-mode-button")
+                .forEach((item) => {
+                    item.classList.remove("active");
+                });
+
+            button.classList.add("active");
+
+            state.drawerMode =
+                button.dataset.drawerMode;
+
+            renderDrawerCart();
+        });
+    });
 
 
     elements.clearCartButton.addEventListener("click", clearCart);
@@ -1160,6 +1372,9 @@ function sendOrder() {
         triggerHaptic("error");
         return;
     }
+
+    renderDrawerCart();
+    closeCartDrawer();
 
     const orderIsEmpty =
         state.orderCart.length === 0;

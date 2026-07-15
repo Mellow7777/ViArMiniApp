@@ -4,8 +4,20 @@ const telegram = window.Telegram?.WebApp;
 
 let products = [];
 
+const productGroups = [
+    "Все",
+    "Тарасівські ковбаси",
+    "КБК",
+    "Крупельницькі ковбаси",
+    "Молочна продукція",
+    "Чипси курячі",
+    "Снеки",
+    "Домашня продукція"
+];
+
 const state = {
     activeMode: "order",
+    selectedGroup: "Все",
     orderCart: [],
     returnCart: []
 };
@@ -93,8 +105,38 @@ async function initializeApp() {
 
     await loadProducts();
 
+    renderGroups();
     renderProducts();
     renderCart();
+}
+
+function renderGroups() {
+    if (!elements.categories) {
+        return;
+    }
+
+    elements.categories.innerHTML = "";
+
+    productGroups.forEach((group) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "category-button";
+        button.textContent = group;
+
+        if (state.selectedGroup === group) {
+            button.classList.add("active");
+        }
+
+        button.addEventListener("click", () => {
+            state.selectedGroup = group;
+
+            renderGroups();
+            renderProducts();
+        });
+
+        elements.categories.appendChild(button);
+    });
 }
 
 async function loadProducts() {
@@ -248,14 +290,26 @@ function getFilteredProducts() {
     );
 
     return products.filter((product) => {
-        const productSearchValue = normalizeText(
-            `${product.name} ${product.article}`
+        const matchesGroup =
+            state.selectedGroup === "Все" ||
+            product.group === state.selectedGroup;
+
+        const searchableText = normalizeText(
+            [
+                product.name,
+                product.russianName,
+                product.article,
+                product.group
+            ]
+                .filter(Boolean)
+                .join(" ")
         );
 
-        return (
+        const matchesSearch =
             searchText.length === 0 ||
-            productSearchValue.includes(searchText)
-        );
+            searchableText.includes(searchText);
+
+        return matchesGroup && matchesSearch;
     });
 }
 
@@ -949,7 +1003,17 @@ function clearCart() {
 }
 
 function bindEvents() {
-    elements.productSearch.addEventListener("input", renderProducts);
+    elements.productSearch.addEventListener("input", () => {
+    const searchText =
+        elements.productSearch.value.trim();
+
+    if (searchText.length > 0) {
+        state.selectedGroup = "Все";
+        renderGroups();
+    }
+
+    renderProducts();
+});
 
     elements.clearCartButton.addEventListener("click", clearCart);
 
@@ -1218,12 +1282,18 @@ function createOrderId() {
 }
 
 function normalizeText(value) {
-    return String(value)
+    return String(value ?? "")
         .toLowerCase()
         .trim()
         .replaceAll("ё", "е")
         .replaceAll("і", "и")
-        .replaceAll("ї", "и");
+        .replaceAll("ї", "и")
+        .replaceAll("є", "е")
+        .replaceAll("ґ", "г")
+        .replaceAll("’", "")
+        .replaceAll("'", "")
+        .replaceAll("`", "")
+        .replace(/\s+/g, " ");
 }
 
 function parseQuantity(value) {

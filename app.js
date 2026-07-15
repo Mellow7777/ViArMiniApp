@@ -1033,20 +1033,38 @@ function bindEvents() {
         renderGroups();
     }
 
-    if (
-    elements.floatingCartButton &&
-    elements.cartSection
-) {
+    if (elements.floatingCartButton) {
     elements.floatingCartButton.addEventListener(
         "click",
         () => {
-            elements.cartSection.scrollIntoView({
+            const cartSection =
+                document.getElementById("cartSection");
+
+            if (!cartSection) {
+                console.error(
+                    "Не найден элемент #cartSection"
+                );
+
+                return;
+            }
+
+            cartSection.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
             });
         }
     );
 }
+
+console.log(
+    "Плавающая корзина:",
+    elements.floatingCartButton
+);
+
+console.log(
+    "Секция корзины:",
+    elements.cartSection
+);
 
     renderProducts();
 });

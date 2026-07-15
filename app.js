@@ -1482,6 +1482,26 @@ function sendOrder() {
     }
 }
 
+function closeProductModal() {
+    if (!elements.productModal) {
+        return;
+    }
+
+    elements.productModal.classList.remove("show");
+    document.body.style.overflow = "";
+
+    if (elements.productModalImage) {
+        elements.productModalImage.removeAttribute("src");
+        elements.productModalImage.style.display = "none";
+    }
+
+    if (elements.productImageLoading) {
+        elements.productImageLoading.style.display = "flex";
+        elements.productImageLoading.textContent =
+            "Загрузка фото...";
+    }
+}
+
 function showOrderForBrowserTesting(json) {
     const formattedJson = JSON.stringify(
         JSON.parse(json),

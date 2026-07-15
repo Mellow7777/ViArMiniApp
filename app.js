@@ -1343,6 +1343,26 @@ function bindEvents() {
         });
 }
 
+function closeProductModal() {
+    if (!elements.productModal) {
+        return;
+    }
+
+    elements.productModal.classList.remove("show");
+    document.body.style.overflow = "";
+
+    if (elements.productModalImage) {
+        elements.productModalImage.removeAttribute("src");
+        elements.productModalImage.style.display = "none";
+    }
+
+    if (elements.productImageLoading) {
+        elements.productImageLoading.style.display = "flex";
+        elements.productImageLoading.textContent =
+            "Загрузка фото...";
+    }
+}
+
 function sendOrder() {
     const selectedShopId =
         Number(
@@ -1482,25 +1502,6 @@ function sendOrder() {
     }
 }
 
-function closeProductModal() {
-    if (!elements.productModal) {
-        return;
-    }
-
-    elements.productModal.classList.remove("show");
-    document.body.style.overflow = "";
-
-    if (elements.productModalImage) {
-        elements.productModalImage.removeAttribute("src");
-        elements.productModalImage.style.display = "none";
-    }
-
-    if (elements.productImageLoading) {
-        elements.productImageLoading.style.display = "flex";
-        elements.productImageLoading.textContent =
-            "Загрузка фото...";
-    }
-}
 
 function showOrderForBrowserTesting(json) {
     const formattedJson = JSON.stringify(

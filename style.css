@@ -824,3 +824,15 @@ textarea:focus {
         font-size: 11px;
     }
 }
+
+.product-card.search-highlight {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 0 0 6px rgba(45, 140, 255, 0.12);
+
+    transition:
+        outline 0.2s ease,
+        box-shadow 0.2s ease;
+}

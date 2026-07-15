@@ -27,8 +27,41 @@ const elements = {
     clearCartButton: document.getElementById("clearCartButton"),
     sendOrderButton: document.getElementById("sendOrderButton"),
     orderComment: document.getElementById("orderComment"),
-    toast: document.getElementById("toast")
+    toast: document.getElementById("toast"),
+    orderComment: document.getElementById("orderComment"),
+toast: document.getElementById("toast"),
+
+productModal:
+    document.getElementById("productModal"),
+
+productModalOverlay:
+    document.getElementById("productModalOverlay"),
+
+productModalClose:
+    document.getElementById("productModalClose"),
+
+productModalImage:
+    document.getElementById("productModalImage"),
+
+productImageLoading:
+    document.getElementById("productImageLoading"),
+
+productModalName:
+    document.getElementById("productModalName"),
+
+productModalArticle:
+    document.getElementById("productModalArticle"),
+
+productModalPrice:
+    document.getElementById("productModalPrice"),
+
+productModalWeight:
+    document.getElementById("productModalWeight"),
+
+productModalAvailability:
+    document.getElementById("productModalAvailability")
 };
+    
 
 function getActiveCart() {
     return state.activeMode === "return"
@@ -289,11 +322,24 @@ function createProductElement(product) {
         : "";
 
     card.innerHTML = `
+    const infoButton =
+    card.querySelector(".info-button");
+
+infoButton.addEventListener("click", () => {
+    openProductModal(product);
+});
         <div class="product-top">
             <div class="product-info">
                 <h3 class="product-name">
                     ${escapeHtml(product.name)}
                 </h3>
+                <button
+    type="button"
+    class="info-button"
+    aria-label="Информация о товаре"
+>
+    i
+</button>
 
                 <div class="product-meta">
                     <span class="product-code">
@@ -906,6 +952,20 @@ function bindEvents() {
 
     elements.sendOrderButton.addEventListener("click", sendOrder);
 
+    if (elements.productModalClose) {
+    elements.productModalClose.addEventListener(
+        "click",
+        closeProductModal
+    );
+}
+
+if (elements.productModalOverlay) {
+    elements.productModalOverlay.addEventListener(
+        "click",
+        closeProductModal
+    );
+}
+
    document
     .querySelectorAll(".operation-button")
     .forEach((button) => {
@@ -1238,5 +1298,85 @@ function escapeHtml(value) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+}
+
+function openProductModal(product) {
+    if (!elements.productModal) {
+        return;
+    }
+
+    elements.productModalName.textContent =
+        product.name || "Без названия";
+
+    elements.productModalArticle.textContent =
+        product.article || "Не указан";
+
+    elements.productModalPrice.textContent =
+        Number(product.price) > 0
+            ? `${formatMoney(product.price)} грн/кг`
+            : "Не указана";
+
+    elements.productModalWeight.textContent =
+        Number(product.approximateWeightPerPiece) > 0
+            ? `${formatQuantity(
+                product.approximateWeightPerPiece
+            )} кг`
+            : "Не указан";
+
+    elements.productModalAvailability.textContent =
+        product.isAvailable
+            ? "🟢 В наличии"
+            : "🔴 Нет в наличии";
+
+    elements.productModalImage.removeAttribute("src");
+    elements.productModalImage.style.display = "none";
+    elements.productImageLoading.style.display = "flex";
+    elements.productImageLoading.textContent =
+        "Загрузка фото...";
+
+    if (product.imageUrl) {
+        elements.productModalImage.onload = () => {
+            elements.productImageLoading.style.display =
+                "none";
+
+            elements.productModalImage.style.display =
+                "block";
+        };
+
+        elements.productModalImage.onerror = () => {
+            elements.productModalImage.style.display =
+                "none";
+
+            elements.productImageLoading.style.display =
+                "flex";
+
+            elements.productImageLoading.textContent =
+                "Фото не найдено";
+        };
+
+        /*
+         * Фото начинает загружаться только сейчас,
+         * после нажатия кнопки информации.
+         */
+        elements.productModalImage.src =
+            `${product.imageUrl}?v=1`;
+    } else {
+        elements.productImageLoading.textContent =
+            "Фото отсутствует";
+    }
+
+    elements.productModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+function closeProductModal() {
+    if (!elements.productModal) {
+        return;
+    }
+
+    elements.productModal.classList.remove("show");
+    document.body.style.overflow = "";
+
+    elements.productModalImage.removeAttribute("src");
 }
 

@@ -372,8 +372,6 @@ function createProductElement(product) {
             </div>
         </div>
 
-}
-
         ${unitSwitchHtml}
 
         <div class="product-controls">

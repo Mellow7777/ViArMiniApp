@@ -322,12 +322,6 @@ function createProductElement(product) {
         : "";
 
     card.innerHTML = `
-    const infoButton =
-    card.querySelector(".info-button");
-
-infoButton.addEventListener("click", () => {
-    openProductModal(product);
-});
         <div class="product-top">
             <div class="product-info">
                 <h3 class="product-name">
@@ -377,6 +371,15 @@ infoButton.addEventListener("click", () => {
                 </div>
             </div>
         </div>
+
+        const infoButton =
+    card.querySelector(".info-button");
+
+if (infoButton) {
+    infoButton.addEventListener("click", () => {
+        openProductModal(product);
+    });
+}
 
         ${unitSwitchHtml}
 

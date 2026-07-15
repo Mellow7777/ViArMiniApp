@@ -348,6 +348,7 @@ function renderProducts() {
 function createProductElement(product) {
     const card = document.createElement("article");
     card.className = "product-card";
+    card.id = `product-${product.id}`;
 
     const isAvailable =
         product.isAvailable === true;
@@ -562,6 +563,44 @@ if (infoButton) {
             Number(product.price || 0)
         );
     }
+
+    function scrollToFirstFoundProduct() {
+    const filteredProducts =
+        getFilteredProducts();
+
+    if (filteredProducts.length === 0) {
+        return;
+    }
+
+    const firstProduct =
+        filteredProducts[0];
+
+    requestAnimationFrame(() => {
+        const productElement =
+            document.getElementById(
+                `product-${firstProduct.id}`
+            );
+
+        if (!productElement) {
+            return;
+        }
+
+        productElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        productElement.classList.add(
+            "search-highlight"
+        );
+
+        setTimeout(() => {
+            productElement.classList.remove(
+                "search-highlight"
+            );
+        }, 1200);
+    });
+}
 
     function updateEstimatedTotal() {
         const total =
@@ -1024,29 +1063,31 @@ function clearCart() {
 }
 
 function bindEvents() {
-    elements.productSearch.addEventListener("input", () => {
-    const searchText =
-        elements.productSearch.value.trim();
+let searchScrollTimer;
 
-    if (searchText.length > 0) {
-        state.selectedGroup = "Все";
-        renderGroups();
+elements.productSearch.addEventListener(
+    "input",
+    () => {
+        const searchText =
+            elements.productSearch.value.trim();
+
+        if (searchText.length > 0) {
+            state.selectedGroup = "Все";
+            renderGroups();
+        }
+
+        renderProducts();
+
+        clearTimeout(searchScrollTimer);
+
+        if (searchText.length >= 2) {
+            searchScrollTimer = setTimeout(() => {
+                scrollToFirstFoundProduct();
+            }, 250);
+        }
     }
-
-   
-
-console.log(
-    "Плавающая корзина:",
-    elements.floatingCartButton
 );
 
-console.log(
-    "Секция корзины:",
-    elements.cartSection
-);
-
-    renderProducts();
-});
 
     elements.clearCartButton.addEventListener("click", clearCart);
 

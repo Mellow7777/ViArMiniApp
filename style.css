@@ -1577,21 +1577,26 @@ body.large-text-mode .availability.unavailable {
     font-weight: 800;
 }
 
-body.large-text-mode .section-label,
-body.large-text-mode .field-label,
+body.large-text-mode .app-header p,
 body.large-text-mode .products-count,
-body.large-text-mode .product-meta,
 body.large-text-mode .product-code,
-body.large-text-mode .product-price,
+body.large-text-mode .product-unit,
 body.large-text-mode .product-weight,
-body.large-text-mode .selected-shop-address,
-body.large-text-mode .app-header p {
-    color: #ffffff !important;
-    opacity: 1 !important;
+body.large-text-mode .selected-shop-card span,
+body.large-text-mode .shop-picker label {
+    color: var(--tg-theme-text-color, #1c1c1e) !important;
+    opacity: 0.95 !important;
     font-weight: 600 !important;
+    background: transparent !important;
+}
+
+body.large-text-mode .product-meta span {
+    color: var(--tg-theme-text-color, #1c1c1e) !important;
+    background: rgba(127, 127, 127, 0.12) !important;
+    border: none !important;
 }
 
 body.large-text-mode input::placeholder {
-    color: #ffffff !important;
-    opacity: 0.9 !important;
+    color: var(--tg-theme-hint-color, #737373) !important;
+    opacity: 1 !important;
 }

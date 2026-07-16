@@ -146,7 +146,7 @@ drawerTotalTitle:
     
 drawerTotalPrice:
     document.getElementById("drawerTotalPrice"),
-    
+
 largeTextToggle:
     document.getElementById("largeTextToggle"),
     
@@ -1633,31 +1633,47 @@ document.addEventListener("click", (event) => {
         );
     }
 
-    if (elements.largeTextToggle) {
-    elements.largeTextToggle.addEventListener(
-        "click",
-        () => {
-            document.body.classList.toggle(
+   if (elements.largeTextToggle) {
+    const toggleLargeText = (event) => {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        document.body.classList.toggle(
+            "large-text-mode"
+        );
+
+        const enabled =
+            document.body.classList.contains(
                 "large-text-mode"
             );
 
-            const enabled =
-                document.body.classList.contains(
-                    "large-text-mode"
-                );
+        elements.largeTextToggle.textContent =
+            enabled
+                ? "🔎 Обычный текст"
+                : "🔎 Крупный текст";
 
-            elements.largeTextToggle.textContent =
-                enabled
-                    ? "🔎 Обычный текст"
-                    : "🔎 Крупный текст";
+        localStorage.setItem(
+            "viar-large-text",
+            enabled ? "1" : "0"
+        );
 
-            localStorage.setItem(
-                "viar-large-text",
-                enabled ? "1" : "0"
-            );
+        console.log("Крупный текст:", enabled);
+    };
+
+    elements.largeTextToggle.onclick =
+        toggleLargeText;
+
+    elements.largeTextToggle.addEventListener(
+        "touchend",
+        toggleLargeText,
+        {
+            passive: false
         }
     );
-}
+} 
+  
 
     document
         .querySelectorAll(".operation-button")

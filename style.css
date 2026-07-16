@@ -47,9 +47,7 @@ button {
 }
 
 .app-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
+    position: static;
 
     display: flex;
     align-items: center;
@@ -172,9 +170,9 @@ textarea:focus {
 }
 
 .search-section {
-    position: sticky;
-    top: 73px;
-    z-index: 15;
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
 
     padding: 8px 0;
     background: var(--tg-theme-bg-color, var(--background));
@@ -1602,9 +1600,9 @@ body.large-text-mode .product-estimated-total {
 }
 
 .app-header {
-    position: sticky;
-    top: 0;
-    z-index: 800;
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
 
     background:
         var(--tg-theme-bg-color, #ffffff);

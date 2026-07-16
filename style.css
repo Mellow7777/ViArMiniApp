@@ -1619,9 +1619,7 @@ body.large-text-mode .product-estimated-total {
 }
 
 .sticky-top-panel {
-    position: sticky;
-    top: 0;
-    z-index: 900;
+    position: static;
 
     background:
         var(--tg-theme-bg-color, #ffffff);
@@ -1631,6 +1629,9 @@ body.large-text-mode .product-estimated-total {
 
     padding-top:
         env(safe-area-inset-top);
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.12);
 }
 
 .sticky-top-panel .app-header {

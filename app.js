@@ -184,6 +184,20 @@ async function initializeApp() {
     restoreSelectedShop();
 
     renderGroups();
+    
+    const largeTextEnabled =
+    localStorage.getItem("viar-large-text") === "1";
+
+if (largeTextEnabled) {
+    document.body.classList.add(
+        "large-text-mode"
+    );
+
+    if (elements.largeTextToggle) {
+        elements.largeTextToggle.textContent =
+            "🔎 Обычный текст";
+    }
+}
     renderProducts();
     renderCart();
 }
@@ -1614,6 +1628,32 @@ document.addEventListener("click", (event) => {
             closeProductModal
         );
     }
+
+    if (elements.largeTextToggle) {
+    elements.largeTextToggle.addEventListener(
+        "click",
+        () => {
+            document.body.classList.toggle(
+                "large-text-mode"
+            );
+
+            const enabled =
+                document.body.classList.contains(
+                    "large-text-mode"
+                );
+
+            elements.largeTextToggle.textContent =
+                enabled
+                    ? "🔎 Обычный текст"
+                    : "🔎 Крупный текст";
+
+            localStorage.setItem(
+                "viar-large-text",
+                enabled ? "1" : "0"
+            );
+        }
+    );
+}
 
     document
         .querySelectorAll(".operation-button")

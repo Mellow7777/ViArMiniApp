@@ -3,6 +3,7 @@
 const telegram = window.Telegram?.WebApp;
 
 let products = [];
+let shops = [];
 
 const productGroups = [
     "Все",
@@ -27,7 +28,6 @@ const elements = {
     cartTitle: document.getElementById("cartTitle"),
     totalPrice: document.getElementById("totalPrice"),
     userName: document.getElementById("userName"),
-    shopSelect: document.getElementById("shopSelect"),
     productSearch: document.getElementById("productSearch"),
     categories: document.getElementById("categories"),
     productsList: document.getElementById("productsList"),
@@ -117,6 +117,28 @@ drawerTotalPrice:
 
 drawerSendButton:
     document.getElementById("drawerSendButton"),
+    shopSearch:
+    document.getElementById("shopSearch"),
+
+shopSearchResults:
+    document.getElementById("shopSearchResults"),
+
+selectedShopId:
+    document.getElementById("selectedShopId"),
+
+selectedShopCard:
+    document.getElementById("selectedShopCard"),
+
+selectedShopName:
+    document.getElementById("selectedShopName"),
+
+selectedShopAddress:
+    document.getElementById("selectedShopAddress"),
+
+clearSelectedShopButton:
+    document.getElementById(
+        "clearSelectedShopButton"
+    ),
 };
     
 
@@ -145,10 +167,14 @@ async function initializeApp() {
     loadCart();
     initializeTelegram();
     renderUser();
-    renderShops();
     bindEvents();
 
-    await loadProducts();
+    await Promise.all([
+        loadProducts(),
+        loadShops()
+    ]);
+
+    restoreSelectedShop();
 
     renderGroups();
     renderProducts();
@@ -311,19 +337,199 @@ function renderUser() {
         fullName || telegramUser.username || `ID: ${telegramUser.id}`;
 }
 
-function renderShops() {
-    const sortedShops = [...shops].sort((a, b) =>
-        a.name.localeCompare(b.name, "ru")
+async function loadShops() {
+    try {
+        const response = await fetch(
+            `./shops.json?v=${Date.now()}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка загрузки shops.json: ${response.status}`
+            );
+        }
+
+        const loadedShops =
+            await response.json();
+
+        if (!Array.isArray(loadedShops)) {
+            throw new Error(
+                "shops.json должен содержать массив"
+            );
+        }
+
+        shops = loadedShops;
+
+        console.log(
+            `Загружено точек: ${shops.length}`
+        );
+    } catch (error) {
+        console.error(
+            "Ошибка загрузки торговых точек:",
+            error
+        );
+
+        shops = [];
+
+        showToast(
+            "Не удалось загрузить торговые точки",
+            "error"
+        );
+    }
+}
+
+function getFilteredShops() {
+    const searchText = normalizeText(
+        elements.shopSearch?.value ?? ""
     );
 
-    sortedShops.forEach((shop) => {
-        const option = document.createElement("option");
+    if (searchText.length === 0) {
+        return [];
+    }
 
-        option.value = shop.id;
-        option.textContent = shop.name;
+    return shops
+        .filter((shop) => {
+            const searchableText =
+                normalizeText(
+                    `${shop.name} ${shop.address}`
+                );
 
-        elements.shopSelect.appendChild(option);
+            return searchableText.includes(
+                searchText
+            );
+        })
+        .slice(0, 20);
+}
+
+function renderShopSearchResults() {
+    if (!elements.shopSearchResults) {
+        return;
+    }
+
+    const searchText =
+        elements.shopSearch.value.trim();
+
+    elements.shopSearchResults.innerHTML = "";
+
+    if (searchText.length === 0) {
+        elements.shopSearchResults.classList.remove(
+            "show"
+        );
+
+        return;
+    }
+
+    const filteredShops =
+        getFilteredShops();
+
+    if (filteredShops.length === 0) {
+        elements.shopSearchResults.innerHTML = `
+            <div class="shop-no-results">
+                Торговые точки не найдены
+            </div>
+        `;
+
+        elements.shopSearchResults.classList.add(
+            "show"
+        );
+
+        return;
+    }
+
+    filteredShops.forEach((shop) => {
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+        button.className = "shop-result-item";
+
+        button.innerHTML = `
+            <strong>
+                ${escapeHtml(shop.name)}
+            </strong>
+
+            <span>
+                ${escapeHtml(shop.address || "")}
+            </span>
+        `;
+
+        button.addEventListener("click", () => {
+            selectShop(shop);
+        });
+
+        elements.shopSearchResults.appendChild(
+            button
+        );
     });
+
+    elements.shopSearchResults.classList.add(
+        "show"
+    );
+}
+
+function selectShop(shop) {
+    elements.selectedShopId.value =
+        String(shop.id);
+
+    elements.selectedShopName.textContent =
+        shop.name;
+
+    elements.selectedShopAddress.textContent =
+        shop.address || "Адрес не указан";
+
+    elements.selectedShopCard.hidden = false;
+
+    elements.shopSearch.value = "";
+    elements.shopSearch.style.display = "none";
+
+    elements.shopSearchResults.innerHTML = "";
+    elements.shopSearchResults.classList.remove(
+        "show"
+    );
+
+    localStorage.setItem(
+        "viar-selected-shop-id",
+        String(shop.id)
+    );
+
+    triggerHaptic("success");
+}
+
+function clearSelectedShop() {
+    elements.selectedShopId.value = "";
+
+    elements.selectedShopCard.hidden = true;
+    elements.shopSearch.style.display = "";
+
+    elements.shopSearch.value = "";
+    elements.shopSearch.focus();
+
+    localStorage.removeItem(
+        "viar-selected-shop-id"
+    );
+}
+
+function restoreSelectedShop() {
+    const savedShopId = Number(
+        localStorage.getItem(
+            "viar-selected-shop-id"
+        )
+    );
+
+    if (!savedShopId) {
+        return;
+    }
+
+    const savedShop = shops.find(
+        (shop) => shop.id === savedShopId
+    );
+
+    if (savedShop) {
+        selectShop(savedShop);
+    }
 }
 
 function renderCategories() {
@@ -1288,6 +1494,36 @@ function bindEvents() {
             sendOrder;
     }
 
+    if (elements.shopSearch) {
+    elements.shopSearch.addEventListener(
+        "input",
+        renderShopSearchResults
+    );
+
+    elements.shopSearch.addEventListener(
+        "focus",
+        renderShopSearchResults
+    );
+}
+
+if (elements.clearSelectedShopButton) {
+    elements.clearSelectedShopButton.addEventListener(
+        "click",
+        clearSelectedShop
+    );
+}
+
+document.addEventListener("click", (event) => {
+    const clickedInsideShopPicker =
+        event.target.closest(".shop-picker");
+
+    if (!clickedInsideShopPicker) {
+        elements.shopSearchResults?.classList.remove(
+            "show"
+        );
+    }
+});
+
     document
         .querySelectorAll(".drawer-mode-button")
         .forEach((button) => {
@@ -1378,10 +1614,8 @@ function closeProductModal() {
 }
 
 function sendOrder() {
-    const selectedShopId =
-        Number(
-            elements.shopSelect.value
-        );
+   const selectedShopId =
+    Number(elements.selectedShopId.value);
 
     const selectedShop =
         shops.find(
@@ -1434,10 +1668,11 @@ function sendOrder() {
     const order = {
         orderId: createOrderId(),
 
-        shop: {
-            id: selectedShop.id,
-            name: selectedShop.name
-        },
+       shop: {
+    id: selectedShop.id,
+    name: selectedShop.name,
+    address: selectedShop.address
+},
 
         salesRepresentative: {
             telegramId:

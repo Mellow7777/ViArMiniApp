@@ -1199,20 +1199,20 @@ function updateSummary() {
         state.orderCart.length +
         state.returnCart.length;
 
-    if (elements.floatingCartCount) {
-    elements.floatingCartCount.textContent =
-        totalItemsCount;
-}
-
-if (elements.floatingCartButton) {
-    elements.floatingCartButton.classList.toggle(
-        "has-items",
-        totalItemsCount > 0
+    const activeTotal = activeCart.reduce(
+        (sum, item) => {
+            return sum + calculateItemEstimatedTotal(item);
+        },
+        0
     );
-}    
 
     if (elements.cartBadge) {
         elements.cartBadge.textContent =
+            totalItemsCount;
+    }
+
+    if (elements.floatingCartCount) {
+        elements.floatingCartCount.textContent =
             totalItemsCount;
     }
 
@@ -1227,11 +1227,17 @@ if (elements.floatingCartButton) {
     }
 
     if (elements.totalPrice) {
-        const orderTotal =
-            calculateCartTotal();
+        const totalTitle =
+            state.activeMode === "return"
+                ? "Сумма возврата"
+                : "Примерная сумма заказа";
 
-        elements.totalPrice.textContent =
-            `≈ ${formatMoney(orderTotal)} грн`;
+        elements.totalPrice.innerHTML = `
+            <span>${totalTitle}</span>
+            <strong>
+                ≈ ${formatMoney(activeTotal)} грн
+            </strong>
+        `;
     }
 
     const nothingToSend =
@@ -1243,18 +1249,15 @@ if (elements.floatingCartButton) {
             nothingToSend;
     }
 
+    if (elements.floatingCartButton) {
+        elements.floatingCartButton.classList.toggle(
+            "has-items",
+            totalItemsCount > 0
+        );
+    }
+
     if (telegram?.MainButton) {
-        if (nothingToSend) {
-            telegram.MainButton.disable();
-            telegram.MainButton.setText(
-                "КОРЗИНЫ ПУСТЫ"
-            );
-        } else {
-            telegram.MainButton.enable();
-            telegram.MainButton.setText(
-                `ОТПРАВИТЬ · ${totalItemsCount}`
-            );
-        }
+        telegram.MainButton.hide();
     }
 }
 
@@ -1419,10 +1422,14 @@ function renderDrawerCart() {
     }
 
     if (elements.drawerTotalPrice) {
-        elements.drawerTotalPrice.textContent =
-            `≈ ${formatMoney(
-                calculateCartTotal()
-            )} грн`;
+       const drawerTotal = activeCart.reduce(
+    (sum, item) =>
+        sum + calculateItemEstimatedTotal(item),
+    0
+);
+
+elements.drawerTotalPrice.textContent =
+    `≈ ${formatMoney(drawerTotal)} грн`;
     }
 
     const nothingToSend =

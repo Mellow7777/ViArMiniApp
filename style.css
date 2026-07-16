@@ -1241,3 +1241,16 @@ textarea:focus {
     color:
         var(--tg-theme-text-color, #1c1c1e);
 }
+
+#selectedShopAddress {
+    display: block;
+    margin-top: 4px;
+
+    color: var(--tg-theme-hint-color, #737373);
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    white-space: normal;
+    word-break: break-word;
+}

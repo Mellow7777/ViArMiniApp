@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-    <link rel="stylesheet" href="style.css?v=100">
+    <link rel="stylesheet" href="style.css?v=101">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -42,10 +42,48 @@
                 Торговая точка
             </label>
 
-            <select id="shopSelect">
-                <option value="">Выберите торговую точку</option>
-            </select>
-        </section>
+            <div class="shop-picker">
+    <label for="shopSearch">
+        Торговая точка
+    </label>
+
+    <input
+        type="search"
+        id="shopSearch"
+        class="shop-search-input"
+        placeholder="Поиск по названию или адресу..."
+        autocomplete="off"
+    >
+
+    <input
+        type="hidden"
+        id="selectedShopId"
+    >
+
+    <div
+        class="shop-search-results"
+        id="shopSearchResults"
+    ></div>
+
+    <div
+        class="selected-shop-card"
+        id="selectedShopCard"
+        hidden
+    >
+        <div>
+            <strong id="selectedShopName"></strong>
+            <span id="selectedShopAddress"></span>
+        </div>
+
+        <button
+            type="button"
+            id="clearSelectedShopButton"
+            aria-label="Изменить торговую точку"
+        >
+            ✕
+        </button>
+    </div>
+</div>
 
         <!-- Тип операции -->
         <section class="card">
@@ -298,8 +336,8 @@
 </button>
 
 
-<script src="products.js?v=53"></script>
-<script src="app.js?v=58"></script>
+<script src="products.js?v=60"></script>
+<script src="app.js?v=60"></script>
 
 </body>
 </html> 

@@ -1576,3 +1576,22 @@ body.large-text-mode .availability.unavailable {
     color: #ff5a5a !important;
     font-weight: 800;
 }
+
+body.large-text-mode .section-label,
+body.large-text-mode .field-label,
+body.large-text-mode .products-count,
+body.large-text-mode .product-meta,
+body.large-text-mode .product-code,
+body.large-text-mode .product-price,
+body.large-text-mode .product-weight,
+body.large-text-mode .selected-shop-address,
+body.large-text-mode .app-header p {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+}
+
+body.large-text-mode input::placeholder {
+    color: #ffffff !important;
+    opacity: 0.9 !important;
+}

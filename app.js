@@ -146,6 +146,10 @@ drawerTotalTitle:
     
 drawerTotalPrice:
     document.getElementById("drawerTotalPrice"),
+    
+largeTextToggle:
+    document.getElementById("largeTextToggle"),
+    
 };
     
 
@@ -184,7 +188,7 @@ async function initializeApp() {
     restoreSelectedShop();
 
     renderGroups();
-    
+
     const largeTextEnabled =
     localStorage.getItem("viar-large-text") === "1";
 

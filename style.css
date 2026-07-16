@@ -1372,3 +1372,30 @@ textarea:focus {
     color: var(--tg-theme-text-color, #202020);
     opacity: 0.85;
 }
+
+.large-text-container {
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+}
+
+.large-text-toggle {
+    position: relative;
+    z-index: 101;
+
+    width: 100%;
+    min-height: 52px;
+
+    pointer-events: auto;
+    touch-action: manipulation;
+    cursor: pointer;
+
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+
+    background: #ffffff;
+    color: var(--primary);
+
+    font-size: 16px;
+    font-weight: 700;
+}

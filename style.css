@@ -1526,3 +1526,53 @@ textarea:focus {
         box-sizing: border-box !important;
     }
 }
+
+body.large-text-mode {
+    color: #ffffff;
+}
+
+body.large-text-mode p,
+body.large-text-mode span,
+body.large-text-mode label,
+body.large-text-mode small,
+body.large-text-mode .products-count,
+body.large-text-mode .selected-shop-address {
+    color: #e8e8e8 !important;
+    opacity: 1 !important;
+}
+
+body.large-text-mode .product-name,
+body.large-text-mode h1,
+body.large-text-mode h2,
+body.large-text-mode h3,
+body.large-text-mode strong {
+    color: #ffffff !important;
+}
+
+body.large-text-mode .product-code,
+body.large-text-mode .product-price,
+body.large-text-mode .product-weight {
+    color: #f5f5f5 !important;
+    background: #101010 !important;
+    border: 1px solid #404040;
+}
+
+body.large-text-mode input,
+body.large-text-mode textarea {
+    color: #ffffff !important;
+    border-color: #5a5a5a !important;
+}
+
+body.large-text-mode input::placeholder {
+    color: #bfbfbf !important;
+}
+
+body.large-text-mode .availability.available {
+    color: #32ff6a !important;
+    font-weight: 800;
+}
+
+body.large-text-mode .availability.unavailable {
+    color: #ff5a5a !important;
+    font-weight: 800;
+}

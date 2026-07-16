@@ -42,6 +42,7 @@ const elements = {
     orderComment: document.getElementById("orderComment"),
     toast: document.getElementById("toast"),
     orderComment: document.getElementById("orderComment"),
+    
 toast: document.getElementById("toast"),
 
 productModal:
@@ -139,6 +140,12 @@ clearSelectedShopButton:
     document.getElementById(
         "clearSelectedShopButton"
     ),
+
+drawerTotalTitle:
+    document.getElementById("drawerTotalTitle"),   
+    
+drawerTotalPrice:
+    document.getElementById("drawerTotalPrice"),
 };
     
 
@@ -1331,17 +1338,6 @@ function renderDrawerCart() {
         const estimatedTotal =
             calculateItemEstimatedTotal(item);
 
-        const priceHtml =
-            state.drawerMode === "order"
-                ? `
-                    <div class="drawer-cart-item-price">
-                        ≈ ${formatMoney(
-                            estimatedTotal
-                        )} грн
-                    </div>
-                `
-                : "";
-
         row.innerHTML = `
             <div class="drawer-cart-item-info">
                 <strong>
@@ -1357,6 +1353,7 @@ function renderDrawerCart() {
                     item.unit === "шт"
                         ? `
                             <small>
+                                Примерный вес:
                                 ≈ ${formatQuantity(
                                     estimatedWeight
                                 )} кг
@@ -1365,12 +1362,15 @@ function renderDrawerCart() {
                         : ""
                 }
 
-                ${priceHtml}
+                <div class="drawer-cart-item-price">
+                    ≈ ${formatMoney(estimatedTotal)} грн
+                </div>
             </div>
 
             <button
                 type="button"
                 class="drawer-remove-button"
+                aria-label="Удалить товар"
             >
                 ✕
             </button>
@@ -1381,9 +1381,16 @@ function renderDrawerCart() {
                 ".drawer-remove-button"
             );
 
-        removeButton.addEventListener("click", () => {
-            removeFromDrawerCart(item.cartKey);
-        });
+        if (removeButton) {
+            removeButton.addEventListener(
+                "click",
+                () => {
+                    removeFromDrawerCart(
+                        item.cartKey
+                    );
+                }
+            );
+        }
 
         elements.drawerCartList.appendChild(row);
     });
@@ -1391,7 +1398,15 @@ function renderDrawerCart() {
     const positions = activeCart.length;
 
     const quantity = activeCart.reduce(
-        (sum, item) => sum + item.quantity,
+        (sum, item) =>
+            sum + Number(item.quantity || 0),
+        0
+    );
+
+    const drawerTotal = activeCart.reduce(
+        (sum, item) =>
+            sum +
+            calculateItemEstimatedTotal(item),
         0
     );
 
@@ -1421,15 +1436,16 @@ function renderDrawerCart() {
             formatQuantity(quantity);
     }
 
-    if (elements.drawerTotalPrice) {
-       const drawerTotal = activeCart.reduce(
-    (sum, item) =>
-        sum + calculateItemEstimatedTotal(item),
-    0
-);
+    if (elements.drawerTotalTitle) {
+        elements.drawerTotalTitle.textContent =
+            state.drawerMode === "return"
+                ? "Примерная сумма возврата"
+                : "Примерная сумма заказа";
+    }
 
-elements.drawerTotalPrice.textContent =
-    `≈ ${formatMoney(drawerTotal)} грн`;
+    if (elements.drawerTotalPrice) {
+        elements.drawerTotalPrice.textContent =
+            `≈ ${formatMoney(drawerTotal)} грн`;
     }
 
     const nothingToSend =

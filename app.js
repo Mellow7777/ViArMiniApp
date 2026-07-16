@@ -724,14 +724,26 @@ function createProductElement(product) {
                 </button>
 
                 <input
-                    type="number"
-                    class="quantity-input"
-                    value="0.1"
-                    min="0.1"
-                    step="0.1"
-                    inputmode="decimal"
-                    ${canAddProduct ? "" : "disabled"}
-                >
+    type="number"
+    class="quantity-input"
+    value="${
+        state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+    }"
+    min="${
+        state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+    }"
+    step="${
+        state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+    }"
+    inputmode="decimal"
+    ${canAddProduct ? "" : "disabled"}
+>
 
                 <button
                     type="button"
@@ -798,24 +810,33 @@ if (infoButton) {
             ".unit-switch-button"
         );
 
+    
     function getStep() {
-        return selectedUnit === "шт"
-            ? 1
-            : 0.1;
+    if (selectedUnit === "шт") {
+        return 1;
     }
+
+    return state.activeMode === "return"
+        ? 0.001
+        : 0.1;
+}
 
     function updateQuantitySettings() {
-        const step = getStep();
+    const step = getStep();
 
-        quantityInput.step = step;
-        quantityInput.min = step;
-        quantityInput.value =
-            selectedUnit === "шт"
-                ? "1"
-                : "0.1";
+    quantityInput.step = String(step);
+    quantityInput.min = String(step);
 
-        updateEstimatedTotal();
+    if (selectedUnit === "шт") {
+        quantityInput.value = "1";
+    } else if (state.activeMode === "return") {
+        quantityInput.value = "0.001";
+    } else {
+        quantityInput.value = "0.1";
     }
+
+    updateEstimatedTotal();
+}
 
     function calculateEstimatedTotal() {
         const quantity =
@@ -1891,7 +1912,9 @@ function parseQuantity(value) {
 }
 
 function roundQuantity(value) {
-    return Math.round((value + Number.EPSILON) * 1000) / 1000;
+    return Math.round(
+        (Number(value) + Number.EPSILON) * 1000
+    ) / 1000;
 }
 
 function formatQuantity(value) {
@@ -1901,9 +1924,21 @@ function formatQuantity(value) {
 }
 
 function formatInputQuantity(value, step) {
-    const decimals = getDecimalsCount(step);
+    const number = Number(value);
 
-    return roundQuantity(value).toFixed(decimals);
+    if (!Number.isFinite(number)) {
+        return step === 1 ? "1" : String(step);
+    }
+
+    if (step === 1) {
+        return String(Math.round(number));
+    }
+
+    if (step === 0.001) {
+        return number.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+    }
+
+    return number.toFixed(1);
 }
 
 function getDecimalsCount(value) {

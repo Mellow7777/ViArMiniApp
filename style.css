@@ -1600,3 +1600,45 @@ body.large-text-mode .product-estimated-total {
     color: var(--tg-theme-text-color, #1c1c1e) !important;
     font-weight: 800 !important;
 }
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 800;
+
+    background:
+        var(--tg-theme-bg-color, #ffffff);
+
+    border-bottom: 1px solid
+        rgba(127, 127, 127, 0.25);
+
+    padding-top:
+        calc(12px + env(safe-area-inset-top));
+
+    padding-bottom: 12px;
+}
+
+.sticky-top-panel {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+
+    background:
+        var(--tg-theme-bg-color, #ffffff);
+
+    border-bottom: 1px solid
+        rgba(127, 127, 127, 0.25);
+
+    padding-top:
+        env(safe-area-inset-top);
+}
+
+.sticky-top-panel .app-header {
+    position: static;
+    border-bottom: none;
+}
+
+.sticky-top-panel .large-text-container {
+    margin: 0;
+    padding: 0 16px 12px;
+}

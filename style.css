@@ -1641,3 +1641,15 @@ body.large-text-mode .product-estimated-total {
     margin: 0;
     padding: 0 16px 12px;
 }
+
+.sticky-top-panel,
+.app-header,
+.search-section {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    transform: none !important;
+}

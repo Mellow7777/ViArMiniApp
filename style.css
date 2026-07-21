@@ -246,102 +246,17 @@ textarea:focus {
     gap: 10px;
 }
 
-.product-card {
-    padding: 14px;
-
-    background: var(--tg-theme-secondary-bg-color, var(--card-background));
-    border: 1px solid var(--border);
-    border-radius: var(--border-radius);
-}
-
-.product-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.product-info {
-    flex: 1;
-}
-
 .product-name {
     margin-bottom: 5px;
     font-size: 16px;
     line-height: 1.3;
 }
 
-.product-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.product-code,
-.product-unit {
-    padding: 4px 8px;
-    border-radius: 8px;
-
-    background: var(--tg-theme-bg-color, #f3f4f6);
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-
-    font-size: 11px;
-}
-
-.product-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-
-    margin-top: 14px;
-}
-
-.quantity-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.quantity-button {
-    width: 40px;
-    height: 40px;
-
-    border: none;
-    border-radius: 12px;
-
-    background: var(--tg-theme-bg-color, #eef1f5);
-    color: var(--tg-theme-text-color, var(--text));
-
-    font-size: 22px;
-    font-weight: 500;
-}
 
 .quantity-button:active {
     transform: scale(0.96);
 }
 
-.quantity-input {
-    width: 76px;
-    height: 40px;
-
-    padding: 0 6px;
-    text-align: center;
-    font-weight: 700;
-}
-
-.add-button {
-    min-width: 105px;
-    height: 40px;
-    padding: 0 14px;
-
-    border: none;
-    border-radius: 12px;
-
-    background: var(--primary);
-    color: #ffffff;
-    font-weight: 700;
-}
 
 .add-button:active,
 .send-button:active {
@@ -546,12 +461,6 @@ textarea:focus {
     }
 }
 
-.availability {
-    margin-top: 10px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
 .availability.available {
     color: #22c55e;
 }
@@ -573,23 +482,6 @@ textarea:focus {
 .product-unavailable .quantity-input {
     cursor: not-allowed;
     opacity: 0.6;
-}
-
-.info-button {
-    flex-shrink: 0;
-
-    width: 36px;
-    height: 36px;
-
-    border: 1px solid var(--border);
-    border-radius: 50%;
-
-    background: var(--tg-theme-bg-color, #f3f4f6);
-    color: var(--primary);
-
-    font-size: 18px;
-    font-weight: 800;
-    font-family: Georgia, serif;
 }
 
 .info-button:active {
@@ -1652,4 +1544,663 @@ body.large-text-mode .product-estimated-total {
     left: auto !important;
     z-index: auto !important;
     transform: none !important;
+}
+.product-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(75, 122, 190, 0.38);
+    border-radius: 26px;
+    padding: 22px 18px 18px;
+
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(28, 100, 255, 0.18),
+            transparent 38%
+        ),
+        linear-gradient(
+            145deg,
+            #071426 0%,
+            #08172b 48%,
+            #050d1a 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 12px 30px rgba(0, 0, 0, 0.28);
+
+    isolation: isolate;
+}
+
+/* Полупрозрачная фирменная надпись */
+.product-card::before {
+    content: "ВіАр";
+    position: absolute;
+    z-index: -1;
+
+    top: 80px;
+    right: 16px;
+
+    font-size: clamp(70px, 22vw, 120px);
+    font-weight: 900;
+    letter-spacing: -8px;
+    line-height: 1;
+
+    color: rgba(55, 111, 196, 0.09);
+    transform: rotate(-4deg);
+
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Синий волнистый узор снизу */
+.product-card::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+
+    left: -15%;
+    right: -15%;
+    bottom: -65px;
+    height: 150px;
+
+    opacity: 0.32;
+
+    background:
+        repeating-radial-gradient(
+            ellipse at center,
+            transparent 0 8px,
+            rgba(37, 111, 255, 0.38) 9px 10px,
+            transparent 11px 17px
+        );
+
+    transform: scaleX(1.45);
+    pointer-events: none;
+}
+
+.product-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    width: 100%;
+    padding: 22px 18px 18px;
+
+    color: #ffffff;
+
+    border: 1px solid rgba(95, 137, 201, 0.38);
+    border-radius: 26px;
+
+    background:
+        radial-gradient(
+            circle at 76% 26%,
+            rgba(30, 100, 240, 0.14),
+            transparent 37%
+        ),
+        linear-gradient(
+            145deg,
+            #071426 0%,
+            #081a31 48%,
+            #050d1a 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 14px 32px rgba(0, 0, 0, 0.28);
+}
+
+/* Синий узор в нижней части карточки */
+.product-card::after {
+    content: "";
+    position: absolute;
+    z-index: -2;
+
+    left: -15%;
+    right: -15%;
+    bottom: -85px;
+
+    height: 190px;
+
+    opacity: 0.28;
+
+    background:
+        repeating-radial-gradient(
+            ellipse at center,
+            transparent 0 8px,
+            rgba(43, 112, 255, 0.55) 9px 10px,
+            transparent 11px 17px
+        );
+
+    transform: scaleX(1.4);
+    pointer-events: none;
+}
+
+/* Затемнение нижней части для читаемости */
+.product-card::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 45%,
+            rgba(1, 8, 19, 0.22) 100%
+        );
+
+    pointer-events: none;
+}
+
+/* Водяной знак ВІАР */
+.viar-watermark {
+    position: absolute;
+    z-index: -1;
+
+    top: 88px;
+    right: 15px;
+
+    width: 62%;
+
+    text-align: center;
+
+    color: rgba(74, 126, 205, 0.10);
+
+    pointer-events: none;
+    user-select: none;
+}
+
+.viar-watermark-logo {
+    position: relative;
+
+    padding: 25px 0 20px;
+
+    font-size: clamp(54px, 18vw, 100px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -5px;
+}
+
+.viar-watermark-logo::before,
+.viar-watermark-logo::after {
+    content: "";
+    position: absolute;
+
+    left: 10%;
+    right: 10%;
+
+    height: 2px;
+
+    border-radius: 999px;
+    background: currentColor;
+}
+
+.viar-watermark-logo::before {
+    top: 5px;
+}
+
+.viar-watermark-logo::after {
+    bottom: 3px;
+}
+
+.viar-watermark-slogan {
+    margin-top: 8px;
+
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+/* Верх карточки */
+.product-card-header {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.product-name {
+    min-width: 0;
+    margin: 0;
+    padding-right: 4px;
+
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+
+    overflow-wrap: anywhere;
+}
+
+/* Кнопка информации справа сверху */
+.info-button {
+    flex: 0 0 48px;
+
+    display: grid;
+    place-items: center;
+
+    width: 48px;
+    height: 48px;
+    padding: 0;
+
+    color: #3789ff;
+    background: rgba(5, 14, 28, 0.85);
+
+    border: 2px solid #3789ff;
+    border-radius: 50%;
+
+    font-family: Georgia, serif;
+    font-size: 29px;
+    font-weight: 700;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 0 3px rgba(55, 137, 255, 0.08),
+        inset 0 0 14px rgba(55, 137, 255, 0.08);
+}
+
+.info-button:active {
+    transform: scale(0.94);
+}
+
+/* Цена */
+.product-price-section {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-height: 112px;
+    padding-top: 10px;
+}
+
+.product-price-label {
+    color: #80a8e5;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.product-price-value {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 850;
+    line-height: 1;
+}
+
+.product-price-value span {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+/* Наличие */
+.availability {
+    position: relative;
+    z-index: 2;
+
+    width: max-content;
+    max-width: 100%;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.availability.available {
+    color: #56e47e;
+    background: rgba(33, 190, 84, 0.10);
+    border: 1px solid rgba(61, 222, 106, 0.22);
+}
+
+.availability.unavailable {
+    color: #ff7070;
+    background: rgba(224, 59, 59, 0.11);
+    border: 1px solid rgba(255, 90, 90, 0.23);
+}
+
+.product-divider {
+    width: 100%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(113, 157, 224, 0.28),
+            transparent
+        );
+}
+
+/* Единицы измерения */
+.product-unit-section {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.unit-section-title {
+    color: #9fb4d6;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.unit-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+
+    width: 100%;
+}
+
+.unit-switch:has(.unit-switch-button:only-child) {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.unit-switch-button {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    min-height: 68px;
+    padding: 13px 14px;
+
+    color: #9eabc1;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 31, 51, 0.93),
+            rgba(8, 16, 29, 0.96)
+        );
+
+    border: 1px solid rgba(137, 160, 199, 0.32);
+    border-radius: 18px;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.unit-switch-button.active {
+    color: #ffffff;
+
+    border-color: #3286ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #176de4,
+            #07388f
+        );
+
+    box-shadow:
+        0 0 0 2px rgba(50, 134, 255, 0.16),
+        0 8px 22px rgba(0, 92, 255, 0.27),
+        inset 0 1px 0 rgba(255, 255, 255, 0.19);
+}
+
+.unit-icon {
+    display: grid;
+    place-items: center;
+
+    width: 30px;
+    height: 30px;
+
+    font-size: 24px;
+    line-height: 1;
+}
+
+.unit-name {
+    flex: 1;
+    text-align: left;
+}
+
+.unit-check {
+    display: none;
+    place-items: center;
+
+    width: 28px;
+    height: 28px;
+
+    color: #1d6ce0;
+    background: #ffffff;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.unit-switch-button.active .unit-check {
+    display: grid;
+}
+
+/* Нижняя часть */
+.product-bottom {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.product-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+}
+
+.quantity-control {
+    display: grid;
+    grid-template-columns: 56px minmax(80px, 1fr) 56px;
+    align-items: center;
+    gap: 9px;
+
+    width: 100%;
+}
+
+.quantity-button {
+    display: grid;
+    place-items: center;
+
+    width: 56px;
+    height: 62px;
+    padding: 0;
+
+    color: #ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            #101d31,
+            #080f1c
+        );
+
+    border: 1px solid rgba(142, 162, 195, 0.35);
+    border-radius: 17px;
+
+    font-size: 33px;
+    font-weight: 500;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.quantity-button:active:not(:disabled) {
+    transform: scale(0.95);
+    background: #17305a;
+}
+
+.quantity-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.quantity-input {
+    width: 100%;
+    height: 62px;
+    padding: 0 8px;
+
+    color: #ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13, 27, 47, 0.98),
+            rgba(6, 14, 25, 0.98)
+        );
+
+    border: 1px solid rgba(142, 162, 195, 0.35);
+    border-radius: 17px;
+    outline: none;
+
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+
+    appearance: textfield;
+}
+
+.quantity-input:focus {
+    border-color: #3286ff;
+
+    box-shadow:
+        0 0 0 3px rgba(50, 134, 255, 0.15);
+}
+
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+}
+
+/* Примерная сумма */
+.product-estimated-total {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+        "symbol value"
+        ". currency";
+    column-gap: 5px;
+    align-items: end;
+
+    min-width: 74px;
+
+    color: #ffffff;
+}
+
+.estimated-symbol {
+    grid-area: symbol;
+
+    align-self: start;
+
+    color: #3789ff;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.estimated-value {
+    grid-area: value;
+
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.estimated-currency {
+    grid-area: currency;
+
+    color: #3789ff;
+    font-size: 16px;
+}
+
+/* Главная кнопка */
+.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+
+    width: 100%;
+    min-height: 66px;
+    padding: 13px 18px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2788ff 0%,
+            #1255d5 55%,
+            #07318c 100%
+        );
+
+    border: 1px solid rgba(84, 157, 255, 0.82);
+    border-radius: 19px;
+
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.15;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px rgba(0, 83, 220, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.add-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.add-button:disabled {
+    color: rgba(255, 255, 255, 0.55);
+    background: #333d4d;
+    border-color: #485363;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.add-button-icon {
+    font-size: 27px;
+}
+
+.add-button-text {
+    text-align: center;
+}
+
+/* Недоступная карточка */
+.product-card.product-unavailable {
+    filter: saturate(0.72);
+}
+
+.product-card.product-unavailable .viar-watermark {
+    opacity: 0.6;
 }

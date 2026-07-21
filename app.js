@@ -1708,24 +1708,22 @@ function removeFromDrawerCart(cartKey) {
 
 function bindEvents() {
     if (elements.productSearch) {
-    elements.productSearch.addEventListener(
-        "input",
-        () => {
-            state.productSearchQuery =
-                elements.productSearch.value.trim();
+        elements.productSearch.addEventListener(
+            "input",
+            () => {
+                state.productSearchQuery =
+                    elements.productSearch.value.trim();
 
-            if (
-                state.productSearchQuery.length > 0
-            ) {
-                state.selectedGroup = "Все";
-                renderGroups();
+                if (state.productSearchQuery.length > 0) {
+                    state.selectedGroup = "Все";
+                    renderGroups();
+                }
+
+                renderProducts();
             }
+        );
+    }
 
-            renderProducts();
-        }
-    );
-}
-}
     if (elements.floatingCartButton) {
         elements.floatingCartButton.onclick =
             openCartDrawer;
@@ -1747,86 +1745,126 @@ function bindEvents() {
     }
 
     if (elements.shopSearch) {
-    elements.shopSearch.addEventListener(
-        "input",
-        renderShopSearchResults
-    );
+        elements.shopSearch.addEventListener(
+            "input",
+            renderShopSearchResults
+        );
 
-    elements.shopSearch.addEventListener(
-        "focus",
-        renderShopSearchResults
-    );
-}
-
-if (elements.clearSelectedShopButton) {
-    elements.clearSelectedShopButton.addEventListener(
-        "click",
-        clearSelectedShop
-    );
-}
-
-document.addEventListener("click", (event) => {
-    const clickedInsideShopPicker =
-        event.target.closest(".shop-picker");
-
-    if (!clickedInsideShopPicker) {
-        elements.shopSearchResults?.classList.remove(
-            "show"
+        elements.shopSearch.addEventListener(
+            "focus",
+            renderShopSearchResults
         );
     }
-});
 
-let touchStartY = 0;
-let touchStartX = 0;
-
-document.addEventListener(
-    "touchstart",
-    (event) => {
-        const touch = event.touches[0];
-
-        touchStartY = touch.clientY;
-        touchStartX = touch.clientX;
-    },
-    { passive: true }
-);
-
-document.addEventListener(
-    "touchmove",
-    (event) => {
-        const touch = event.touches[0];
-
-        const distanceY = Math.abs(
-            touch.clientY - touchStartY
+    if (elements.clearSelectedShopButton) {
+        elements.clearSelectedShopButton.addEventListener(
+            "click",
+            clearSelectedShop
         );
+    }
 
-        const distanceX = Math.abs(
-            touch.clientX - touchStartX
-        );
+    document.addEventListener(
+        "click",
+        (event) => {
+            const clickedInsideShopPicker =
+                event.target.closest(".shop-picker");
 
-        if (distanceY > 10 || distanceX > 10) {
-            hideProductSearch();
+            if (!clickedInsideShopPicker) {
+                elements.shopSearchResults?.classList.remove(
+                    "show"
+                );
+            }
         }
-    },
-    { passive: true }
-);
+    );
+
+    let touchStartY = 0;
+    let touchStartX = 0;
+
+    document.addEventListener(
+        "touchstart",
+        (event) => {
+            const touch = event.touches[0];
+
+            if (!touch) {
+                return;
+            }
+
+            touchStartY = touch.clientY;
+            touchStartX = touch.clientX;
+        },
+        {
+            passive: true
+        }
+    );
+
+    document.addEventListener(
+        "touchmove",
+        (event) => {
+            const touch = event.touches[0];
+
+            if (!touch) {
+                return;
+            }
+
+            const distanceY = Math.abs(
+                touch.clientY - touchStartY
+            );
+
+            const distanceX = Math.abs(
+                touch.clientX - touchStartX
+            );
+
+            if (distanceY > 10 || distanceX > 10) {
+                hideProductSearch();
+            }
+        },
+        {
+            passive: true
+        }
+    );
 
     document
         .querySelectorAll(".drawer-mode-button")
         .forEach((button) => {
-            button.addEventListener("click", () => {
-                document
-                    .querySelectorAll(".drawer-mode-button")
-                    .forEach((item) => {
-                        item.classList.remove("active");
-                    });
+            button.addEventListener(
+                "click",
+                () => {
+                    const selectedMode =
+                        button.dataset.drawerMode;
 
-                button.classList.add("active");
+                    if (
+                        selectedMode !== "order" &&
+                        selectedMode !== "return"
+                    ) {
+                        return;
+                    }
 
-                state.drawerMode =
-                    button.dataset.drawerMode;
+                    document
+                        .querySelectorAll(
+                            ".drawer-mode-button"
+                        )
+                        .forEach((item) => {
+                            item.classList.toggle(
+                                "active",
+                                item === button
+                            );
+                        });
 
-                renderDrawerCart();
-            });
+                    /*
+                     * drawerMode отвечает за вкладку
+                     * внутри выезжающей корзины.
+                     *
+                     * activeMode отвечает за то,
+                     * куда добавляется новый товар.
+                     */
+                    state.drawerMode = selectedMode;
+                    state.activeMode = selectedMode;
+
+                    renderProducts();
+                    renderCart();
+                    renderDrawerCart();
+                }
+            );
         });
 
     if (elements.clearCartButton) {
@@ -1857,46 +1895,50 @@ document.addEventListener(
         );
     }
 
-   if (elements.largeTextToggle) {
-    const toggleLargeText = (event) => {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+    if (elements.largeTextToggle) {
+        const toggleLargeText = (event) => {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
 
-        document.body.classList.toggle(
-            "large-text-mode"
-        );
-
-        const enabled =
-            document.body.classList.contains(
+            document.body.classList.toggle(
                 "large-text-mode"
             );
 
-        elements.largeTextToggle.textContent =
-            enabled
-                ? "🔎 Обычный текст"
-                : "🔎 Крупный текст";
+            const enabled =
+                document.body.classList.contains(
+                    "large-text-mode"
+                );
 
-        localStorage.setItem(
-            "viar-large-text",
-            enabled ? "1" : "0"
+            elements.largeTextToggle.textContent =
+                enabled
+                    ? "🔎 Обычный текст"
+                    : "🔎 Крупный текст";
+
+            localStorage.setItem(
+                "viar-large-text",
+                enabled ? "1" : "0"
+            );
+
+            console.log(
+                "Крупный текст:",
+                enabled
+            );
+        };
+
+        /*
+         * Используем только click.
+         * Не нужно одновременно onclick и touchend,
+         * иначе на телефоне переключение может
+         * сработать два раза подряд.
+         */
+        elements.largeTextToggle.addEventListener(
+            "click",
+            toggleLargeText
         );
-
-        console.log("Крупный текст:", enabled);
-    };
-
-    elements.largeTextToggle.onclick =
-        toggleLargeText;
-
-    elements.largeTextToggle.addEventListener(
-        "touchend",
-        toggleLargeText,
-        {
-            passive: false
-        }
-    );
-} 
+    }
+}
 
 function hideProductSearch() {
     if (!elements.productSearch) return;

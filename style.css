@@ -2415,3 +2415,31 @@ body.large-text-mode .product-estimated-total {
         font-size: 13px;
     }
 }
+
+.unit-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.add-button-icon {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+}
+
+.add-button-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+@media (max-width: 390px) {
+    .add-button-icon {
+        width: 19px;
+        height: 19px;
+        flex-basis: 19px;
+    }
+}

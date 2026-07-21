@@ -19,6 +19,7 @@ const productGroups = [
 const state = {
     activeMode: "order",
     selectedGroup: "Все",
+    productSearchQuery: "",
     drawerMode: "order",
     orderCart: [],
     returnCart: []
@@ -586,10 +587,29 @@ function renderCategories() {
     });
 }
 
+function hideProductKeyboardKeepResults() {
+    if (!elements.productSearch) {
+        return;
+    }
+
+    if (
+        document.activeElement !==
+        elements.productSearch
+    ) {
+        return;
+    }
+
+    elements.productSearch.blur();
+
+    // Очищаем только видимое поле.
+    // state.productSearchQuery не трогаем.
+    elements.productSearch.value = "";
+}
+
 function getFilteredProducts() {
     const searchText = normalizeText(
-        elements.productSearch.value
-    );
+    state.productSearchQuery
+);
 
     return products.filter((product) => {
         const matchesGroup =
@@ -1523,18 +1543,23 @@ function removeFromDrawerCart(cartKey) {
 
 function bindEvents() {
     if (elements.productSearch) {
-    elements.productSearch.addEventListener("input", () => {
-        const searchText =
-            elements.productSearch.value.trim();
+    elements.productSearch.addEventListener(
+        "input",
+        () => {
+            state.productSearchQuery =
+                elements.productSearch.value.trim();
 
-        // При поиске ищем сразу среди всех групп
-        if (searchText.length > 0) {
-            state.selectedGroup = "Все";
-            renderGroups();
+            if (
+                state.productSearchQuery.length > 0
+            ) {
+                state.selectedGroup = "Все";
+                renderGroups();
+            }
+
+            renderProducts();
         }
-
-        renderProducts();
-    });
+    );
+}
 }
     if (elements.floatingCartButton) {
         elements.floatingCartButton.onclick =
@@ -1585,6 +1610,21 @@ document.addEventListener("click", (event) => {
         );
     }
 });
+
+document.addEventListener(
+    "pointerdown",
+    (event) => {
+        const clickedSearch =
+            event.target.closest("#productSearch");
+
+        if (clickedSearch) {
+            return;
+        }
+
+        hideProductKeyboardKeepResults();
+    },
+    true
+);
 
     document
         .querySelectorAll(".drawer-mode-button")
@@ -1674,28 +1714,6 @@ document.addEventListener("click", (event) => {
     );
 } 
   
-
-    document
-        .querySelectorAll(".operation-button")
-        .forEach((button) => {
-            button.addEventListener("click", () => {
-                document
-                    .querySelectorAll(".operation-button")
-                    .forEach((item) => {
-                        item.classList.remove("active");
-                    });
-
-                button.classList.add("active");
-
-                state.activeMode =
-                    button.dataset.operation;
-
-                renderProducts();
-                renderCart();
-                updateSummary();
-            });
-        });
-}
 
 function closeProductModal() {
     if (!elements.productModal) {

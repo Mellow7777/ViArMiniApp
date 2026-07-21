@@ -2386,3 +2386,34 @@ function openProductModal(product) {
     elements.productModal.classList.add("show");
     document.body.style.overflow = "hidden";
 }
+
+document.addEventListener("click", function (event) {
+    const button = event.target.closest(
+        ".drawer-mode-button"
+    );
+
+    if (!button) {
+        return;
+    }
+
+    const selectedMode =
+        button.getAttribute("data-drawer-mode");
+
+    alert("Нажато: " + selectedMode);
+
+    state.drawerMode = selectedMode;
+    state.activeMode = selectedMode;
+
+    document
+        .querySelectorAll(".drawer-mode-button")
+        .forEach(function (item) {
+            item.classList.toggle(
+                "active",
+                item === button
+            );
+        });
+
+    renderProducts();
+    renderCart();
+    renderDrawerCart();
+});

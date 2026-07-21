@@ -2210,217 +2210,208 @@ body.large-text-mode .product-estimated-total {
    ========================================= */
 
 .product-card {
-    gap: 12px;
-    padding: 16px 14px 14px;
-    border-radius: 22px;
+    padding: 10px 10px 11px;
+    gap: 7px;
+    border-radius: 18px;
 }
 
 /* Название и кнопка информации */
 .product-name {
-    font-size: 21px;
-    line-height: 1.12;
+    font-size: 16px;
+    line-height: 1.08;
 }
 
 .info-button {
-    flex-basis: 42px;
-    width: 42px;
-    height: 42px;
-    font-size: 25px;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    font-size: 21px;
 }
 
 /* Цена */
 .product-price-section {
-    min-height: 82px;
-    padding-top: 2px;
-    gap: 2px;
+    min-height: 58px;
+    padding-top: 0;
+    gap: 1px;
 }
 
 .product-price-label {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .product-price-value {
-    gap: 6px;
-    font-size: 31px;
+    gap: 4px;
+    font-size: 25px;
 }
 
 .product-price-value span {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* Логотип на фоне */
 .viar-watermark {
-    top: 66px;
-    right: 10px;
-    width: 59%;
+    top: 50px;
+    right: 8px;
+    width: 54%;
 }
 
 .viar-watermark-logo {
-    padding: 18px 0 14px;
-    font-size: clamp(48px, 16vw, 78px);
+    padding: 12px 0 9px;
+    font-size: clamp(38px, 13vw, 58px);
 }
 
 .viar-watermark-slogan {
-    margin-top: 5px;
-    font-size: 6px;
-    letter-spacing: 1.5px;
+    margin-top: 3px;
+    font-size: 5px;
+    letter-spacing: 1px;
 }
 
 /* Наличие */
 .availability {
-    padding: 5px 9px;
-    font-size: 13px;
+    padding: 4px 7px;
+    font-size: 11px;
+}
+
+/* Разделитель */
+.product-divider {
+    margin: 1px 0;
 }
 
 /* Заголовок выбора единицы */
 .product-unit-section {
-    gap: 8px;
+    gap: 6px;
 }
 
 .unit-section-title {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* Кнопки КГ / ШТ */
 .unit-switch {
-    gap: 9px;
+    gap: 7px;
 }
 
 .unit-switch-button {
-    min-height: 54px;
-    padding: 9px 11px;
-    gap: 8px;
-    border-radius: 15px;
-    font-size: 16px;
+    min-height: 42px;
+    padding: 7px 9px;
+    gap: 6px;
+    border-radius: 12px;
+    font-size: 14px;
 }
 
 .unit-icon {
-    width: 25px;
-    height: 25px;
-    font-size: 19px;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
 }
 
 .unit-check {
-    width: 25px;
-    height: 25px;
-    font-size: 16px;
+    width: 21px;
+    height: 21px;
+    font-size: 13px;
 }
 
 /* Количество */
 .product-bottom {
-    gap: 12px;
+    gap: 8px;
 }
 
 .product-controls {
-    gap: 10px;
-}
-
-.quantity-control {
-    grid-template-columns: 48px minmax(70px, 1fr) 48px;
     gap: 7px;
 }
 
+.quantity-control {
+    grid-template-columns: 40px minmax(58px, 1fr) 40px;
+    gap: 6px;
+}
+
 .quantity-button {
-    width: 48px;
-    height: 52px;
-    border-radius: 14px;
-    font-size: 28px;
+    width: 40px;
+    height: 42px;
+    border-radius: 11px;
+    font-size: 23px;
 }
 
 .quantity-input {
-    height: 52px;
-    border-radius: 14px;
-    font-size: 23px;
+    height: 42px;
+    border-radius: 11px;
+    font-size: 19px;
 }
 
 /* Примерная сумма */
 .product-estimated-total {
-    min-width: 68px;
-    column-gap: 4px;
+    min-width: 60px;
+    column-gap: 3px;
 }
 
 .estimated-symbol {
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .estimated-value {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .estimated-currency {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* Кнопка добавления */
 .add-button {
-    min-height: 56px;
-    padding: 10px 14px;
-    gap: 9px;
-    border-radius: 16px;
-    font-size: 16px;
+    min-height: 44px;
+    padding: 8px 10px;
+    gap: 7px;
+    border-radius: 13px;
+    font-size: 14px;
 }
 
 .add-button-icon {
-    font-size: 23px;
+    font-size: 19px;
 }
 
 /* Нижний узор */
 .product-card::after {
-    bottom: -95px;
-    height: 170px;
+    bottom: -110px;
+    height: 155px;
 }
 
 @media (max-width: 390px) {
     .product-card {
-        padding: 14px 12px 12px;
-        gap: 10px;
+        padding: 9px;
+        gap: 6px;
     }
 
     .product-name {
-        font-size: 19px;
+        font-size: 15px;
     }
 
     .info-button {
-        flex-basis: 38px;
-        width: 38px;
-        height: 38px;
-        font-size: 23px;
-    }
-
-    .product-price-section {
-        min-height: 72px;
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
     }
 
     .product-price-value {
-        font-size: 28px;
+        font-size: 23px;
     }
 
     .unit-switch-button {
-        min-height: 50px;
-        padding: 8px 9px;
-        font-size: 15px;
+        min-height: 40px;
+        font-size: 13px;
     }
 
     .quantity-control {
-        grid-template-columns: 44px minmax(64px, 1fr) 44px;
+        grid-template-columns: 38px minmax(54px, 1fr) 38px;
     }
 
-    .quantity-button {
-        width: 44px;
-        height: 48px;
-    }
-
+    .quantity-button,
     .quantity-input {
-        height: 48px;
-        font-size: 21px;
-    }
-
-    .estimated-value {
-        font-size: 22px;
+        height: 40px;
     }
 
     .add-button {
-        min-height: 52px;
-        font-size: 15px;
+        min-height: 42px;
+        font-size: 13px;
     }
 }

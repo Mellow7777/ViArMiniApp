@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=133">
+   <link rel="stylesheet" href="style.css?v=134">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -36,67 +36,108 @@
         </button>
     </div>
 </div>
-</header>
-    <main class="container">
 
-        <!-- Информация о торговом -->
-        <section class="card user-card">
-            <span class="section-label">Торговый представитель</span>
-            <strong id="userName">Загрузка...</strong>
-        </section>
+<main class="container">
 
-        <!-- Выбор торговой точки -->
-        <section class="card">
-            <label class="section-label" for="shopSelect">
+    <!-- Торговый представитель -->
+    <section class="card user-card">
+        <span class="section-label">
+            Торговый представитель
+        </span>
+
+        <strong id="userName">
+            Загрузка...
+        </strong>
+    </section>
+
+    <!-- Торговая точка и параметры заказа -->
+    <section class="card order-setup-card">
+        <div class="order-setup-header">
+            <div>
+                <span class="section-label">
+                    Оформление заказа
+                </span>
+
+                <strong class="order-setup-title">
+                    Торговая точка и параметры
+                </strong>
+            </div>
+
+            <div class="order-setup-icon">
+                📝
+            </div>
+        </div>
+
+        <!-- Поиск торговой точки -->
+        <div class="shop-picker">
+            <label
+                class="field-label"
+                for="shopSearch"
+            >
                 Торговая точка
             </label>
 
-            <div class="shop-picker">
-    <label for="shopSearch">
-        Торговая точка
-    </label>
+            <div class="shop-search-wrapper">
+                <span class="shop-search-icon">
+                    🔎
+                </span>
 
-    <input
-        type="search"
-        id="shopSearch"
-        class="shop-search-input"
-        placeholder="Поиск по названию или адресу..."
-        autocomplete="off"
-    >
+                <input
+                    type="search"
+                    id="shopSearch"
+                    class="shop-search-input"
+                    placeholder="Название или адрес..."
+                    autocomplete="off"
+                >
+            </div>
 
-    <input
-        type="hidden"
-        id="selectedShopId"
-    >
+            <input
+                type="hidden"
+                id="selectedShopId"
+            >
 
-    <div
-        class="shop-search-results"
-        id="shopSearchResults"
-    ></div>
+            <div
+                class="shop-search-results"
+                id="shopSearchResults"
+            ></div>
 
-    <div
-        class="selected-shop-card"
-        id="selectedShopCard"
-        hidden
-    >
-        <div>
-            <strong id="selectedShopName"></strong>
-            <span id="selectedShopAddress"></span>
+            <div
+                class="selected-shop-card selected-shop-modern"
+                id="selectedShopCard"
+                hidden
+            >
+                <div class="selected-shop-icon">
+                    🏪
+                </div>
+
+                <div class="selected-shop-info">
+                    <span class="selected-shop-small-label">
+                        Выбранная точка
+                    </span>
+
+                    <strong id="selectedShopName"></strong>
+
+                    <span id="selectedShopAddress"></span>
+                </div>
+
+                <button
+                    type="button"
+                    id="clearSelectedShopButton"
+                    class="selected-shop-clear"
+                    aria-label="Изменить торговую точку"
+                >
+                    ✕
+                </button>
+            </div>
         </div>
 
-        <button
-            type="button"
-            id="clearSelectedShopButton"
-            aria-label="Изменить торговую точку"
-        >
-            ✕
-        </button>
-    </div>
-</div>
+        <div class="setup-divider"></div>
 
         <!-- Тип операции -->
-        <section class="card">
-            <span class="section-label">Тип операции</span>
+        <div class="setup-group">
+            <span class="field-label">
+                Тип операции
+            </span>
 
             <div class="operation-switch">
                 <button
@@ -104,7 +145,8 @@
                     class="operation-button active"
                     data-operation="order"
                 >
-                    📦 Заказ
+                    <span>📦</span>
+                    <span>Заказ</span>
                 </button>
 
                 <button
@@ -112,20 +154,73 @@
                     class="operation-button"
                     data-operation="return"
                 >
-                    ↩️ Возврат
+                    <span>↩️</span>
+                    <span>Возврат</span>
                 </button>
             </div>
-        </section>
+        </div>
 
-        <!-- Поиск товара -->
-        <section class="search-section">
-            <input
-                type="search"
-                id="productSearch"
-                placeholder="Поиск товара..."
-                autocomplete="off"
-            >
-        </section>
+        <!-- Форма накладной -->
+        <div class="setup-group">
+            <span class="field-label">
+                Форма накладной
+            </span>
+
+            <div class="invoice-form-switch">
+                <button
+                    type="button"
+                    class="invoice-form-button"
+                    data-invoice-form="1"
+                >
+                    <span class="invoice-form-main">
+                        1Ф
+                    </span>
+
+                    <span class="invoice-form-caption">
+                        Первая форма
+                    </span>
+
+                    <span class="invoice-form-check">
+                        ✓
+                    </span>
+                </button>
+
+                <button
+                    type="button"
+                    class="invoice-form-button active"
+                    data-invoice-form="2"
+                >
+                    <span class="invoice-form-main">
+                        2Ф
+                    </span>
+
+                    <span class="invoice-form-caption">
+                        Вторая форма
+                    </span>
+
+                    <span class="invoice-form-check">
+                        ✓
+                    </span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Поиск товара -->
+    <section class="search-section">
+        <input
+            type="search"
+            id="productSearch"
+            placeholder="Поиск товара..."
+            autocomplete="off"
+        >
+    </section>
+
+    <!-- Категории товаров -->
+    <section
+        class="categories"
+        id="categories"
+    ></section>
 
         <section class="categories" id="categories"></section>
 
@@ -361,7 +456,7 @@
 </button>
 
 
-<script src="app.js?v=83"></script>
+<script src="app.js?v=84"></script>
 
 </body>
 </html> 

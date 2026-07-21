@@ -1421,48 +1421,76 @@ function renderDrawerCart() {
 
         row.className = "drawer-cart-item";
 
-        const estimatedWeight =
-            calculateItemEstimatedWeight(item);
+        const getStep = () => {
+            if (item.unit === "шт") {
+                return 1;
+            }
+
+            return state.drawerMode === "return"
+                ? 0.001
+                : 0.1;
+        };
 
         const estimatedTotal =
             calculateItemEstimatedTotal(item);
 
         row.innerHTML = `
-            <div class="drawer-cart-item-info">
-                <strong>
-                    ${escapeHtml(item.name)}
-                </strong>
+            <div class="drawer-item-top">
+                <div>
+                    <div class="drawer-item-name">
+                        ${escapeHtml(item.name)}
+                    </div>
 
-                <span>
-                    ${formatQuantity(item.quantity)}
-                    ${escapeHtml(item.unit)}
-                </span>
-
-                ${
-                    item.unit === "шт"
-                        ? `
-                            <small>
-                                Примерный вес:
-                                ≈ ${formatQuantity(
-                                    estimatedWeight
-                                )} кг
-                            </small>
-                        `
-                        : ""
-                }
-
-                <div class="drawer-cart-item-price">
-                    ≈ ${formatMoney(estimatedTotal)} грн
+                    <div class="drawer-item-unit">
+                        ${escapeHtml(
+                            String(item.unit).toUpperCase()
+                        )}
+                    </div>
                 </div>
+
+                <button
+                    type="button"
+                    class="drawer-remove-button"
+                    aria-label="Удалить товар"
+                >
+                    ✕
+                </button>
             </div>
 
-            <button
-                type="button"
-                class="drawer-remove-button"
-                aria-label="Удалить товар"
-            >
-                ✕
-            </button>
+            <div class="drawer-item-editor">
+                <button
+                    type="button"
+                    class="drawer-edit-button drawer-minus-button"
+                    aria-label="Уменьшить количество"
+                >
+                    −
+                </button>
+
+                <input
+                    type="number"
+                    class="drawer-quantity-input"
+                    value="${formatQuantity(item.quantity)}"
+                    min="${getStep()}"
+                    step="${getStep()}"
+                    inputmode="${
+                        item.unit === "шт"
+                            ? "numeric"
+                            : "decimal"
+                    }"
+                >
+
+                <button
+                    type="button"
+                    class="drawer-edit-button drawer-plus-button"
+                    aria-label="Увеличить количество"
+                >
+                    +
+                </button>
+            </div>
+
+            <div class="drawer-item-price">
+                ≈ ${formatMoney(estimatedTotal)} грн
+            </div>
         `;
 
         const removeButton =
@@ -1470,16 +1498,123 @@ function renderDrawerCart() {
                 ".drawer-remove-button"
             );
 
-        if (removeButton) {
-            removeButton.addEventListener(
-                "click",
-                () => {
-                    removeFromDrawerCart(
-                        item.cartKey
-                    );
-                }
+        const minusButton =
+            row.querySelector(
+                ".drawer-minus-button"
             );
-        }
+
+        const plusButton =
+            row.querySelector(
+                ".drawer-plus-button"
+            );
+
+        const quantityInput =
+            row.querySelector(
+                ".drawer-quantity-input"
+            );
+
+        removeButton?.addEventListener(
+            "click",
+            () => {
+                removeFromDrawerCart(
+                    item.cartKey
+                );
+            }
+        );
+
+        minusButton?.addEventListener(
+            "click",
+            () => {
+                const step = getStep();
+
+                const currentQuantity =
+                    Number(item.quantity) || step;
+
+                let newQuantity =
+                    currentQuantity - step;
+
+                newQuantity = Math.max(
+                    step,
+                    newQuantity
+                );
+
+                if (item.unit === "шт") {
+                    newQuantity =
+                        Math.round(newQuantity);
+                } else {
+                    newQuantity =
+                        Number(
+                            newQuantity.toFixed(3)
+                        );
+                }
+
+                item.quantity = newQuantity;
+
+                renderDrawerCart();
+            }
+        );
+
+        plusButton?.addEventListener(
+            "click",
+            () => {
+                const step = getStep();
+
+                const currentQuantity =
+                    Number(item.quantity) || 0;
+
+                let newQuantity =
+                    currentQuantity + step;
+
+                if (item.unit === "шт") {
+                    newQuantity =
+                        Math.round(newQuantity);
+                } else {
+                    newQuantity =
+                        Number(
+                            newQuantity.toFixed(3)
+                        );
+                }
+
+                item.quantity = newQuantity;
+
+                renderDrawerCart();
+            }
+        );
+
+        quantityInput?.addEventListener(
+            "change",
+            () => {
+                const step = getStep();
+
+                let newQuantity =
+                    parseQuantity(
+                        quantityInput.value
+                    );
+
+                if (
+                    !Number.isFinite(newQuantity) ||
+                    newQuantity < step
+                ) {
+                    newQuantity = step;
+                }
+
+                if (item.unit === "шт") {
+                    newQuantity = Math.max(
+                        1,
+                        Math.round(newQuantity)
+                    );
+                } else {
+                    newQuantity =
+                        Number(
+                            newQuantity.toFixed(3)
+                        );
+                }
+
+                item.quantity = newQuantity;
+
+                renderDrawerCart();
+            }
+        );
 
         elements.drawerCartList.appendChild(row);
     });

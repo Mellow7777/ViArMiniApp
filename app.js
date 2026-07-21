@@ -1469,7 +1469,11 @@ function renderDrawerCart() {
                 <input
                     type="number"
                     class="drawer-quantity-input"
-                    value="${formatQuantity(item.quantity)}"
+                    value="${
+    Number(item.quantity) >= 1
+        ? formatQuantity(item.quantity)
+        : ""
+}"
                     min="${getStep()}"
                     step="${getStep()}"
                     inputmode="${
@@ -1656,9 +1660,11 @@ function renderDrawerCart() {
     }
 
     if (elements.drawerQuantity) {
-        elements.drawerQuantity.textContent =
-            formatQuantity(quantity);
-    }
+    elements.drawerQuantity.textContent =
+        quantity >= 1
+            ? formatQuantity(quantity)
+            : "";
+}
 
     if (elements.drawerTotalTitle) {
         elements.drawerTotalTitle.textContent =

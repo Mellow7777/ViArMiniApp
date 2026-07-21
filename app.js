@@ -1467,21 +1467,16 @@ function renderDrawerCart() {
                 </button>
 
                 <input
-                    type="number"
-                    class="drawer-quantity-input"
-                    value="${
-    Number(item.quantity) >= 1
-        ? formatQuantity(item.quantity)
-        : ""
-}"
-                    min="${getStep()}"
-                    step="${getStep()}"
-                    inputmode="${
-                        item.unit === "шт"
-                            ? "numeric"
-                            : "decimal"
-                    }"
-                >
+    type="text"
+    class="drawer-quantity-input"
+    value="${formatQuantity(item.quantity)}"
+    inputmode="${
+        item.unit === "шт"
+            ? "numeric"
+            : "decimal"
+    }"
+    autocomplete="off"
+>
 
                 <button
                     type="button"

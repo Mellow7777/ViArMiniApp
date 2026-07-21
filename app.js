@@ -1611,19 +1611,38 @@ document.addEventListener("click", (event) => {
     }
 });
 
+let touchStartY = 0;
+let touchStartX = 0;
+
 document.addEventListener(
-    "pointerdown",
+    "touchstart",
     (event) => {
-        const clickedSearch =
-            event.target.closest("#productSearch");
+        const touch = event.touches[0];
 
-        if (clickedSearch) {
-            return;
-        }
-
-        hideProductKeyboardKeepResults();
+        touchStartY = touch.clientY;
+        touchStartX = touch.clientX;
     },
-    true
+    { passive: true }
+);
+
+document.addEventListener(
+    "touchmove",
+    (event) => {
+        const touch = event.touches[0];
+
+        const distanceY = Math.abs(
+            touch.clientY - touchStartY
+        );
+
+        const distanceX = Math.abs(
+            touch.clientX - touchStartX
+        );
+
+        if (distanceY > 10 || distanceX > 10) {
+            hideProductSearch();
+        }
+    },
+    { passive: true }
 );
 
     document
@@ -1713,6 +1732,25 @@ document.addEventListener(
         }
     );
 } 
+
+function hideProductSearch() {
+    if (!elements.productSearch) return;
+
+    // Если поле не активно — ничего не делаем
+    if (document.activeElement !== elements.productSearch) {
+        return;
+    }
+
+    // Закрываем клавиатуру
+    elements.productSearch.blur();
+
+    // Очищаем только текст в поле
+    elements.productSearch.value = "";
+
+    // ВАЖНО:
+    // state.productSearchQuery НЕ очищаем,
+    // поэтому найденные товары остаются на экране.
+}
   
 
 function closeProductModal() {

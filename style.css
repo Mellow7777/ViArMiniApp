@@ -2204,3 +2204,223 @@ body.large-text-mode .product-estimated-total {
 .product-card.product-unavailable .viar-watermark {
     opacity: 0.6;
 }
+
+/* =========================================
+   КОМПАКТНЫЙ РАЗМЕР КАРТОЧКИ ВІАР
+   ========================================= */
+
+.product-card {
+    gap: 12px;
+    padding: 16px 14px 14px;
+    border-radius: 22px;
+}
+
+/* Название и кнопка информации */
+.product-name {
+    font-size: 21px;
+    line-height: 1.12;
+}
+
+.info-button {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+    font-size: 25px;
+}
+
+/* Цена */
+.product-price-section {
+    min-height: 82px;
+    padding-top: 2px;
+    gap: 2px;
+}
+
+.product-price-label {
+    font-size: 14px;
+}
+
+.product-price-value {
+    gap: 6px;
+    font-size: 31px;
+}
+
+.product-price-value span {
+    font-size: 16px;
+}
+
+/* Логотип на фоне */
+.viar-watermark {
+    top: 66px;
+    right: 10px;
+    width: 59%;
+}
+
+.viar-watermark-logo {
+    padding: 18px 0 14px;
+    font-size: clamp(48px, 16vw, 78px);
+}
+
+.viar-watermark-slogan {
+    margin-top: 5px;
+    font-size: 6px;
+    letter-spacing: 1.5px;
+}
+
+/* Наличие */
+.availability {
+    padding: 5px 9px;
+    font-size: 13px;
+}
+
+/* Заголовок выбора единицы */
+.product-unit-section {
+    gap: 8px;
+}
+
+.unit-section-title {
+    font-size: 14px;
+}
+
+/* Кнопки КГ / ШТ */
+.unit-switch {
+    gap: 9px;
+}
+
+.unit-switch-button {
+    min-height: 54px;
+    padding: 9px 11px;
+    gap: 8px;
+    border-radius: 15px;
+    font-size: 16px;
+}
+
+.unit-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 19px;
+}
+
+.unit-check {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+}
+
+/* Количество */
+.product-bottom {
+    gap: 12px;
+}
+
+.product-controls {
+    gap: 10px;
+}
+
+.quantity-control {
+    grid-template-columns: 48px minmax(70px, 1fr) 48px;
+    gap: 7px;
+}
+
+.quantity-button {
+    width: 48px;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 28px;
+}
+
+.quantity-input {
+    height: 52px;
+    border-radius: 14px;
+    font-size: 23px;
+}
+
+/* Примерная сумма */
+.product-estimated-total {
+    min-width: 68px;
+    column-gap: 4px;
+}
+
+.estimated-symbol {
+    font-size: 20px;
+}
+
+.estimated-value {
+    font-size: 24px;
+}
+
+.estimated-currency {
+    font-size: 14px;
+}
+
+/* Кнопка добавления */
+.add-button {
+    min-height: 56px;
+    padding: 10px 14px;
+    gap: 9px;
+    border-radius: 16px;
+    font-size: 16px;
+}
+
+.add-button-icon {
+    font-size: 23px;
+}
+
+/* Нижний узор */
+.product-card::after {
+    bottom: -95px;
+    height: 170px;
+}
+
+@media (max-width: 390px) {
+    .product-card {
+        padding: 14px 12px 12px;
+        gap: 10px;
+    }
+
+    .product-name {
+        font-size: 19px;
+    }
+
+    .info-button {
+        flex-basis: 38px;
+        width: 38px;
+        height: 38px;
+        font-size: 23px;
+    }
+
+    .product-price-section {
+        min-height: 72px;
+    }
+
+    .product-price-value {
+        font-size: 28px;
+    }
+
+    .unit-switch-button {
+        min-height: 50px;
+        padding: 8px 9px;
+        font-size: 15px;
+    }
+
+    .quantity-control {
+        grid-template-columns: 44px minmax(64px, 1fr) 44px;
+    }
+
+    .quantity-button {
+        width: 44px;
+        height: 48px;
+    }
+
+    .quantity-input {
+        height: 48px;
+        font-size: 21px;
+    }
+
+    .estimated-value {
+        font-size: 22px;
+    }
+
+    .add-button {
+        min-height: 52px;
+        font-size: 15px;
+    }
+}

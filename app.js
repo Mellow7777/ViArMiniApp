@@ -1707,6 +1707,7 @@ function removeFromDrawerCart(cartKey) {
 }
 
 function bindEvents() {
+    console.log("bindEvents запущена");
     if (elements.productSearch) {
         elements.productSearch.addEventListener(
             "input",
@@ -1823,49 +1824,51 @@ function bindEvents() {
         }
     );
 
+    document.addEventListener("click", (event) => {
+    const button = event.target.closest(
+        ".drawer-mode-button"
+    );
+
+    if (!button) {
+        return;
+    }
+
+    const selectedMode =
+        button.dataset.drawerMode;
+
+    if (
+        selectedMode !== "order" &&
+        selectedMode !== "return"
+    ) {
+        console.error(
+            "Неправильный режим:",
+            selectedMode
+        );
+
+        return;
+    }
+
     document
         .querySelectorAll(".drawer-mode-button")
-        .forEach((button) => {
-            button.addEventListener(
-                "click",
-                () => {
-                    const selectedMode =
-                        button.dataset.drawerMode;
-
-                    if (
-                        selectedMode !== "order" &&
-                        selectedMode !== "return"
-                    ) {
-                        return;
-                    }
-
-                    document
-                        .querySelectorAll(
-                            ".drawer-mode-button"
-                        )
-                        .forEach((item) => {
-                            item.classList.toggle(
-                                "active",
-                                item === button
-                            );
-                        });
-
-                    /*
-                     * drawerMode отвечает за вкладку
-                     * внутри выезжающей корзины.
-                     *
-                     * activeMode отвечает за то,
-                     * куда добавляется новый товар.
-                     */
-                    state.drawerMode = selectedMode;
-                    state.activeMode = selectedMode;
-
-                    renderProducts();
-                    renderCart();
-                    renderDrawerCart();
-                }
+        .forEach((item) => {
+            item.classList.toggle(
+                "active",
+                item === button
             );
         });
+
+    state.drawerMode = selectedMode;
+    state.activeMode = selectedMode;
+
+    console.log(
+        "Выбран режим:",
+        selectedMode
+    );
+
+    renderProducts();
+    renderCart();
+    renderDrawerCart();
+});
 
     if (elements.clearCartButton) {
         elements.clearCartButton.addEventListener(

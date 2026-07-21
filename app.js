@@ -1764,6 +1764,16 @@ function bindEvents() {
         );
     }
 
+    document
+    .querySelectorAll(".operation-button")
+    .forEach((button) => {
+        button.addEventListener("click", () => {
+            setActiveOperation(
+                button.dataset.operation
+            );
+        });
+    });
+
     document.addEventListener(
         "click",
         (event) => {
@@ -2159,6 +2169,29 @@ function saveCart() {
     }
 }
 
+function setActiveOperation(operation) {
+    if (
+        operation !== "order" &&
+        operation !== "return"
+    ) {
+        return;
+    }
+
+    state.activeMode = operation;
+
+    document
+        .querySelectorAll(".operation-button")
+        .forEach((button) => {
+            button.classList.toggle(
+                "active",
+                button.dataset.operation === operation
+            );
+        });
+
+    renderProducts();
+    renderCart();
+}
+
 function loadCart() {
     try {
         const savedData =
@@ -2386,34 +2419,3 @@ function openProductModal(product) {
     elements.productModal.classList.add("show");
     document.body.style.overflow = "hidden";
 }
-
-document.addEventListener("click", function (event) {
-    const button = event.target.closest(
-        ".drawer-mode-button"
-    );
-
-    if (!button) {
-        return;
-    }
-
-    const selectedMode =
-        button.getAttribute("data-drawer-mode");
-
-    alert("Нажато: " + selectedMode);
-
-    state.drawerMode = selectedMode;
-    state.activeMode = selectedMode;
-
-    document
-        .querySelectorAll(".drawer-mode-button")
-        .forEach(function (item) {
-            item.classList.toggle(
-                "active",
-                item === button
-            );
-        });
-
-    renderProducts();
-    renderCart();
-    renderDrawerCart();
-});

@@ -688,7 +688,7 @@ const unitSwitchHtml = `
                 class="unit-switch-button active"
                 data-unit="кг"
             >
-                <span class="unit-icon">⚖</span>
+                <span class="unit-icon">⚖️</span>
                 <span class="unit-name">КГ</span>
                 <span class="unit-check">✓</span>
             </button>
@@ -701,7 +701,7 @@ const unitSwitchHtml = `
                             class="unit-switch-button"
                             data-unit="шт"
                         >
-                            <span class="unit-icon">▣</span>
+                            <span class="unit-icon">📦</span>
                             <span class="unit-name">ШТ</span>
                             <span class="unit-check">✓</span>
                         </button>
@@ -820,7 +820,7 @@ card.innerHTML = `
             class="add-button"
             ${canAddProduct ? "" : "disabled"}
         >
-            <span class="add-button-icon">▢</span>
+             <span class="add-button-icon">🛒</span>
 
             <span class="add-button-text">
                 ${

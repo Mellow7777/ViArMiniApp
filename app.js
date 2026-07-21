@@ -676,141 +676,164 @@ function createProductElement(product) {
         product.canOrderByPiece === true &&
         Number(product.approximateWeightPerPiece) > 0;
 
-    const unitSwitchHtml = canOrderByPiece
-        ? `
-            <div class="unit-switch">
-                <button
-                    type="button"
-                    class="unit-switch-button active"
-                    data-unit="кг"
-                >
-                    кг
-                </button>
-
-                <button
-                    type="button"
-                    class="unit-switch-button"
-                    data-unit="шт"
-                >
-                    шт
-                </button>
-            </div>
-        `
-        : "";
-
-    card.innerHTML = `
-        <div class="product-top">
-            <div class="product-info">
-                <h3 class="product-name">
-                    ${escapeHtml(product.name)}
-                </h3>
-                <button
-    type="button"
-    class="info-button"
-    aria-label="Информация о товаре"
->
-    i
-</button>
-
-                <div class="product-meta">
-                    <span class="product-code">
-                        Артикул: ${escapeHtml(product.article)}
-                    </span>
-
-                    <span class="product-unit">
-                        Цена: ${formatMoney(product.price)} грн/кг
-                    </span>
-                </div>
-
-                ${
-                    canOrderByPiece
-                        ? `
-                            <div class="product-weight">
-                                Примерный вес 1 шт:
-                                ${formatQuantity(
-                                    product.approximateWeightPerPiece
-                                )} кг
-                            </div>
-                        `
-                        : ""
-                }
-
-                <div class="availability ${
-                    isAvailable
-                        ? "available"
-                        : "unavailable"
-                }">
-                    ${
-                        isAvailable
-                            ? "🟢 В наличии"
-                            : "🔴 Нет в наличии"
-                    }
-                </div>
-            </div>
+const unitSwitchHtml = `
+    <div class="product-unit-section">
+        <div class="unit-section-title">
+            Оберіть одиницю
         </div>
 
-        ${unitSwitchHtml}
+        <div class="unit-switch">
+            <button
+                type="button"
+                class="unit-switch-button active"
+                data-unit="кг"
+            >
+                <span class="unit-icon">⚖</span>
+                <span class="unit-name">КГ</span>
+                <span class="unit-check">✓</span>
+            </button>
 
+            ${
+                canOrderByPiece
+                    ? `
+                        <button
+                            type="button"
+                            class="unit-switch-button"
+                            data-unit="шт"
+                        >
+                            <span class="unit-icon">▣</span>
+                            <span class="unit-name">ШТ</span>
+                            <span class="unit-check">✓</span>
+                        </button>
+                    `
+                    : ""
+            }
+        </div>
+    </div>
+`;
+
+card.innerHTML = `
+    <div class="viar-watermark" aria-hidden="true">
+        <div class="viar-watermark-logo">
+            ВІАР
+        </div>
+
+        <div class="viar-watermark-slogan">
+            ЯКІСТЬ • СМАК • ДОВІРА
+        </div>
+    </div>
+
+    <div class="product-card-header">
+        <h3 class="product-name">
+            ${escapeHtml(product.name)}
+        </h3>
+
+        <button
+            type="button"
+            class="info-button"
+            aria-label="Інформація про товар"
+        >
+            i
+        </button>
+    </div>
+
+    <div class="product-price-section">
+        <div class="product-price-label">
+            Ціна за кг
+        </div>
+
+        <div class="product-price-value">
+            ${formatMoney(product.price)}
+            <span>грн/кг</span>
+        </div>
+    </div>
+
+    <div class="availability ${
+        isAvailable
+            ? "available"
+            : "unavailable"
+    }">
+        ${
+            isAvailable
+                ? "● В наявності"
+                : "● Немає в наявності"
+        }
+    </div>
+
+    <div class="product-divider"></div>
+
+    ${unitSwitchHtml}
+
+    <div class="product-bottom">
         <div class="product-controls">
             <div class="quantity-control">
                 <button
                     type="button"
                     class="quantity-button minus-button"
                     ${canAddProduct ? "" : "disabled"}
+                    aria-label="Зменшити кількість"
                 >
                     −
                 </button>
 
                 <input
-    type="number"
-    class="quantity-input"
-    value="${
-        state.activeMode === "return"
-            ? "0.001"
-            : "0.1"
-    }"
-    min="${
-        state.activeMode === "return"
-            ? "0.001"
-            : "0.1"
-    }"
-    step="${
-        state.activeMode === "return"
-            ? "0.001"
-            : "0.1"
-    }"
-    inputmode="decimal"
-    ${canAddProduct ? "" : "disabled"}
->
+                    type="number"
+                    class="quantity-input"
+                    value="${
+                        state.activeMode === "return"
+                            ? "0.001"
+                            : "0.1"
+                    }"
+                    min="${
+                        state.activeMode === "return"
+                            ? "0.001"
+                            : "0.1"
+                    }"
+                    step="${
+                        state.activeMode === "return"
+                            ? "0.001"
+                            : "0.1"
+                    }"
+                    inputmode="decimal"
+                    ${canAddProduct ? "" : "disabled"}
+                >
 
                 <button
                     type="button"
                     class="quantity-button plus-button"
                     ${canAddProduct ? "" : "disabled"}
+                    aria-label="Збільшити кількість"
                 >
                     +
                 </button>
             </div>
 
             <div class="product-estimated-total">
-                ≈ 0 грн
+                <span class="estimated-symbol">≈</span>
+                <span class="estimated-value">0</span>
+                <span class="estimated-currency">грн</span>
             </div>
-
-           <button
-    type="button"
-    class="add-button"
-    ${canAddProduct ? "" : "disabled"}
->
-    ${
-        canAddProduct
-            ? state.activeMode === "return"
-                ? "Добавить в возврат"
-                : "Добавить в заказ"
-            : "Нет в наличии"
-    }
-</button>
         </div>
-    `;
+
+        <button
+            type="button"
+            class="add-button"
+            ${canAddProduct ? "" : "disabled"}
+        >
+            <span class="add-button-icon">▢</span>
+
+            <span class="add-button-text">
+                ${
+                    canAddProduct
+                        ? state.activeMode === "return"
+                            ? "Додати в повернення"
+                            : "Додати в замовлення"
+                        : "Немає в наявності"
+                }
+            </span>
+        </button>
+    </div>
+`;
 
     const infoButton =
     card.querySelector(".info-button");
@@ -900,12 +923,19 @@ if (infoButton) {
 
 
     function updateEstimatedTotal() {
-        const total =
-            calculateEstimatedTotal();
+    const total =
+        calculateEstimatedTotal();
 
-        estimatedTotalElement.textContent =
-            `≈ ${formatMoney(total)} грн`;
+    const valueElement =
+        estimatedTotalElement.querySelector(
+            ".estimated-value"
+        );
+
+    if (valueElement) {
+        valueElement.textContent =
+            formatMoney(total);
     }
+}
 
     unitButtons.forEach((button) => {
         button.addEventListener("click", () => {

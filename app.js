@@ -19,6 +19,7 @@ const productGroups = [
 const state = {
     activeMode: "order",
     selectedGroup: "Все",
+    invoiceForm: "2",
     productSearchQuery: "",
     drawerMode: "order",
     orderCart: [],
@@ -1772,6 +1773,41 @@ function bindEvents() {
             setActiveOperation(
                 button.dataset.operation
             );
+        });
+    });
+
+
+document
+    .querySelectorAll(".invoice-form-button")
+    .forEach((button) => {
+        button.addEventListener("click", () => {
+            const selectedForm =
+                button.dataset.invoiceForm;
+
+            if (
+                selectedForm !== "1" &&
+                selectedForm !== "2"
+            ) {
+                return;
+            }
+
+            state.invoiceForm = selectedForm;
+
+            document
+                .querySelectorAll(
+                    ".invoice-form-button"
+                )
+                .forEach((item) => {
+                    item.classList.toggle(
+                        "active",
+                        item.dataset.invoiceForm ===
+                            selectedForm
+                    );
+                });
+
+            window.Telegram?.WebApp
+                ?.HapticFeedback
+                ?.selectionChanged();
         });
     });
 

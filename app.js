@@ -151,6 +151,16 @@ drawerTotalPrice:
 
 largeTextToggle:
     document.getElementById("largeTextToggle"),
+
+historyButton:
+    document.getElementById(
+        "historyButton"
+    ),
+
+historyContainer:
+    document.getElementById(
+        "historyContainer"
+    ),    
     
 };
     
@@ -509,6 +519,11 @@ function selectShop(shop) {
 
     elements.selectedShopCard.hidden = false;
 
+    elements.historyButton.hidden = false;
+
+elements.historyContainer.hidden = true;
+elements.historyContainer.innerHTML = "";
+
     elements.shopSearch.value = "";
     elements.shopSearch.style.display = "none";
 
@@ -529,6 +544,10 @@ function clearSelectedShop() {
     elements.selectedShopId.value = "";
 
     elements.selectedShopCard.hidden = true;
+    elements.historyButton.hidden = true;
+
+    elements.historyContainer.hidden = true;
+    elements.historyContainer.innerHTML = "";
     elements.shopSearch.style.display = "";
 
     elements.shopSearch.value = "";
@@ -1727,6 +1746,11 @@ function bindEvents() {
         );
     }
 
+    elements.historyButton.addEventListener(
+    "click",
+    openHistory
+);
+
     if (elements.floatingCartButton) {
         elements.floatingCartButton.onclick =
             openCartDrawer;
@@ -1965,6 +1989,51 @@ setInvoiceForm(state.invoiceForm);
             "click",
             toggleLargeText
         );
+    }
+}
+
+async function openHistory() {
+    const shopId = Number(elements.selectedShopId.value);
+
+    if (!shopId) {
+        return;
+    }
+
+    elements.historyContainer.hidden = false;
+
+    elements.historyContainer.innerHTML = `
+        <div class="history-loading">
+            Завантаження...
+        </div>
+    `;
+
+    try {
+        const response = await fetch(
+            `http://localhost:5055/api/shops/${shopId}/orders?days=60`
+        );
+
+        if (!response.ok) {
+            throw new Error("Не удалось получить историю.");
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+
+        elements.historyContainer.innerHTML =
+            "<pre>" +
+            JSON.stringify(data, null, 2) +
+            "</pre>";
+    }
+    catch (error) {
+        console.error(error);
+
+        elements.historyContainer.innerHTML =
+            `
+            <div class="history-loading">
+                ❌ Помилка завантаження історії
+            </div>
+            `;
     }
 }
 

@@ -1776,7 +1776,7 @@ function bindEvents() {
         });
     });
 
-    document
+ document
     .querySelectorAll(".invoice-form-button")
     .forEach((button) => {
         button.addEventListener("click", () => {
@@ -1785,6 +1785,8 @@ function bindEvents() {
             );
         });
     });
+
+setInvoiceForm(state.invoiceForm);
 
     document.addEventListener(
         "click",
@@ -2121,6 +2123,10 @@ invoiceForm: state.invoiceForm,
     };
 
     const json =
+    console.log(
+    "Отправляем форму:",
+    state.invoiceForm
+);
         JSON.stringify(order);
 
     console.log("Отправляем:", order);

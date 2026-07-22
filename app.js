@@ -2084,6 +2084,8 @@ function sendOrder() {
     address: selectedShop.address
 },
 
+invoiceForm: state.invoiceForm,
+
         salesRepresentative: {
             telegramId:
                 telegramUser?.id ?? null,

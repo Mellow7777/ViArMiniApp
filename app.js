@@ -1896,6 +1896,16 @@ document
     }
 
     document
+    .querySelectorAll(".invoice-form-button")
+    .forEach((button) => {
+        button.addEventListener("click", () => {
+            setInvoiceForm(
+                button.dataset.invoiceForm
+            );
+        });
+    });
+
+    document
         .querySelectorAll(".drawer-mode-button")
         .forEach((item) => {
             item.classList.toggle(
@@ -1988,6 +1998,19 @@ document
             toggleLargeText
         );
     }
+}
+
+function setInvoiceForm(form) {
+    state.invoiceForm = form;
+
+    document
+        .querySelectorAll(".invoice-form-button")
+        .forEach((button) => {
+            button.classList.toggle(
+                "active",
+                button.dataset.invoiceForm === form
+            );
+        });
 }
 
 function hideProductSearch() {

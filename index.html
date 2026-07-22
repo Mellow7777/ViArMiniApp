@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=134">
+   <link rel="stylesheet" href="style.css?v=135">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -39,16 +39,7 @@
 
 <main class="container">
 
-    <!-- Торговый представитель -->
-    <section class="card user-card">
-        <span class="section-label">
-            Торговый представитель
-        </span>
-
-        <strong id="userName">
-            Загрузка...
-        </strong>
-    </section>
+    <span id="userName" hidden></span>
 
     <!-- Торговая точка и параметры заказа -->
     <section class="card order-setup-card">
@@ -133,78 +124,69 @@
 
         <div class="setup-divider"></div>
 
-        <!-- Тип операции -->
-        <div class="setup-group">
-            <span class="field-label">
-                Тип операции
-            </span>
-
-            <div class="operation-switch">
-                <button
-                    type="button"
-                    class="operation-button active"
-                    data-operation="order"
-                >
-                    <span>📦</span>
-                    <span>Заказ</span>
-                </button>
-
-                <button
-                    type="button"
-                    class="operation-button"
-                    data-operation="return"
-                >
-                    <span>↩️</span>
-                    <span>Возврат</span>
-                </button>
-            </div>
-        </div>
-
         <!-- Форма накладной -->
-        <div class="setup-group">
-            <span class="field-label">
-                Форма накладной
+<div class="setup-group invoice-group">
+    <span class="field-label">
+        Форма накладной
+    </span>
+
+    <div class="invoice-form-switch">
+        <button
+            type="button"
+            class="invoice-form-button"
+            data-invoice-form="1"
+        >
+            <span class="invoice-form-main">
+                1Ф
             </span>
 
-            <div class="invoice-form-switch">
-                <button
-                    type="button"
-                    class="invoice-form-button"
-                    data-invoice-form="1"
-                >
-                    <span class="invoice-form-main">
-                        1Ф
-                    </span>
+            <span class="invoice-form-check">
+                ✓
+            </span>
+        </button>
 
-                    <span class="invoice-form-caption">
-                        Первая форма
-                    </span>
+        <button
+            type="button"
+            class="invoice-form-button active"
+            data-invoice-form="2"
+        >
+            <span class="invoice-form-main">
+                2Ф
+            </span>
 
-                    <span class="invoice-form-check">
-                        ✓
-                    </span>
-                </button>
+            <span class="invoice-form-check">
+                ✓
+            </span>
+        </button>
+    </div>
+</div>
 
-                <button
-                    type="button"
-                    class="invoice-form-button active"
-                    data-invoice-form="2"
-                >
-                    <span class="invoice-form-main">
-                        2Ф
-                    </span>
+<!-- Тип операции -->
+<div class="setup-group operation-group">
+    <span class="field-label">
+        Тип операции
+    </span>
 
-                    <span class="invoice-form-caption">
-                        Вторая форма
-                    </span>
+    <div class="operation-switch">
+        <button
+            type="button"
+            class="operation-button active"
+            data-operation="order"
+        >
+            <span class="operation-icon">📦</span>
+            <span>Заказ</span>
+        </button>
 
-                    <span class="invoice-form-check">
-                        ✓
-                    </span>
-                </button>
-            </div>
-        </div>
-    </section>
+        <button
+            type="button"
+            class="operation-button"
+            data-operation="return"
+        >
+            <span class="operation-icon">↩️</span>
+            <span>Возврат</span>
+        </button>
+    </div>
+</div>
 
     <!-- Поиск товара -->
     <section class="search-section">
@@ -456,7 +438,7 @@
 </button>
 
 
-<script src="app.js?v=84"></script>
+<script src="app.js?v=85"></script>
 
 </body>
 </html> 

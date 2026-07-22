@@ -2123,10 +2123,6 @@ invoiceForm: state.invoiceForm,
     };
 
     const json =
-    console.log(
-    "Отправляем форму:",
-    state.invoiceForm
-);
         JSON.stringify(order);
 
     console.log("Отправляем:", order);

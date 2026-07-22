@@ -2151,18 +2151,20 @@ invoiceForm: state.invoiceForm,
 
         triggerHaptic("success");
     } catch (error) {
-        console.error(
-            "Ошибка отправки:",
-            error
-        );
+    console.error("Ошибка отправки:", error);
 
-        showToast(
-            "Не удалось отправить",
-            "error"
-        );
+    alert(
+        "Ошибка:\n\n" +
+        (error?.message || error)
+    );
 
-        triggerHaptic("error");
-    }
+    showToast(
+        "Не удалось отправить",
+        "error"
+    );
+
+    triggerHaptic("error");
+}
 }
 
 

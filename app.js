@@ -1776,38 +1776,13 @@ function bindEvents() {
         });
     });
 
-
-document
+    document
     .querySelectorAll(".invoice-form-button")
     .forEach((button) => {
         button.addEventListener("click", () => {
-            const selectedForm =
-                button.dataset.invoiceForm;
-
-            if (
-                selectedForm !== "1" &&
-                selectedForm !== "2"
-            ) {
-                return;
-            }
-
-            state.invoiceForm = selectedForm;
-
-            document
-                .querySelectorAll(
-                    ".invoice-form-button"
-                )
-                .forEach((item) => {
-                    item.classList.toggle(
-                        "active",
-                        item.dataset.invoiceForm ===
-                            selectedForm
-                    );
-                });
-
-            window.Telegram?.WebApp
-                ?.HapticFeedback
-                ?.selectionChanged();
+            setInvoiceForm(
+                button.dataset.invoiceForm
+            );
         });
     });
 
@@ -1895,15 +1870,6 @@ document
         return;
     }
 
-    document
-    .querySelectorAll(".invoice-form-button")
-    .forEach((button) => {
-        button.addEventListener("click", () => {
-            setInvoiceForm(
-                button.dataset.invoiceForm
-            );
-        });
-    });
 
     document
         .querySelectorAll(".drawer-mode-button")
@@ -2001,6 +1967,10 @@ document
 }
 
 function setInvoiceForm(form) {
+    if (form !== "1" && form !== "2") {
+        return;
+    }
+
     state.invoiceForm = form;
 
     document

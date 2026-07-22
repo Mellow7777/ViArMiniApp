@@ -3147,3 +3147,446 @@ body.large-text-mode .invoice-form-caption {
         0 10px 24px rgba(51, 144, 255, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
+
+
+/* ==================================================
+   ОНОВЛЕНЕ ОФОРМЛЕННЯ ВЕРХНЬОЇ ЧАСТИНИ
+================================================== */
+
+.order-setup-card {
+    position: relative;
+    overflow: visible;
+    padding: 18px;
+    border: 1px solid rgba(51, 144, 255, 0.15);
+    border-radius: 24px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(51, 144, 255, 0.14),
+            transparent 42%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(19, 38, 60, 0.96),
+            rgba(8, 20, 35, 0.98)
+        );
+    box-shadow:
+        0 15px 36px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Заголовок */
+
+.order-setup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.order-setup-heading {
+    color: var(
+        --tg-theme-hint-color,
+        rgba(255, 255, 255, 0.68)
+    );
+    font-size: 17px;
+    font-weight: 750;
+}
+
+.order-setup-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 45px;
+    width: 45px;
+    height: 45px;
+    border: 1px solid rgba(51, 144, 255, 0.34);
+    border-radius: 15px;
+    background: rgba(51, 144, 255, 0.14);
+    font-size: 21px;
+}
+
+.setup-section-title {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--tg-theme-text-color, #ffffff);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+/* Поиск торговой точки */
+
+.shop-picker {
+    position: relative;
+}
+
+.shop-search-wrapper {
+    position: relative;
+}
+
+.shop-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    z-index: 2;
+    font-size: 17px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.order-setup-card .shop-search-input {
+    display: block;
+    width: 100%;
+    min-height: 54px;
+    padding: 0 42px 0 46px;
+    border: 1px solid rgba(51, 144, 255, 0.5);
+    border-radius: 17px;
+    outline: none;
+    background: rgba(9, 25, 44, 0.92);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 16px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.order-setup-card .shop-search-input:focus {
+    border-color: #3390ff;
+    box-shadow: 0 0 0 3px rgba(51, 144, 255, 0.14);
+}
+
+.order-setup-card .shop-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Выбранная точка */
+
+.order-setup-card .selected-shop-modern {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-top: 11px;
+    padding: 14px;
+    border: 1px solid rgba(51, 144, 255, 0.72);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(51, 144, 255, 0.2),
+            rgba(51, 144, 255, 0.065)
+        );
+}
+
+.order-setup-card .selected-shop-modern[hidden] {
+    display: none !important;
+}
+
+.selected-shop-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: rgba(51, 144, 255, 0.17);
+    font-size: 23px;
+}
+
+.selected-shop-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.selected-shop-small-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #65aaff;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.selected-shop-info strong {
+    display: block;
+    overflow: hidden;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 850;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.selected-shop-info #selectedShopAddress {
+    display: block;
+    overflow: hidden;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.selected-shop-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.12);
+    color: #ffffff;
+    font-size: 19px;
+}
+
+/* Разделитель */
+
+.setup-divider {
+    height: 1px;
+    margin: 21px 0;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        );
+}
+
+.setup-group + .setup-group {
+    margin-top: 18px;
+}
+
+/* Форма накладной — компактная */
+
+.invoice-form-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.invoice-form-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 55px;
+    padding: 10px 45px 10px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.045);
+    color: #ffffff;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.invoice-form-button.active {
+    border-color: #3390ff;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(51, 144, 255, 0.25),
+            rgba(51, 144, 255, 0.08)
+        );
+    box-shadow:
+        0 7px 18px rgba(51, 144, 255, 0.14);
+}
+
+.invoice-form-main {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.invoice-form-check {
+    position: absolute;
+    top: 50%;
+    right: 13px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #3390ff;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+    transform: translateY(-50%);
+}
+
+.invoice-form-button.active .invoice-form-check {
+    display: flex;
+}
+
+/* Замовлення / Повернення — крупные */
+
+.order-setup-card .operation-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.order-setup-card .operation-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 0;
+    min-height: 68px;
+    padding: 13px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 19px;
+    background: rgba(255, 255, 255, 0.045);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 900;
+    cursor: pointer;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.order-setup-card .operation-button.active {
+    border-color: #3390ff;
+    background:
+        linear-gradient(
+            135deg,
+            #3390ff,
+            #267ddd
+        );
+    box-shadow:
+        0 10px 24px rgba(51, 144, 255, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.operation-icon {
+    font-size: 23px;
+}
+
+/* ==================================================
+   КРАСИВЫЙ ПОИСК ТОВАРА
+================================================== */
+
+.product-search-card {
+    width: 100%;
+    margin: 14px 0;
+    padding: 0;
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.product-search-title {
+    display: block;
+    margin: 0 0 9px 3px;
+    color: var(--tg-theme-text-color, #ffffff);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.product-search-wrapper {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.product-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.64);
+    font-size: 18px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.product-search-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 58px;
+    margin: 0;
+    padding: 0 45px 0 49px;
+    border: 1px solid rgba(51, 144, 255, 0.75);
+    border-radius: 19px;
+    outline: none;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(18, 38, 63, 0.98),
+            rgba(11, 25, 43, 0.98)
+        );
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 17px;
+    box-sizing: border-box;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.product-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.43);
+}
+
+.product-search-input:focus {
+    border-color: #3390ff;
+    box-shadow:
+        0 0 0 3px rgba(51, 144, 255, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Убирает старый чёрный фон вокруг поиска */
+
+.search-section {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.search-section::before,
+.search-section::after {
+    display: none !important;
+}
+
+#productSearch {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Маленькие экраны */
+
+@media (max-width: 380px) {
+    .order-setup-card {
+        padding: 15px;
+    }
+
+    .order-setup-heading {
+        font-size: 15px;
+    }
+
+    .order-setup-card .operation-button {
+        min-height: 62px;
+        font-size: 15px;
+    }
+
+    .operation-icon {
+        font-size: 20px;
+    }
+
+    .product-search-input {
+        min-height: 55px;
+        font-size: 15px;
+    }
+}

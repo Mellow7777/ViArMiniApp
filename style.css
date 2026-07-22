@@ -3084,3 +3084,66 @@ body.large-text-mode .invoice-form-caption {
         height: 21px;
     }
 }
+
+/* Форма накладной выше и компактнее */
+
+.invoice-group {
+    margin-top: 15px;
+}
+
+.invoice-form-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.invoice-form-button {
+    position: relative;
+    min-height: 48px;
+    padding: 8px 38px 8px 14px;
+    border-radius: 14px;
+}
+
+.invoice-form-main {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.invoice-form-caption {
+    display: none;
+}
+
+.invoice-form-check {
+    right: 11px;
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+}
+
+/* Заказ / Возврат крупнее */
+
+.operation-group {
+    margin-top: 18px;
+}
+
+.order-setup-card .operation-switch {
+    gap: 10px;
+}
+
+.order-setup-card .operation-button {
+    min-height: 66px;
+    padding: 14px 10px;
+    border-radius: 18px;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.operation-icon {
+    font-size: 24px;
+}
+
+.order-setup-card .operation-button.active {
+    box-shadow:
+        0 10px 24px rgba(51, 144, 255, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}

@@ -5,6 +5,9 @@ const telegram = window.Telegram?.WebApp;
 let products = [];
 let shops = [];
 
+const API_BASE_URL =
+    "http://localhost:5055";
+
 const productGroups = [
     "Все",
     "Тарасівські ковбаси",
@@ -1993,9 +1996,15 @@ setInvoiceForm(state.invoiceForm);
 }
 
 async function openHistory() {
-    const shopId = Number(elements.selectedShopId.value);
+    const shopId =
+        Number(elements.selectedShopId.value);
 
     if (!shopId) {
+        showToast(
+            "Спочатку оберіть торгову точку",
+            "error"
+        );
+
         return;
     }
 
@@ -2003,38 +2012,478 @@ async function openHistory() {
 
     elements.historyContainer.innerHTML = `
         <div class="history-loading">
-            Завантаження...
+            ⏳ Завантаження історії...
         </div>
     `;
 
+    elements.historyButton.disabled = true;
+
     try {
         const response = await fetch(
-            `http://localhost:5055/api/shops/${shopId}/orders?days=60`
+            `${API_BASE_URL}/api/shops/${shopId}/orders?days=60`
         );
 
         if (!response.ok) {
-            throw new Error("Не удалось получить историю.");
+            throw new Error(
+                `Помилка API: ${response.status}`
+            );
         }
 
         const data = await response.json();
 
-        console.log(data);
+        const orders =
+            Array.isArray(data.orders)
+                ? data.orders
+                : [];
 
-        elements.historyContainer.innerHTML =
-            "<pre>" +
-            JSON.stringify(data, null, 2) +
-            "</pre>";
+        renderOrderHistory(orders);
     }
     catch (error) {
-        console.error(error);
+        console.error(
+            "Помилка завантаження історії:",
+            error
+        );
 
-        elements.historyContainer.innerHTML =
-            `
-            <div class="history-loading">
-                ❌ Помилка завантаження історії
+        elements.historyContainer.innerHTML = `
+            <div class="history-empty">
+                <div class="history-empty-icon">
+                    ❌
+                </div>
+
+                <strong>
+                    Не вдалося завантажити історію
+                </strong>
+
+                <span>
+                    Перевірте, чи запущений бот та API.
+                </span>
             </div>
-            `;
+        `;
     }
+    finally {
+        elements.historyButton.disabled = false;
+    }
+}
+
+function renderOrderHistory(orders) {
+    if (!Array.isArray(orders) ||
+        orders.length === 0) {
+        elements.historyContainer.innerHTML = `
+            <div class="history-empty">
+                <div class="history-empty-icon">
+                    📭
+                </div>
+
+                <strong>
+                    Історія замовлень відсутня
+                </strong>
+
+                <span>
+                    За останні 60 днів замовлень немає.
+                </span>
+            </div>
+        `;
+
+        return;
+    }
+
+    /*
+     * Пока показываем пять последних заказов.
+     */
+    const latestOrders =
+        orders.slice(0, 5);
+
+    elements.historyContainer.innerHTML = `
+        <div class="history-header">
+            <div>
+                <strong>
+                    Історія замовлень
+                </strong>
+
+                <span>
+                    Останні ${latestOrders.length}
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="history-close-button"
+                id="closeHistoryButton"
+                aria-label="Закрити історію"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="history-orders-list">
+            ${latestOrders
+                .map(
+                    (order, index) =>
+                        createHistoryOrderHtml(
+                            order,
+                            index
+                        )
+                )
+                .join("")}
+        </div>
+    `;
+
+    bindHistoryButtons(latestOrders);
+
+    document
+        .getElementById("closeHistoryButton")
+        ?.addEventListener(
+            "click",
+            closeOrderHistory
+        );
+}
+
+function createHistoryOrderHtml(
+    order,
+    index
+) {
+    const items =
+        Array.isArray(order.items)
+            ? order.items
+            : [];
+
+    const dateText =
+        formatHistoryDate(order.createdAt);
+
+    const invoiceForm =
+        String(order.invoiceForm || "2")
+            .replace("Ф", "");
+
+    const itemsHtml =
+        items.length > 0
+            ? items
+                .map((item) => {
+                    const quantity =
+                        formatHistoryQuantity(
+                            item.quantity
+                        );
+
+                    return `
+                        <div class="history-product-row">
+                            <div class="history-product-info">
+                                <strong>
+                                    ${escapeHtml(
+                                        item.productName ||
+                                        item.name ||
+                                        "Товар"
+                                    )}
+                                </strong>
+
+                                ${
+                                    item.article
+                                        ? `
+                                        <span>
+                                            Артикул:
+                                            ${escapeHtml(
+                                                item.article
+                                            )}
+                                        </span>
+                                        `
+                                        : ""
+                                }
+                            </div>
+
+                            <div class="history-product-quantity">
+                                ${quantity}
+                                ${escapeHtml(
+                                    item.unit || ""
+                                )}
+                            </div>
+                        </div>
+                    `;
+                })
+                .join("")
+            : `
+                <div class="history-no-products">
+                    У замовленні немає позицій
+                </div>
+            `;
+
+    return `
+        <article class="history-order-card">
+            <div class="history-order-top">
+                <div class="history-order-date">
+                    <span class="history-order-calendar">
+                        📅
+                    </span>
+
+                    <div>
+                        <strong>
+                            ${dateText}
+                        </strong>
+
+                        <span>
+                            Накладна ${invoiceForm}Ф
+                        </span>
+                    </div>
+                </div>
+
+                <span class="history-order-count">
+                    ${items.length} поз.
+                </span>
+            </div>
+
+            <div class="history-order-products">
+                ${itemsHtml}
+            </div>
+
+            <button
+                type="button"
+                class="repeat-order-button"
+                data-history-order-index="${index}"
+                ${items.length === 0 ? "disabled" : ""}
+            >
+                🔄 Повторити замовлення
+            </button>
+        </article>
+    `;
+}
+
+function bindHistoryButtons(orders) {
+    document
+        .querySelectorAll(
+            "[data-history-order-index]"
+        )
+        .forEach((button) => {
+            button.addEventListener(
+                "click",
+                () => {
+                    const index =
+                        Number(
+                            button.dataset
+                                .historyOrderIndex
+                        );
+
+                    const order =
+                        orders[index];
+
+                    if (!order) {
+                        return;
+                    }
+
+                    repeatHistoryOrder(order);
+                }
+            );
+        });
+}
+
+function repeatHistoryOrder(historyOrder) {
+    const historyItems =
+        Array.isArray(historyOrder.items)
+            ? historyOrder.items
+            : [];
+
+    if (historyItems.length === 0) {
+        showToast(
+            "У цьому замовленні немає товарів",
+            "error"
+        );
+
+        return;
+    }
+
+    let addedCount = 0;
+    let unavailableCount = 0;
+
+    historyItems.forEach(
+        (historyItem) => {
+            const product =
+                findProductForHistoryItem(
+                    historyItem
+                );
+
+            /*
+             * Товара уже нет в актуальном
+             * списке products.
+             */
+            if (!product) {
+                unavailableCount++;
+                return;
+            }
+
+            const quantity =
+                Number(historyItem.quantity);
+
+            if (!Number.isFinite(quantity) ||
+                quantity <= 0) {
+                return;
+            }
+
+            const unit =
+                historyItem.unit ||
+                product.unit ||
+                "кг";
+
+            const existingItem =
+                state.orderCart.find(
+                    (cartItem) =>
+                        Number(cartItem.productId) ===
+                            Number(product.id) &&
+                        cartItem.unit === unit
+                );
+
+            if (existingItem) {
+                existingItem.quantity =
+                    roundCartQuantity(
+                        Number(
+                            existingItem.quantity
+                        ) + quantity
+                    );
+            }
+            else {
+                state.orderCart.push({
+                    productId: product.id,
+                    article:
+                        product.article ||
+                        historyItem.article ||
+                        "",
+
+                    name:
+                        product.name ||
+                        historyItem.productName ||
+                        historyItem.name ||
+                        "Товар",
+
+                    unit,
+
+                    quantity:
+                        roundCartQuantity(
+                            quantity
+                        )
+                });
+            }
+
+            addedCount++;
+        }
+    );
+
+    saveCart();
+    renderCart();
+    renderProducts();
+    renderDrawerCart();
+
+    if (addedCount === 0) {
+        showToast(
+            "Товари з цього замовлення не знайдені",
+            "error"
+        );
+
+        return;
+    }
+
+    closeOrderHistory();
+
+    let message =
+        `Додано позицій: ${addedCount}`;
+
+    if (unavailableCount > 0) {
+        message +=
+            `. Не знайдено: ${unavailableCount}`;
+    }
+
+    showToast(
+        message,
+        "success"
+    );
+
+    triggerHaptic("success");
+}
+
+function findProductForHistoryItem(
+    historyItem
+) {
+    const historyProductId =
+        Number(historyItem.productId);
+
+    if (historyProductId) {
+        const byId =
+            products.find(
+                (product) =>
+                    Number(product.id) ===
+                    historyProductId
+            );
+
+        if (byId) {
+            return byId;
+        }
+    }
+
+    const article =
+        String(historyItem.article || "")
+            .trim();
+
+    if (article) {
+        const byArticle =
+            products.find(
+                (product) =>
+                    String(
+                        product.article || ""
+                    ).trim() === article
+            );
+
+        if (byArticle) {
+            return byArticle;
+        }
+    }
+
+    return null;
+}
+
+function formatHistoryDate(value) {
+    if (!value) {
+        return "Дата не вказана";
+    }
+
+    const date =
+        new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString(
+        "uk-UA",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+}
+
+function formatHistoryQuantity(value) {
+    const number =
+        Number(value);
+
+    if (!Number.isFinite(number)) {
+        return "0";
+    }
+
+    return number.toLocaleString(
+        "uk-UA",
+        {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 3
+        }
+    );
+}
+
+function roundCartQuantity(value) {
+    return Math.round(
+        (Number(value) +
+            Number.EPSILON) *
+        1000
+    ) / 1000;
+}
+
+function closeOrderHistory() {
+    elements.historyContainer.hidden = true;
+    elements.historyContainer.innerHTML = "";
 }
 
 function setInvoiceForm(form) {

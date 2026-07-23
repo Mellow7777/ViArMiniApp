@@ -2342,26 +2342,22 @@ function repeatHistoryOrder(historyOrder) {
                     );
             }
             else {
-                state.orderCart.push({
-                    productId: product.id,
-                    article:
-                        product.article ||
-                        historyItem.article ||
-                        "",
+state.orderCart =
+    state.orderCart.map((item) => ({
+        ...item,
+        cartKey:
+            item.cartKey ||
+            createCartKey()
+    }));
 
-                    name:
-                        product.name ||
-                        historyItem.productName ||
-                        historyItem.name ||
-                        "Товар",
+state.returnCart =
+    state.returnCart.map((item) => ({
+        ...item,
+        cartKey:
+            item.cartKey ||
+            createCartKey()
+    }));
 
-                    unit,
-
-                    quantity:
-                        roundCartQuantity(
-                            quantity
-                        )
-                });
             }
 
             addedCount++;
@@ -2398,6 +2394,22 @@ function repeatHistoryOrder(historyOrder) {
     );
 
     triggerHaptic("success");
+}
+
+function createCartKey() {
+    if (window.crypto &&
+        typeof window.crypto.randomUUID ===
+            "function") {
+        return window.crypto.randomUUID();
+    }
+
+    return (
+        Date.now().toString(36) +
+        "-" +
+        Math.random()
+            .toString(36)
+            .slice(2)
+    );
 }
 
 function findProductForHistoryItem(

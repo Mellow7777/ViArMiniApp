@@ -3664,7 +3664,17 @@ body.large-text-mode .invoice-form-caption {
 .history-order-card {
     padding: 14px;
     border-radius: 16px;
-    background: var(--card-background, #ffffff);
+
+    background: var(
+        --tg-theme-secondary-bg-color,
+        #ffffff
+    );
+
+    color: var(
+        --tg-theme-text-color,
+        #111827
+    );
+
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
 }
 
@@ -3797,4 +3807,38 @@ body.large-text-mode .invoice-form-caption {
 .history-empty span {
     font-size: 13px;
     opacity: 0.65;
+}
+
+.history-order-date strong,
+.history-product-info strong,
+.history-product-quantity {
+    color: var(
+        --tg-theme-text-color,
+        #111827
+    );
+}
+
+.history-order-date span,
+.history-product-info span {
+    color: var(
+        --tg-theme-hint-color,
+        #6b7280
+    );
+}
+
+.history-order-top,
+.history-product-row {
+    border-color: var(
+        --tg-theme-section-separator-color,
+        rgba(127, 127, 127, 0.18)
+    );
+}
+
+.history-order-count {
+    color: var(
+        --tg-theme-hint-color,
+        #6b7280
+    );
+
+    background: rgba(127, 127, 127, 0.13);
 }

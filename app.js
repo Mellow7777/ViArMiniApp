@@ -2541,17 +2541,39 @@ function repeatHistoryOrder(historyOrder) {
                 );
 
             if (existingItem) {
-                if (!existingItem.cartKey) {
-    existingItem.cartKey =
-        createCartKey();
+    if (!existingItem.cartKey) {
+        existingItem.cartKey =
+            createCartKey();
+    }
+
+    existingItem.price = Number(
+        product.price ??
+        product.Price ??
+        existingItem.price ??
+        0
+    );
+
+    existingItem.approximateWeightPerPiece =
+        Number(
+            product.approximateWeightPerPiece ??
+            product.ApproximateWeightPerPiece ??
+            existingItem.approximateWeightPerPiece ??
+            0
+        );
+
+    existingItem.canOrderByPiece = Boolean(
+        product.canOrderByPiece ??
+        product.CanOrderByPiece ??
+        existingItem.canOrderByPiece ??
+        false
+    );
+
+    existingItem.quantity =
+        roundCartQuantity(
+            Number(existingItem.quantity) +
+            quantity
+        );
 }
-                existingItem.quantity =
-                    roundCartQuantity(
-                        Number(
-                            existingItem.quantity
-                        ) + quantity
-                    );
-            }
             else {
     state.orderCart.push({
         cartKey: createCartKey(),
@@ -2568,6 +2590,26 @@ function repeatHistoryOrder(historyOrder) {
             historyItem.productName ||
             historyItem.name ||
             "Товар",
+
+        price: Number(
+            product.price ??
+            product.Price ??
+            historyItem.price ??
+            0
+        ),
+
+        approximateWeightPerPiece: Number(
+            product.approximateWeightPerPiece ??
+            product.ApproximateWeightPerPiece ??
+            historyItem.approximateWeightPerPiece ??
+            0
+        ),
+
+        canOrderByPiece: Boolean(
+            product.canOrderByPiece ??
+            product.CanOrderByPiece ??
+            false
+        ),
 
         unit,
 

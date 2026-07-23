@@ -600,11 +600,20 @@ function renderCategories() {
         }
 
         button.addEventListener("click", () => {
-            state.selectedCategory = category;
+    // Выбираем категорию
+    state.selectedCategory = category;
 
-            renderCategories();
-            renderProducts();
-        });
+    // Полностью сбрасываем поиск
+    state.productSearchQuery = "";
+
+    if (elements.productSearch) {
+        elements.productSearch.value = "";
+        elements.productSearch.blur();
+    }
+
+    renderCategories();
+    renderProducts();
+});
 
         elements.categories.appendChild(button);
     });

@@ -2106,6 +2106,22 @@ setInvoiceForm(state.invoiceForm);
         return;
     }
 
+    const drawerOrderComment =
+    document.getElementById("drawerOrderComment");
+
+const legacyOrderComment =
+    document.getElementById("orderComment");
+
+drawerOrderComment?.addEventListener(
+    "input",
+    () => {
+        if (legacyOrderComment) {
+            legacyOrderComment.value =
+                drawerOrderComment.value;
+        }
+    }
+);
+
 
     document
         .querySelectorAll(".drawer-mode-button")

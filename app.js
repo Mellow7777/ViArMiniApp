@@ -6,7 +6,7 @@ let products = [];
 let shops = [];
 
 const API_BASE_URL =
-    "https://creamer-jurist-marine.ngrok-free.dev";
+    "https://api.via-r-order.com";
 
 const productGroups = [
     "Все",

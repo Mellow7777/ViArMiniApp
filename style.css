@@ -981,12 +981,6 @@ textarea:focus {
     opacity: 0.5;
 }
 
-@media (max-width: 430px) {
-    .drawer-summary {
-        grid-template-columns: 1fr;
-    }
-}
-
 .shop-picker {
     position: relative;
 }
@@ -3860,4 +3854,139 @@ body.large-text-mode .invoice-form-caption {
 
 .legacy-cart-elements {
     display: none !important;
+}
+
+.cart-drawer-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 650px;
+
+    height: 92dvh;
+    max-height: 92dvh;
+
+    padding: 16px;
+
+    background: var(--tg-theme-secondary-bg-color, #ffffff);
+    border-radius: 22px 22px 0 0;
+
+    overflow: hidden;
+}
+
+.drawer-cart-list {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    padding: 0 2px 12px;
+}
+
+.drawer-footer {
+    flex-shrink: 0;
+
+    padding: 10px 0
+        max(10px, env(safe-area-inset-bottom));
+
+    background: var(--tg-theme-secondary-bg-color, #ffffff);
+    border-top: 1px solid var(--border);
+}
+
+/* Итоги в одну компактную строку */
+.drawer-summary {
+    display: grid;
+    grid-template-columns: 0.75fr 0.9fr 1.6fr;
+    gap: 6px;
+
+    margin: 0 0 8px;
+}
+
+.drawer-summary div {
+    min-width: 0;
+    padding: 7px 8px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--tg-theme-bg-color, #f6f7f9);
+}
+
+.drawer-summary span {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--tg-theme-hint-color, #737373);
+    font-size: 9px;
+    line-height: 1.1;
+}
+
+.drawer-summary strong {
+    display: block;
+
+    overflow: hidden;
+
+    font-size: 13px;
+    line-height: 1.15;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Комментарий только в одну строку */
+.drawer-comment {
+    margin: 0 0 8px;
+}
+
+.drawer-comment label {
+    display: none;
+}
+
+.drawer-comment textarea {
+    display: block;
+
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
+
+    padding: 11px 12px;
+
+    resize: none;
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #1c1c1e);
+
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/* Кнопка всегда видна */
+.drawer-send-button {
+    display: block;
+
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    margin: 0;
+
+    border: none;
+    border-radius: 13px;
+
+    background: var(--primary);
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.drawer-send-button:disabled {
+    opacity: 0.5;
 }

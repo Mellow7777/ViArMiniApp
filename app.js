@@ -2334,6 +2334,10 @@ function repeatHistoryOrder(historyOrder) {
                 );
 
             if (existingItem) {
+                if (!existingItem.cartKey) {
+    existingItem.cartKey =
+        createCartKey();
+}
                 existingItem.quantity =
                     roundCartQuantity(
                         Number(
@@ -2342,23 +2346,28 @@ function repeatHistoryOrder(historyOrder) {
                     );
             }
             else {
-state.orderCart =
-    state.orderCart.map((item) => ({
-        ...item,
-        cartKey:
-            item.cartKey ||
-            createCartKey()
-    }));
+    state.orderCart.push({
+        cartKey: createCartKey(),
 
-state.returnCart =
-    state.returnCart.map((item) => ({
-        ...item,
-        cartKey:
-            item.cartKey ||
-            createCartKey()
-    }));
+        productId: product.id,
 
-            }
+        article:
+            product.article ||
+            historyItem.article ||
+            "",
+
+        name:
+            product.name ||
+            historyItem.productName ||
+            historyItem.name ||
+            "Товар",
+
+        unit,
+
+        quantity:
+            roundCartQuantity(quantity)
+    });
+}
 
             addedCount++;
         }
@@ -2394,22 +2403,6 @@ state.returnCart =
     );
 
     triggerHaptic("success");
-}
-
-function createCartKey() {
-    if (window.crypto &&
-        typeof window.crypto.randomUUID ===
-            "function") {
-        return window.crypto.randomUUID();
-    }
-
-    return (
-        Date.now().toString(36) +
-        "-" +
-        Math.random()
-            .toString(36)
-            .slice(2)
-    );
 }
 
 function findProductForHistoryItem(
@@ -2764,6 +2757,21 @@ function setActiveOperation(operation) {
     renderCart();
 }
 
+function createCartKey() {
+    if (
+        window.crypto &&
+        typeof window.crypto.randomUUID === "function"
+    ) {
+        return window.crypto.randomUUID();
+    }
+
+    return (
+        Date.now().toString(36) +
+        "-" +
+        Math.random().toString(36).slice(2)
+    );
+}
+
 function loadCart() {
     try {
         const savedData =
@@ -2780,19 +2788,40 @@ function loadCart() {
         const parsedData =
             JSON.parse(savedData);
 
-        state.orderCart =
-            Array.isArray(
-                parsedData.orderCart
-            )
+        const savedOrderCart =
+            Array.isArray(parsedData.orderCart)
                 ? parsedData.orderCart
                 : [];
 
-        state.returnCart =
-            Array.isArray(
-                parsedData.returnCart
-            )
+        const savedReturnCart =
+            Array.isArray(parsedData.returnCart)
                 ? parsedData.returnCart
                 : [];
+
+        /*
+         * Добавляем cartKey старым позициям,
+         * у которых его ещё нет.
+         */
+        state.orderCart =
+            savedOrderCart.map((item) => ({
+                ...item,
+                cartKey:
+                    item.cartKey ||
+                    createCartKey()
+            }));
+
+        state.returnCart =
+            savedReturnCart.map((item) => ({
+                ...item,
+                cartKey:
+                    item.cartKey ||
+                    createCartKey()
+            }));
+
+        /*
+         * Сохраняем уже исправленную корзину.
+         */
+        saveCart();
     } catch (error) {
         console.warn(
             "Не удалось загрузить корзины:",

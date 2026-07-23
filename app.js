@@ -268,6 +268,15 @@ function renderGroups() {
         button.addEventListener("click", () => {
             state.selectedGroup = group;
 
+            // Полностью сбрасываем сохранённый поиск
+            state.productSearchQuery = "";
+
+            // Поле поиска тоже очищаем
+            if (elements.productSearch) {
+                elements.productSearch.value = "";
+                elements.productSearch.blur();
+            }
+
             renderGroups();
             renderProducts();
         });

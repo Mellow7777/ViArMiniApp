@@ -3,7 +3,7 @@
     "id": 1,
     "article": "1001",
     "name": "Балик \"Посольский\"",
-    "unit": "",
+    "unit": "кг",
     "isAvailable": true,
     "step": 0.1,
     "price": 397.60,
@@ -1086,7 +1086,7 @@
     "step": 1,
     "price": 78.10,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1786,7 +1786,7 @@
     "step": 1,
     "price": 106.05,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Тарасівські ковбаси",
     "russianName": ""
@@ -1828,7 +1828,7 @@
     "step": 1,
     "price": 35.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1870,7 +1870,7 @@
     "step": 1,
     "price": 300.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1884,7 +1884,7 @@
     "step": 1,
     "price": 41.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1898,7 +1898,7 @@
     "step": 1,
     "price": 44.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1912,7 +1912,7 @@
     "step": 1,
     "price": 39.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1926,7 +1926,7 @@
     "step": 1,
     "price": 40.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1940,7 +1940,7 @@
     "step": 1,
     "price": 33.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1954,7 +1954,7 @@
     "step": 1,
     "price": 33.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1968,7 +1968,7 @@
     "step": 1,
     "price": 21.50,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1982,7 +1982,7 @@
     "step": 1,
     "price": 21.50,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -1996,7 +1996,7 @@
     "step": 1,
     "price": 22.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -2066,7 +2066,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2080,7 +2080,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2094,7 +2094,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2108,7 +2108,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2122,7 +2122,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2136,7 +2136,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2150,7 +2150,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2164,7 +2164,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2178,7 +2178,7 @@
     "step": 1,
     "price": 425.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2192,7 +2192,7 @@
     "step": 1,
     "price": 87.75,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -2206,7 +2206,7 @@
     "step": 1,
     "price": 87.75,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -2220,7 +2220,7 @@
     "step": 1,
     "price": 87.75,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -2234,7 +2234,7 @@
     "step": 1,
     "price": 87.75,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Снеки",
     "russianName": ""
@@ -2248,7 +2248,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2262,7 +2262,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2276,7 +2276,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2290,7 +2290,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2304,7 +2304,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2318,7 +2318,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2332,7 +2332,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2346,7 +2346,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2360,7 +2360,7 @@
     "step": 1,
     "price": 200.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Чипси курячі",
     "russianName": ""
@@ -2402,7 +2402,7 @@
     "step": 1,
     "price": 235.85,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2416,7 +2416,7 @@
     "step": 1,
     "price": 235.85,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2430,7 +2430,7 @@
     "step": 1,
     "price": 87.60,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2444,7 +2444,7 @@
     "step": 1,
     "price": 213.10,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2458,7 +2458,7 @@
     "step": 1,
     "price": 213.10,
     "approximateWeightPerPiece": 0.500,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2472,7 +2472,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2486,7 +2486,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2500,7 +2500,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2514,7 +2514,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2528,7 +2528,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2542,7 +2542,7 @@
     "step": 1,
     "price": 18.00,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2556,7 +2556,7 @@
     "step": 1,
     "price": 340.80,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2570,7 +2570,7 @@
     "step": 1,
     "price": 340.80,
     "approximateWeightPerPiece": 2.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2584,7 +2584,7 @@
     "step": 1,
     "price": 340.80,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2598,7 +2598,7 @@
     "step": 1,
     "price": 72.25,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2612,7 +2612,7 @@
     "step": 1,
     "price": 350.80,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2626,7 +2626,7 @@
     "step": 1,
     "price": 65.50,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2640,7 +2640,7 @@
     "step": 1,
     "price": 72.25,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2654,7 +2654,7 @@
     "step": 1,
     "price": 65.50,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2668,7 +2668,7 @@
     "step": 1,
     "price": 340.80,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2696,7 +2696,7 @@
     "step": 1,
     "price": 40.20,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2710,7 +2710,7 @@
     "step": 1,
     "price": 40.20,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2724,7 +2724,7 @@
     "step": 1,
     "price": 40.20,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2738,7 +2738,7 @@
     "step": 1,
     "price": 40.20,
     "approximateWeightPerPiece": 1.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""
@@ -2752,7 +2752,7 @@
     "step": 1,
     "price": 84.00,
     "approximateWeightPerPiece": 5.00,
-    "canOrderByPiece": true,
+    "canOrderByPiece": false,
     "imageUrl": "images/1008.png",
     "group": "Молочна продукція",
     "russianName": ""

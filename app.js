@@ -6,7 +6,7 @@ let products = [];
 let shops = [];
 
 const API_BASE_URL =
-    "http://localhost:5055";
+    "https://creamer-jurist-marine.ngrok-free.dev";
 
 const productGroups = [
     "Все",
@@ -2018,10 +2018,16 @@ async function openHistory() {
 
     elements.historyButton.disabled = true;
 
-    try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/shops/${shopId}/orders?days=60`
-        );
+   try {
+    const response = await fetch(
+        `${API_BASE_URL}/api/shops/${shopId}/orders?days=60`,
+        {
+            headers: {
+                "ngrok-skip-browser-warning": "true"
+            }
+        }
+    );
+
 
         if (!response.ok) {
             throw new Error(

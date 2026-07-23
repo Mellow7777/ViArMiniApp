@@ -3848,3 +3848,7 @@ body.large-text-mode .invoice-form-caption {
 
     background: rgba(127, 127, 127, 0.13);
 }
+
+.legacy-cart-elements {
+    display: none !important;
+}

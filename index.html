@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=146">
+   <link rel="stylesheet" href="style.css?v=147">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -248,6 +248,39 @@
             <div class="products-list" id="productsList"></div>
         </section>
 
+        <!-- Скрытые служебные элементы для старой логики app.js -->
+<div class="legacy-cart-elements">
+    <h2 id="cartTitle">Корзина заказа</h2>
+
+    <button
+        type="button"
+        id="clearCartButton"
+    >
+        Очистить
+    </button>
+
+    <div id="cartList"></div>
+
+    <div id="emptyCart">
+        Корзина пока пустая
+    </div>
+
+    <textarea
+        id="orderComment"
+        maxlength="300"
+    ></textarea>
+
+    <strong id="totalPrice">
+        ≈ 0 грн
+    </strong>
+
+    <strong id="totalQuantity">
+        0
+    </strong>
+</div>
+
+<div class="bottom-space"></div>
+
 
         <div class="bottom-space"></div>
     </main>
@@ -424,7 +457,7 @@
 </button>
 
 
-<script src="app.js?v=112"></script>
+<script src="app.js?v=113"></script>
 
 </body>
 </html> 

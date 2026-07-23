@@ -3990,3 +3990,72 @@ body.large-text-mode .invoice-form-caption {
 .drawer-send-button:disabled {
     opacity: 0.5;
 }
+
+@media (max-width: 430px) {
+    .drawer-summary {
+        grid-template-columns:
+            0.75fr 0.9fr 1.6fr !important;
+        gap: 5px !important;
+        margin: 0 0 7px !important;
+    }
+
+    .drawer-summary div {
+        min-width: 0 !important;
+        padding: 6px !important;
+        border-radius: 9px !important;
+    }
+
+    .drawer-summary span {
+        margin-bottom: 2px !important;
+        font-size: 8px !important;
+        line-height: 1.05 !important;
+    }
+
+    .drawer-summary strong {
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+
+    .drawer-comment {
+        margin: 0 0 7px !important;
+    }
+
+    .drawer-comment label {
+        display: none !important;
+    }
+
+    .drawer-comment textarea {
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+
+        padding: 10px 11px !important;
+        overflow: hidden !important;
+        resize: none !important;
+
+        font-size: 14px !important;
+    }
+
+    .drawer-send-button {
+        display: block !important;
+
+        width: 100% !important;
+        height: 50px !important;
+        min-height: 50px !important;
+
+        margin: 0 !important;
+    }
+
+    .drawer-footer {
+        flex-shrink: 0 !important;
+
+        padding: 8px 0
+            max(8px, env(safe-area-inset-bottom)) !important;
+    }
+
+    .drawer-cart-list {
+        min-height: 0 !important;
+        padding-bottom: 10px !important;
+    }
+}

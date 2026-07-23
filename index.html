@@ -248,53 +248,6 @@
             <div class="products-list" id="productsList"></div>
         </section>
 
-        <!-- Корзина -->
-        <section class="cart-section" id="cartSection">
-            <div class="section-title-row">
-                <h2 id="cartTitle">Корзина заказа</h2>
-
-                <button
-                    type="button"
-                    class="clear-cart-button"
-                    id="clearCartButton"
-                >
-                    Очистить
-                </button>
-            </div>
-
-            <div id="cartList" class="cart-list"></div>
-
-            <div id="emptyCart" class="empty-cart">
-                Корзина пока пустая
-            </div>
-        </section>
-
-        <!-- Комментарий -->
-        <section class="card">
-            <label class="section-label" for="orderComment">
-                Комментарий
-            </label>
-
-            <textarea
-                id="orderComment"
-                rows="3"
-                maxlength="300"
-                placeholder="Например: доставка до 12:00"
-            ></textarea>
-        </section>
-
-        <!-- Итоги -->
-        <div class="summary-total-price">
-    <span>Примерная сумма заказа</span>
-    <strong id="totalPrice">≈ 0 грн</strong>
-</div>
-
-            <div>
-                <span>Общее количество</span>
-                <strong id="totalQuantity">0</strong>
-            </div>
-        </section>
-
 
         <div class="bottom-space"></div>
     </main>
@@ -405,47 +358,49 @@
             Корзина заказа пока пустая
         </div>
 
-        <div class="drawer-summary">
-    <div>
-        <span>Позиций</span>
-        <strong id="drawerPositions">0</strong>
-    </div>
+       <div class="drawer-footer">
 
-    <div>
-        <span>Количество</span>
-        <strong id="drawerQuantity">0</strong>
-    </div>
-
-    <div>
-        <span id="drawerTotalTitle">
-            Примерная сумма заказа
-        </span>
-
-        <strong id="drawerTotalPrice">
-            ≈ 0 грн
-        </strong>
-    </div>
-</div>
-<button
-    type="button"
-    class="drawer-send-button"
-    id="drawerSendButton"
->
-    Отправить заказ
-</button>
-</span>
-
-            </div>
+    <div class="drawer-summary">
+        <div>
+            <span>Позиций</span>
+            <strong id="drawerPositions">0</strong>
         </div>
 
-        <button
-            type="button"
-            class="drawer-send-button"
-            id="drawerSendButton"
-        >
-            Отправить
-        </button>
+        <div>
+            <span>Количество</span>
+            <strong id="drawerQuantity">0</strong>
+        </div>
+
+        <div>
+            <span id="drawerTotalTitle">
+                Примерная сумма заказа
+            </span>
+
+            <strong id="drawerTotalPrice">
+                ≈ 0 грн
+            </strong>
+        </div>
     </div>
+
+    <div class="drawer-comment">
+        <label for="drawerOrderComment">
+            Комментарий
+        </label>
+
+        <textarea
+            id="drawerOrderComment"
+            placeholder="Например: доставка после 14:00"
+        ></textarea>
+    </div>
+
+    <button
+        type="button"
+        class="drawer-send-button"
+        id="drawerSendButton"
+    >
+        Отправить заказ
+    </button>
+
 </div>
 
 <button

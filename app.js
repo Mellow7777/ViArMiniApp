@@ -1439,8 +1439,79 @@ function renderDrawerCart() {
                 : "Корзина заказа пока пустая";
     }
 
+    /*
+     * Обновляет корзину после изменения
+     * количества или единицы измерения.
+     */
+    const refreshCart = () => {
+        saveCart();
+        renderDrawerCart();
+
+        if (typeof renderCart === "function") {
+            renderCart();
+        }
+
+        if (typeof renderProducts === "function") {
+            renderProducts();
+        }
+
+        if (typeof updateSummary === "function") {
+            updateSummary();
+        }
+    };
+
     activeCart.forEach((item) => {
-        const row = document.createElement("div");
+        /*
+         * Ищем актуальный товар.
+         * Поддерживаются разные варианты
+         * расположения массива товаров.
+         */
+        const productsList =
+            Array.isArray(state.products)
+                ? state.products
+                : (
+                    typeof products !== "undefined" &&
+                    Array.isArray(products)
+                        ? products
+                        : []
+                );
+
+        const product = productsList.find(
+            (productItem) =>
+                Number(productItem.id) ===
+                    Number(item.productId) ||
+                (
+                    item.article &&
+                    String(productItem.article) ===
+                        String(item.article)
+                )
+        );
+
+        /*
+         * Поддержка как camelCase,
+         * так и PascalCase из C#.
+         */
+        const canOrderByPiece = Boolean(
+            product?.canOrderByPiece ??
+            product?.CanOrderByPiece ??
+            false
+        );
+
+        const approximateWeightPerPiece = Number(
+            product?.approximateWeightPerPiece ??
+            product?.ApproximateWeightPerPiece ??
+            0
+        );
+
+        const canSwitchUnit =
+            canOrderByPiece &&
+            Number.isFinite(
+                approximateWeightPerPiece
+            ) &&
+            approximateWeightPerPiece > 0;
+
+        const row =
+            document.createElement("div");
 
         row.className = "drawer-cart-item";
 
@@ -1457,6 +1528,56 @@ function renderDrawerCart() {
         const estimatedTotal =
             calculateItemEstimatedTotal(item);
 
+        const unitHtml = canSwitchUnit
+            ? `
+                <select
+                    class="drawer-unit-select"
+                    aria-label="Единица измерения"
+                >
+                    <option
+                        value="кг"
+                        ${
+                            item.unit === "кг"
+                                ? "selected"
+                                : ""
+                        }
+                    >
+                        КГ
+                    </option>
+
+                    <option
+                        value="шт"
+                        ${
+                            item.unit === "шт"
+                                ? "selected"
+                                : ""
+                        }
+                    >
+                        ШТ
+                    </option>
+                </select>
+            `
+            : `
+                <div class="drawer-item-unit">
+                    ${escapeHtml(
+                        String(item.unit).toUpperCase()
+                    )}
+                </div>
+            `;
+
+        const weightHintHtml =
+            item.unit === "шт" &&
+            approximateWeightPerPiece > 0
+                ? `
+                    <div class="drawer-item-weight-hint">
+                        ≈ ${formatQuantity(
+                            Number(item.quantity) *
+                            approximateWeightPerPiece
+                        )} кг
+                    </div>
+                `
+                : "";
+
         row.innerHTML = `
             <div class="drawer-item-top">
                 <div>
@@ -1464,11 +1585,9 @@ function renderDrawerCart() {
                         ${escapeHtml(item.name)}
                     </div>
 
-                    <div class="drawer-item-unit">
-                        ${escapeHtml(
-                            String(item.unit).toUpperCase()
-                        )}
-                    </div>
+                    ${unitHtml}
+
+                    ${weightHintHtml}
                 </div>
 
                 <button
@@ -1483,27 +1602,35 @@ function renderDrawerCart() {
             <div class="drawer-item-editor">
                 <button
                     type="button"
-                    class="drawer-edit-button drawer-minus-button"
+                    class="
+                        drawer-edit-button
+                        drawer-minus-button
+                    "
                     aria-label="Уменьшить количество"
                 >
                     −
                 </button>
 
                 <input
-    type="text"
-    class="drawer-quantity-input"
-    value="${formatQuantity(item.quantity)}"
-    inputmode="${
-        item.unit === "шт"
-            ? "numeric"
-            : "decimal"
-    }"
-    autocomplete="off"
->
+                    type="text"
+                    class="drawer-quantity-input"
+                    value="${
+                        formatQuantity(item.quantity)
+                    }"
+                    inputmode="${
+                        item.unit === "шт"
+                            ? "numeric"
+                            : "decimal"
+                    }"
+                    autocomplete="off"
+                >
 
                 <button
                     type="button"
-                    class="drawer-edit-button drawer-plus-button"
+                    class="
+                        drawer-edit-button
+                        drawer-plus-button
+                    "
                     aria-label="Увеличить количество"
                 >
                     +
@@ -1535,12 +1662,87 @@ function renderDrawerCart() {
                 ".drawer-quantity-input"
             );
 
+        const unitSelect =
+            row.querySelector(
+                ".drawer-unit-select"
+            );
+
         removeButton?.addEventListener(
             "click",
             () => {
                 removeFromDrawerCart(
                     item.cartKey
                 );
+            }
+        );
+
+        /*
+         * Переключение КГ / ШТ.
+         */
+        unitSelect?.addEventListener(
+            "change",
+            () => {
+                const oldUnit = item.unit;
+                const newUnit = unitSelect.value;
+
+                if (oldUnit === newUnit) {
+                    return;
+                }
+
+                const currentQuantity =
+                    Number(item.quantity) || 0;
+
+                /*
+                 * Килограммы переводим в штуки.
+                 */
+                if (
+                    oldUnit === "кг" &&
+                    newUnit === "шт"
+                ) {
+                    item.quantity = Math.max(
+                        1,
+                        Math.round(
+                            currentQuantity /
+                            approximateWeightPerPiece
+                        )
+                    );
+                }
+
+                /*
+                 * Штуки переводим в килограммы.
+                 */
+                if (
+                    oldUnit === "шт" &&
+                    newUnit === "кг"
+                ) {
+                    item.quantity = Number(
+                        (
+                            currentQuantity *
+                            approximateWeightPerPiece
+                        ).toFixed(3)
+                    );
+
+                    const minimumKg =
+                        state.drawerMode === "return"
+                            ? 0.001
+                            : 0.1;
+
+                    item.quantity = Math.max(
+                        minimumKg,
+                        item.quantity
+                    );
+                }
+
+                item.unit = newUnit;
+
+                refreshCart();
+
+                if (
+                    typeof triggerHaptic ===
+                    "function"
+                ) {
+                    triggerHaptic("selection");
+                }
             }
         );
 
@@ -1562,17 +1764,19 @@ function renderDrawerCart() {
 
                 if (item.unit === "шт") {
                     newQuantity =
-                        Math.round(newQuantity);
-                } else {
-                    newQuantity =
-                        Number(
-                            newQuantity.toFixed(3)
+                        Math.max(
+                            1,
+                            Math.round(newQuantity)
                         );
+                } else {
+                    newQuantity = Number(
+                        newQuantity.toFixed(3)
+                    );
                 }
 
                 item.quantity = newQuantity;
 
-                renderDrawerCart();
+                refreshCart();
             }
         );
 
@@ -1589,17 +1793,19 @@ function renderDrawerCart() {
 
                 if (item.unit === "шт") {
                     newQuantity =
-                        Math.round(newQuantity);
-                } else {
-                    newQuantity =
-                        Number(
-                            newQuantity.toFixed(3)
+                        Math.max(
+                            1,
+                            Math.round(newQuantity)
                         );
+                } else {
+                    newQuantity = Number(
+                        newQuantity.toFixed(3)
+                    );
                 }
 
                 item.quantity = newQuantity;
 
-                renderDrawerCart();
+                refreshCart();
             }
         );
 
@@ -1626,19 +1832,20 @@ function renderDrawerCart() {
                         Math.round(newQuantity)
                     );
                 } else {
-                    newQuantity =
-                        Number(
-                            newQuantity.toFixed(3)
-                        );
+                    newQuantity = Number(
+                        newQuantity.toFixed(3)
+                    );
                 }
 
                 item.quantity = newQuantity;
 
-                renderDrawerCart();
+                refreshCart();
             }
         );
 
-        elements.drawerCartList.appendChild(row);
+        elements.drawerCartList.appendChild(
+            row
+        );
     });
 
     const positions = activeCart.length;
@@ -1678,11 +1885,11 @@ function renderDrawerCart() {
     }
 
     if (elements.drawerQuantity) {
-    elements.drawerQuantity.textContent =
-        quantity >= 1
-            ? formatQuantity(quantity)
-            : "";
-}
+        elements.drawerQuantity.textContent =
+            quantity >= 1
+                ? formatQuantity(quantity)
+                : "";
+    }
 
     if (elements.drawerTotalTitle) {
         elements.drawerTotalTitle.textContent =

@@ -451,18 +451,6 @@ function getShopSearchText(shop) {
         .join(" "));
 }
 
-const query = normalizeShopSearch(
-    elements.shopSearch?.value
-);
-
-const filteredShops = state.shops.filter(shop => {
-    if (!query) {
-        return true;
-    }
-
-    return getShopSearchText(shop).includes(query);
-});
-
 function getShopDisplayName(shop) {
     return (
         shop.nameUa ||
@@ -473,24 +461,20 @@ function getShopDisplayName(shop) {
 }
 
 function getFilteredShops() {
-    const searchText = normalizeText(
-    `${shop.id} ${shop.name} ${shop.nameUa} ${shop.nameRu} ${shop.address} ${shop.district} ${shop.searchAliases}`
-);
+    const query = normalizeShopSearch(
+        elements.shopSearch?.value || ""
+    );
 
-    if (searchText.length === 0) {
+    if (!query) {
         return [];
     }
 
     return shops
         .filter((shop) => {
             const searchableText =
-                normalizeText(
-                    `${shop.name} ${shop.address}`
-                );
+                getShopSearchText(shop);
 
-            return searchableText.includes(
-                searchText
-            );
+            return searchableText.includes(query);
         })
         .slice(0, 20);
 }

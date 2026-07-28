@@ -306,7 +306,8 @@ async function loadProducts() {
             );
         }
 
-        const loadedProducts = await response.json();
+        const loadedProducts =
+            await response.json();
 
         if (!Array.isArray(loadedProducts)) {
             throw new Error(
@@ -314,11 +315,51 @@ async function loadProducts() {
             );
         }
 
-        products = loadedProducts;
+        products = loadedProducts.map(product => ({
+            ...product,
+
+            name:
+                product.nameUa ||
+                product.name ||
+                product.nameRu ||
+                "Без названия",
+
+            orderName:
+                product.orderName ||
+                product.nameUa ||
+                product.name ||
+                product.nameRu ||
+                "Без названия",
+
+            saleMode:
+                (product.saleMode || "кг")
+                    .toLowerCase()
+                    .trim(),
+
+            stock:
+                Number(product.stock || 0),
+
+            price:
+                Number(product.price || 0),
+
+            approximateWeightPerPiece:
+                Number(
+                    product.approximateWeightPerPiece || 0
+                ),
+
+            searchAliases:
+                product.searchAliases || ""
+        }));
 
         console.log(
             `Загружено товаров: ${products.length}`
         );
+
+        console.log(
+            "Первый товар:",
+            products[0]
+        );
+
     } catch (error) {
         console.error(
             "Ошибка загрузки товаров:",
@@ -739,45 +780,68 @@ function createProductElement(product) {
 
     let selectedUnit = "кг";
 
-    const canOrderByPiece =
-        product.canOrderByPiece === true &&
-        Number(product.approximateWeightPerPiece) > 0;
+    const saleMode =
+    (product.saleMode || "кг")
+        .toLowerCase()
+        .trim();
 
-const unitSwitchHtml = `
-    <div class="product-unit-section">
-        <div class="unit-section-title">
-            Оберіть одиницю
+let selectedUnit =
+    saleMode === "шт"
+        ? "шт"
+        : "кг";
+
+const canUseKg =
+    saleMode === "кг" ||
+    saleMode === "кг/шт";
+
+const canUsePiece =
+    saleMode === "шт" ||
+    saleMode === "кг/шт";
+
+const showUnitSwitch =
+    saleMode === "кг/шт";
+
+let unitSwitchHtml = "";
+
+if (showUnitSwitch) {
+    unitSwitchHtml = `
+        <div class="product-unit-section">
+            <div class="unit-section-title">
+                Оберіть одиницю
+            </div>
+
+            <div class="unit-switch">
+                <button
+                    type="button"
+                    class="unit-switch-button ${
+                        selectedUnit === "кг"
+                            ? "active"
+                            : ""
+                    }"
+                    data-unit="кг"
+                >
+                    <span class="unit-icon">⚖️</span>
+                    <span class="unit-name">КГ</span>
+                    <span class="unit-check">✓</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="unit-switch-button ${
+                        selectedUnit === "шт"
+                            ? "active"
+                            : ""
+                    }"
+                    data-unit="шт"
+                >
+                    <span class="unit-icon">📦</span>
+                    <span class="unit-name">ШТ</span>
+                    <span class="unit-check">✓</span>
+                </button>
+            </div>
         </div>
-
-        <div class="unit-switch">
-            <button
-                type="button"
-                class="unit-switch-button active"
-                data-unit="кг"
-            >
-                <span class="unit-icon">⚖️</span>
-                <span class="unit-name">КГ</span>
-                <span class="unit-check">✓</span>
-            </button>
-
-            ${
-                canOrderByPiece
-                    ? `
-                        <button
-                            type="button"
-                            class="unit-switch-button"
-                            data-unit="шт"
-                        >
-                            <span class="unit-icon">📦</span>
-                            <span class="unit-name">ШТ</span>
-                            <span class="unit-check">✓</span>
-                        </button>
-                    `
-                    : ""
-            }
-        </div>
-    </div>
-`;
+    `;
+}
 
 card.innerHTML = `
     <div class="viar-watermark" aria-hidden="true">
@@ -804,16 +868,24 @@ card.innerHTML = `
         </button>
     </div>
 
-    <div class="product-price-section">
-        <div class="product-price-label">
-            Ціна за кг
-        </div>
+   <div class="product-price-label">
+    ${
+        selectedUnit === "шт"
+            ? "Ціна за шт"
+            : "Ціна за кг"
+    }
+</div>
 
-        <div class="product-price-value">
-            ${formatMoney(product.price)}
-            <span>грн/кг</span>
-        </div>
-    </div>
+<div class="product-price-value">
+    ${formatMoney(product.price)}
+    <span>
+        ${
+            selectedUnit === "шт"
+                ? "грн/шт"
+                : "грн/кг"
+        }
+    </span>
+</div>
 
     <div class="availability ${
         isAvailable
@@ -846,21 +918,27 @@ card.innerHTML = `
                 <input
                     type="number"
                     class="quantity-input"
-                    value="${
-                        state.activeMode === "return"
-                            ? "0.001"
-                            : "0.1"
-                    }"
-                    min="${
-                        state.activeMode === "return"
-                            ? "0.001"
-                            : "0.1"
-                    }"
-                    step="${
-                        state.activeMode === "return"
-                            ? "0.001"
-                            : "0.1"
-                    }"
+                value="${
+    selectedUnit === "шт"
+        ? "1"
+        : state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+}"
+min="${
+    selectedUnit === "шт"
+        ? "1"
+        : state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+}"
+step="${
+    selectedUnit === "шт"
+        ? "1"
+        : state.activeMode === "return"
+            ? "0.001"
+            : "0.1"
+}"
                     inputmode="decimal"
                     ${canAddProduct ? "" : "disabled"}
                 >
@@ -949,6 +1027,7 @@ if (infoButton) {
         : 0.1;
 }
 
+    
     function updateQuantitySettings() {
     const step = getStep();
 
@@ -957,36 +1036,60 @@ if (infoButton) {
 
     if (selectedUnit === "шт") {
         quantityInput.value = "1";
+        quantityInput.inputMode = "numeric";
     } else if (state.activeMode === "return") {
         quantityInput.value = "0.001";
+        quantityInput.inputMode = "decimal";
     } else {
         quantityInput.value = "0.1";
+        quantityInput.inputMode = "decimal";
     }
 
     updateEstimatedTotal();
 }
 
     function calculateEstimatedTotal() {
-        const quantity =
-            parseQuantity(quantityInput.value);
+    const quantity =
+        parseQuantity(quantityInput.value);
 
-        let estimatedWeight;
+    const price =
+        Number(product.price || 0);
 
-        if (selectedUnit === "шт") {
-            estimatedWeight =
-                quantity *
-                Number(
-                    product.approximateWeightPerPiece || 0
-                );
-        } else {
-            estimatedWeight = quantity;
-        }
+    const saleMode =
+        (product.saleMode || "кг")
+            .toLowerCase()
+            .trim();
 
+    // Товар продаётся ТОЛЬКО поштучно:
+    // цена в Excel считается ценой за 1 шт.
+    if (saleMode === "шт") {
         return roundMoney(
-            estimatedWeight *
-            Number(product.price || 0)
+            quantity * price
         );
     }
+
+    // Товар кг/шт, но сейчас выбраны штуки:
+    // цена в Excel за кг,
+    // поэтому переводим штуки в примерный вес.
+    if (selectedUnit === "шт") {
+        const weightPerPiece =
+            Number(
+                product.approximateWeightPerPiece || 0
+            );
+
+        const estimatedWeight =
+            quantity * weightPerPiece;
+
+        return roundMoney(
+            estimatedWeight * price
+        );
+    }
+
+    // Обычный товар в кг
+    return roundMoney(
+        quantity * price
+    );
+}
 
 
     function updateEstimatedTotal() {
@@ -1005,19 +1108,20 @@ if (infoButton) {
 }
 
     unitButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            unitButtons.forEach((item) =>
-                item.classList.remove("active")
-            );
+    button.addEventListener("click", () => {
+        unitButtons.forEach((item) =>
+            item.classList.remove("active")
+        );
 
-            button.classList.add("active");
+        button.classList.add("active");
 
-            selectedUnit =
-                button.dataset.unit;
+        selectedUnit =
+            button.dataset.unit;
 
-            updateQuantitySettings();
-        });
+        updateQuantitySettings();
+        updatePriceDisplay();
     });
+});
 
     minusButton.addEventListener("click", () => {
         const step = getStep();
@@ -1090,9 +1194,58 @@ if (infoButton) {
         );
     });
 
-    updateEstimatedTotal();
+    updatePriceDisplay();
+updateEstimatedTotal();
 
-    return card;
+return card;
+}
+
+function updatePriceDisplay() {
+    const saleMode =
+        (product.saleMode || "кг")
+            .toLowerCase()
+            .trim();
+
+    if (!priceLabelElement ||
+        !priceValueElement) {
+        return;
+    }
+
+    if (saleMode === "шт") {
+        priceLabelElement.textContent =
+            "Ціна за шт";
+
+        priceValueElement.innerHTML = `
+            ${formatMoney(product.price)}
+            <span>грн/шт</span>
+        `;
+
+        return;
+    }
+
+    if (selectedUnit === "шт") {
+        const piecePrice =
+            Number(product.price || 0) *
+            Number(
+                product.approximateWeightPerPiece || 0
+            );
+
+        priceLabelElement.textContent =
+            "Ціна за шт приблизно";
+
+        priceValueElement.innerHTML = `
+            ≈ ${formatMoney(piecePrice)}
+            <span>грн/шт</span>
+        `;
+    } else {
+        priceLabelElement.textContent =
+            "Ціна за кг";
+
+        priceValueElement.innerHTML = `
+            ${formatMoney(product.price)}
+            <span>грн/кг</span>
+        `;
+    }
 }
 
 function addToCart(

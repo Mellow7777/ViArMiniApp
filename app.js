@@ -430,10 +430,52 @@ async function loadShops() {
     }
 }
 
+function normalizeShopSearch(value) {
+    return String(value || "")
+        .toLowerCase()
+        .trim()
+        .replaceAll("ё", "е");
+}
+
+function getShopSearchText(shop) {
+    return normalizeShopSearch([
+        shop.id,
+        shop.name,
+        shop.nameUa,
+        shop.nameRu,
+        shop.address,
+        shop.district,
+        shop.searchAliases
+    ]
+        .filter(Boolean)
+        .join(" "));
+}
+
+const query = normalizeShopSearch(
+    elements.shopSearch?.value
+);
+
+const filteredShops = state.shops.filter(shop => {
+    if (!query) {
+        return true;
+    }
+
+    return getShopSearchText(shop).includes(query);
+});
+
+function getShopDisplayName(shop) {
+    return (
+        shop.nameUa ||
+        shop.nameRu ||
+        shop.name ||
+        "Без названия"
+    );
+}
+
 function getFilteredShops() {
     const searchText = normalizeText(
-        elements.shopSearch?.value ?? ""
-    );
+    `${shop.id} ${shop.name} ${shop.nameUa} ${shop.nameRu} ${shop.address} ${shop.district} ${shop.searchAliases}`
+);
 
     if (searchText.length === 0) {
         return [];
@@ -497,7 +539,7 @@ function renderShopSearchResults() {
 
         button.innerHTML = `
             <strong>
-                ${escapeHtml(shop.name)}
+                ${escapeHtml(getShopDisplayName(shop))}
             </strong>
 
             <span>
@@ -524,7 +566,7 @@ function selectShop(shop) {
         String(shop.id);
 
     elements.selectedShopName.textContent =
-        shop.name;
+    getShopDisplayName(shop);
 
     elements.selectedShopAddress.textContent =
         shop.address || "Адрес не указан";
@@ -2894,7 +2936,8 @@ function sendOrder() {
 
        shop: {
     id: selectedShop.id,
-    name: selectedShop.name,
+    name: getShopDisplayName(selectedShop),
+district: selectedShop.district,
     address: selectedShop.address
 },
 

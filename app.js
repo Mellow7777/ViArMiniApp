@@ -778,8 +778,6 @@ function createProductElement(product) {
     state.activeMode === "return" ||
     isAvailable;
 
-    let selectedUnit = "кг";
-
     const saleMode =
     (product.saleMode || "кг")
         .toLowerCase()
@@ -1814,11 +1812,11 @@ function renderDrawerCart() {
                     value="${
                         formatQuantity(item.quantity)
                     }"
-                    inputmode="${
-                        item.unit === "шт"
-                            ? "numeric"
-                            : "decimal"
-                    }"
+                  inputmode="${
+    selectedUnit === "шт"
+        ? "numeric"
+        : "decimal"
+}"
                     autocomplete="off"
                 >
 

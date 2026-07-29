@@ -3125,13 +3125,30 @@ function sendOrder() {
     const telegramUser =
         telegram?.initDataUnsafe?.user;
 
-    const mapCartItem = (item) => ({
+  const mapCartItem = (item) => {
+    const product = products.find(
+        product =>
+            Number(product.id) ===
+            Number(item.productId)
+    );
+
+    const orderName =
+        product?.orderName?.trim() ||
+        item.orderName?.trim() ||
+        item.name;
+
+    return {
         productId: item.productId,
-        article: item.article,
-        name: item.name,
+        article:
+            item.article ||
+            product?.article ||
+            "",
+        name: orderName,
         unit: item.unit,
         quantity: item.quantity
-    });
+    };
+};
+
 
     const order = {
         orderId: createOrderId(),

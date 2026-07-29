@@ -1645,10 +1645,6 @@ function renderDrawerCart() {
                 : "Корзина заказа пока пустая";
     }
 
-    /*
-     * Обновляет корзину после изменения
-     * количества или единицы измерения.
-     */
     const refreshCart = () => {
         saveCart();
         renderDrawerCart();
@@ -1666,22 +1662,17 @@ function renderDrawerCart() {
         }
     };
 
-    activeCart.forEach((item) => {
-        /*
-         * Ищем актуальный товар.
-         * Поддерживаются разные варианты
-         * расположения массива товаров.
-         */
-        const productsList =
-            Array.isArray(state.products)
-                ? state.products
-                : (
-                    typeof products !== "undefined" &&
-                    Array.isArray(products)
-                        ? products
-                        : []
-                );
+    const productsList =
+        Array.isArray(state.products)
+            ? state.products
+            : (
+                typeof products !== "undefined" &&
+                Array.isArray(products)
+                    ? products
+                    : []
+            );
 
+    activeCart.forEach((item) => {
         const product = productsList.find(
             (productItem) =>
                 Number(productItem.id) ===
@@ -1693,59 +1684,58 @@ function renderDrawerCart() {
                 )
         );
 
-        /*
-         * Поддержка как camelCase,
-         * так и PascalCase из C#.
-         */
-       const saleMode = String(
-    product?.saleMode ??
-    product?.SaleMode ??
-    "кг"
-)
-    .toLowerCase()
-    .trim();
+        const saleMode = String(
+            product?.saleMode ??
+            product?.SaleMode ??
+            item.saleMode ??
+            "кг"
+        )
+            .toLowerCase()
+            .trim();
 
-const approximateWeightPerPiece = Number(
-    product?.approximateWeightPerPiece ??
-    product?.ApproximateWeightPerPiece ??
-    0
-);
+        const approximateWeightPerPiece = Number(
+            product?.approximateWeightPerPiece ??
+            product?.ApproximateWeightPerPiece ??
+            item.approximateWeightPerPiece ??
+            0
+        );
 
-if (!item.unit) {
-    item.unit =
-        saleMode === "шт"
-            ? "шт"
-            : "кг";
-}
+        const canUseKg =
+            saleMode === "кг" ||
+            saleMode === "кг/шт";
 
-if (
-    item.unit === "шт" &&
-    !canUsePiece
-) {
-    item.unit = "кг";
-}
+        const canUsePiece =
+            saleMode === "шт" ||
+            saleMode === "кг/шт";
 
-if (
-    item.unit === "кг" &&
-    !canUseKg
-) {
-    item.unit = "шт";
-}
+        const canSwitchUnit =
+            saleMode === "кг/шт" &&
+            Number.isFinite(
+                approximateWeightPerPiece
+            ) &&
+            approximateWeightPerPiece > 0;
 
-const canUseKg =
-    saleMode === "кг" ||
-    saleMode === "кг/шт";
+        if (!item.unit) {
+            item.unit =
+                saleMode === "шт"
+                    ? "шт"
+                    : "кг";
+        }
 
-const canUsePiece =
-    saleMode === "шт" ||
-    saleMode === "кг/шт";
+        if (
+            item.unit === "шт" &&
+            !canUsePiece
+        ) {
+            item.unit = "кг";
+        }
 
-const canSwitchUnit =
-    saleMode === "кг/шт" &&
-    Number.isFinite(
-        approximateWeightPerPiece
-    ) &&
-    approximateWeightPerPiece > 0;
+        if (
+            item.unit === "кг" &&
+            !canUseKg
+        ) {
+            item.unit = "шт";
+        }
+
         const row =
             document.createElement("div");
 
@@ -1796,7 +1786,9 @@ const canSwitchUnit =
             : `
                 <div class="drawer-item-unit">
                     ${escapeHtml(
-                        String(item.unit).toUpperCase()
+                        String(
+                            item.unit || ""
+                        ).toUpperCase()
                     )}
                 </div>
             `;
@@ -1807,7 +1799,9 @@ const canSwitchUnit =
                 ? `
                     <div class="drawer-item-weight-hint">
                         ≈ ${formatQuantity(
-                            Number(item.quantity) *
+                            Number(
+                                item.quantity || 0
+                            ) *
                             approximateWeightPerPiece
                         )} кг
                     </div>
@@ -1818,7 +1812,12 @@ const canSwitchUnit =
             <div class="drawer-item-top">
                 <div>
                     <div class="drawer-item-name">
-                        ${escapeHtml(item.name)}
+                        ${escapeHtml(
+                            item.name ||
+                            product?.name ||
+                            product?.Name ||
+                            "Товар"
+                        )}
                     </div>
 
                     ${unitHtml}
@@ -1847,20 +1846,21 @@ const canSwitchUnit =
                     −
                 </button>
 
-
                 <input
-    type="text"
-    class="drawer-quantity-input"
-    value="${formatQuantity(item.quantity)}"
-    inputmode="${
-        item.unit === "шт"
-            ? "numeric"
-            : "decimal"
-    }"
-    autocomplete="off"
->
-
-
+                    type="text"
+                    class="drawer-quantity-input"
+                    value="${
+                        formatQuantity(
+                            item.quantity
+                        )
+                    }"
+                    inputmode="${
+                        item.unit === "шт"
+                            ? "numeric"
+                            : "decimal"
+                    }"
+                    autocomplete="off"
+                >
 
                 <button
                     type="button"
@@ -1875,11 +1875,13 @@ const canSwitchUnit =
             </div>
 
             <div class="drawer-item-price">
-                ≈ ${formatMoney(estimatedTotal)} грн
+                ≈ ${formatMoney(
+                    estimatedTotal
+                )} грн
             </div>
         `;
 
-        const removeButton =
+                const removeButton =
             row.querySelector(
                 ".drawer-remove-button"
             );
@@ -1913,9 +1915,6 @@ const canSwitchUnit =
             }
         );
 
-        /*
-         * Переключение КГ / ШТ.
-         */
         unitSelect?.addEventListener(
             "change",
             () => {
@@ -1926,12 +1925,15 @@ const canSwitchUnit =
                     return;
                 }
 
+                if (
+                    approximateWeightPerPiece <= 0
+                ) {
+                    return;
+                }
+
                 const currentQuantity =
                     Number(item.quantity) || 0;
 
-                /*
-                 * Килограммы переводим в штуки.
-                 */
                 if (
                     oldUnit === "кг" &&
                     newUnit === "шт"
@@ -1945,9 +1947,6 @@ const canSwitchUnit =
                     );
                 }
 
-                /*
-                 * Штуки переводим в килограммы.
-                 */
                 if (
                     oldUnit === "шт" &&
                     newUnit === "кг"
@@ -1959,13 +1958,10 @@ const canSwitchUnit =
                         ).toFixed(3)
                     );
 
-                    const minimumKg =
+                    item.quantity = Math.max(
                         state.drawerMode === "return"
                             ? 0.001
-                            : 0.1;
-
-                    item.quantity = Math.max(
-                        minimumKg,
+                            : 0.1,
                         item.quantity
                     );
                 }
@@ -1988,30 +1984,24 @@ const canSwitchUnit =
             () => {
                 const step = getStep();
 
-                const currentQuantity =
+                let value =
                     Number(item.quantity) || step;
 
-                let newQuantity =
-                    currentQuantity - step;
-
-                newQuantity = Math.max(
-                    step,
-                    newQuantity
-                );
+                value -= step;
 
                 if (item.unit === "шт") {
-                    newQuantity =
-                        Math.max(
-                            1,
-                            Math.round(newQuantity)
-                        );
+                    value = Math.max(
+                        1,
+                        Math.round(value)
+                    );
                 } else {
-                    newQuantity = Number(
-                        newQuantity.toFixed(3)
+                    value = Math.max(
+                        step,
+                        Number(value.toFixed(3))
                     );
                 }
 
-                item.quantity = newQuantity;
+                item.quantity = value;
 
                 refreshCart();
             }
@@ -2022,25 +2012,20 @@ const canSwitchUnit =
             () => {
                 const step = getStep();
 
-                const currentQuantity =
+                let value =
                     Number(item.quantity) || 0;
 
-                let newQuantity =
-                    currentQuantity + step;
+                value += step;
 
                 if (item.unit === "шт") {
-                    newQuantity =
-                        Math.max(
-                            1,
-                            Math.round(newQuantity)
-                        );
+                    value = Math.round(value);
                 } else {
-                    newQuantity = Number(
-                        newQuantity.toFixed(3)
+                    value = Number(
+                        value.toFixed(3)
                     );
                 }
 
-                item.quantity = newQuantity;
+                item.quantity = value;
 
                 refreshCart();
             }
@@ -2051,30 +2036,30 @@ const canSwitchUnit =
             () => {
                 const step = getStep();
 
-                let newQuantity =
+                let value =
                     parseQuantity(
                         quantityInput.value
                     );
 
                 if (
-                    !Number.isFinite(newQuantity) ||
-                    newQuantity < step
+                    !Number.isFinite(value)
                 ) {
-                    newQuantity = step;
+                    value = step;
                 }
 
                 if (item.unit === "шт") {
-                    newQuantity = Math.max(
+                    value = Math.max(
                         1,
-                        Math.round(newQuantity)
+                        Math.round(value)
                     );
                 } else {
-                    newQuantity = Number(
-                        newQuantity.toFixed(3)
+                    value = Math.max(
+                        step,
+                        Number(value.toFixed(3))
                     );
                 }
 
-                item.quantity = newQuantity;
+                item.quantity = value;
 
                 refreshCart();
             }
@@ -2085,15 +2070,17 @@ const canSwitchUnit =
         );
     });
 
-    const positions = activeCart.length;
+    const active = getDrawerCart();
 
-    const quantity = activeCart.reduce(
+    const positions = active.length;
+
+    const quantity = active.reduce(
         (sum, item) =>
             sum + Number(item.quantity || 0),
         0
     );
 
-    const drawerTotal = activeCart.reduce(
+    const total = active.reduce(
         (sum, item) =>
             sum +
             calculateItemEstimatedTotal(item),
@@ -2112,8 +2099,7 @@ const canSwitchUnit =
 
     if (elements.drawerCartSummary) {
         elements.drawerCartSummary.textContent =
-            `Заказ: ${state.orderCart.length} · ` +
-            `Возврат: ${state.returnCart.length}`;
+            `Заказ: ${state.orderCart.length} · Возврат: ${state.returnCart.length}`;
     }
 
     if (elements.drawerPositions) {
@@ -2123,9 +2109,7 @@ const canSwitchUnit =
 
     if (elements.drawerQuantity) {
         elements.drawerQuantity.textContent =
-            quantity >= 1
-                ? formatQuantity(quantity)
-                : "";
+            formatQuantity(quantity);
     }
 
     if (elements.drawerTotalTitle) {
@@ -2137,18 +2121,16 @@ const canSwitchUnit =
 
     if (elements.drawerTotalPrice) {
         elements.drawerTotalPrice.textContent =
-            `≈ ${formatMoney(drawerTotal)} грн`;
+            `≈ ${formatMoney(total)} грн`;
     }
-
-    const nothingToSend =
-        state.orderCart.length === 0 &&
-        state.returnCart.length === 0;
 
     if (elements.drawerSendButton) {
         elements.drawerSendButton.disabled =
-            nothingToSend;
+            state.orderCart.length === 0 &&
+            state.returnCart.length === 0;
     }
 }
+
 
 function removeFromDrawerCart(cartKey) {
     if (state.drawerMode === "return") {

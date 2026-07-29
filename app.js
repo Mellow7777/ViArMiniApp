@@ -658,40 +658,70 @@ function restoreSelectedShop() {
 }
 
 function renderCategories() {
-    const productCategories = products.map((product) => product.category);
-    const uniqueCategories = ["Все", ...new Set(productCategories)];
+const productCategories = products
+    .map((product) =>
+        String(product.category || "").trim()
+    )
+    .filter(Boolean);
+
+const uniqueCategories = [
+    "Все",
+    ...new Set(productCategories)
+];
 
     elements.categories.innerHTML = "";
 
+    /*
+     * Если выбранной категории больше нет,
+     * автоматически возвращаемся на "Все".
+     */
+    if (
+        !uniqueCategories.includes(
+            state.selectedCategory
+        )
+    ) {
+        state.selectedCategory = "Все";
+    }
+
     uniqueCategories.forEach((category) => {
-        const button = document.createElement("button");
+        const button =
+            document.createElement("button");
 
         button.type = "button";
         button.className = "category-button";
         button.textContent = category;
         button.dataset.category = category;
 
-        if (category === state.selectedCategory) {
+        if (
+            category ===
+            state.selectedCategory
+        ) {
             button.classList.add("active");
         }
 
-        button.addEventListener("click", () => {
-    // Выбираем категорию
-    state.selectedCategory = category;
+        button.addEventListener(
+            "click",
+            () => {
+                state.selectedCategory =
+                    category;
 
-    // Полностью сбрасываем поиск
-    state.productSearchQuery = "";
+                state.productSearchQuery = "";
 
-    if (elements.productSearch) {
-        elements.productSearch.value = "";
-        elements.productSearch.blur();
-    }
+                if (elements.productSearch) {
+                    elements.productSearch.value =
+                        "";
 
-    renderCategories();
-    renderProducts();
-});
+                    elements.productSearch.blur();
+                }
 
-        elements.categories.appendChild(button);
+                renderCategories();
+                renderProducts();
+            }
+        );
+
+        elements.categories.appendChild(
+            button
+        );
     });
 }
 
@@ -716,20 +746,33 @@ function hideProductKeyboardKeepResults() {
 
 function getFilteredProducts() {
     const searchText = normalizeText(
-    state.productSearchQuery
-);
+        state.productSearchQuery || ""
+    );
 
     return products.filter((product) => {
-        const matchesGroup =
-            state.selectedGroup === "Все" ||
-            product.group === state.selectedGroup;
+        const category = String(
+            product.category || ""
+        ).trim();
+
+        const normalizedCategory = normalizeText(category);
+
+const normalizedSelectedCategory = normalizeText(
+    state.selectedCategory || "Все"
+);
+
+const matchesCategory =
+    normalizedSelectedCategory === normalizeText("Все") ||
+    normalizedCategory === normalizedSelectedCategory;
 
         const searchableText = normalizeText(
             [
                 product.name,
-                product.russianName,
+                product.nameUa,
+                product.nameRu,
+                product.orderName,
+                product.searchAliases,
                 product.article,
-                product.group
+                product.category
             ]
                 .filter(Boolean)
                 .join(" ")
@@ -739,11 +782,11 @@ function getFilteredProducts() {
             searchText.length === 0 ||
             searchableText.includes(searchText);
 
-        return matchesGroup && matchesSearch;
+        return matchesCategory && matchesSearch;
     });
 }
 
-function renderProducts() {
+ function renderProducts(){
     const filteredProducts = getFilteredProducts();
 
     elements.productsList.innerHTML = "";
@@ -2158,22 +2201,22 @@ function removeFromDrawerCart(cartKey) {
 
 function bindEvents() {
     console.log("bindEvents запущена");
-    if (elements.productSearch) {
-        elements.productSearch.addEventListener(
-            "input",
-            () => {
-                state.productSearchQuery =
-                    elements.productSearch.value.trim();
+   if (elements.productSearch) {
+    elements.productSearch.addEventListener(
+        "input",
+        () => {
+            state.productSearchQuery =
+                elements.productSearch.value.trim();
 
-                if (state.productSearchQuery.length > 0) {
-                    state.selectedGroup = "Все";
-                    renderGroups();
-                }
-
-                renderProducts();
+            if (state.productSearchQuery.length > 0) {
+                state.selectedCategory = "Все";
+                renderCategories();
             }
-        );
-    }
+
+            renderProducts();
+        }
+    );
+}
 
     elements.historyButton.addEventListener(
     "click",

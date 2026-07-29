@@ -1697,25 +1697,55 @@ function renderDrawerCart() {
          * Поддержка как camelCase,
          * так и PascalCase из C#.
          */
-        const canOrderByPiece = Boolean(
-            product?.canOrderByPiece ??
-            product?.CanOrderByPiece ??
-            false
-        );
+       const saleMode = String(
+    product?.saleMode ??
+    product?.SaleMode ??
+    "кг"
+)
+    .toLowerCase()
+    .trim();
 
-        const approximateWeightPerPiece = Number(
-            product?.approximateWeightPerPiece ??
-            product?.ApproximateWeightPerPiece ??
-            0
-        );
+const approximateWeightPerPiece = Number(
+    product?.approximateWeightPerPiece ??
+    product?.ApproximateWeightPerPiece ??
+    0
+);
 
-        const canSwitchUnit =
-            canOrderByPiece &&
-            Number.isFinite(
-                approximateWeightPerPiece
-            ) &&
-            approximateWeightPerPiece > 0;
+if (!item.unit) {
+    item.unit =
+        saleMode === "шт"
+            ? "шт"
+            : "кг";
+}
 
+if (
+    item.unit === "шт" &&
+    !canUsePiece
+) {
+    item.unit = "кг";
+}
+
+if (
+    item.unit === "кг" &&
+    !canUseKg
+) {
+    item.unit = "шт";
+}
+
+const canUseKg =
+    saleMode === "кг" ||
+    saleMode === "кг/шт";
+
+const canUsePiece =
+    saleMode === "шт" ||
+    saleMode === "кг/шт";
+
+const canSwitchUnit =
+    saleMode === "кг/шт" &&
+    Number.isFinite(
+        approximateWeightPerPiece
+    ) &&
+    approximateWeightPerPiece > 0;
         const row =
             document.createElement("div");
 
@@ -1817,19 +1847,20 @@ function renderDrawerCart() {
                     −
                 </button>
 
+
                 <input
-                    type="text"
-                    class="drawer-quantity-input"
-                    value="${
-                        formatQuantity(item.quantity)
-                    }"
-                  inputmode="${
-    selectedUnit === "шт"
-        ? "numeric"
-        : "decimal"
-}"
-                    autocomplete="off"
-                >
+    type="text"
+    class="drawer-quantity-input"
+    value="${formatQuantity(item.quantity)}"
+    inputmode="${
+        item.unit === "шт"
+            ? "numeric"
+            : "decimal"
+    }"
+    autocomplete="off"
+>
+
+
 
                 <button
                     type="button"

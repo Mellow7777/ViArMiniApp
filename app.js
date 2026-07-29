@@ -1014,6 +1014,64 @@ if (infoButton) {
             ".unit-switch-button"
         );
 
+    const priceLabelElement =
+    card.querySelector(
+        ".product-price-label"
+    );
+
+const priceValueElement =
+    card.querySelector(
+        ".product-price-value"
+    );
+
+function updatePriceDisplay() {
+    const saleMode =
+        (product.saleMode || "кг")
+            .toLowerCase()
+            .trim();
+
+    if (!priceLabelElement ||
+        !priceValueElement) {
+        return;
+    }
+
+    if (saleMode === "шт") {
+        priceLabelElement.textContent =
+            "Ціна за шт";
+
+        priceValueElement.innerHTML = `
+            ${formatMoney(product.price)}
+            <span>грн/шт</span>
+        `;
+
+        return;
+    }
+
+    if (selectedUnit === "шт") {
+        const piecePrice =
+            Number(product.price || 0) *
+            Number(
+                product.approximateWeightPerPiece || 0
+            );
+
+        priceLabelElement.textContent =
+            "Ціна за шт приблизно";
+
+        priceValueElement.innerHTML = `
+            ≈ ${formatMoney(piecePrice)}
+            <span>грн/шт</span>
+        `;
+    } else {
+        priceLabelElement.textContent =
+            "Ціна за кг";
+
+        priceValueElement.innerHTML = `
+            ${formatMoney(product.price)}
+            <span>грн/кг</span>
+        `;
+    }
+}    
+
     
     function getStep() {
     if (selectedUnit === "шт") {
@@ -1198,53 +1256,6 @@ updateEstimatedTotal();
 return card;
 }
 
-function updatePriceDisplay() {
-    const saleMode =
-        (product.saleMode || "кг")
-            .toLowerCase()
-            .trim();
-
-    if (!priceLabelElement ||
-        !priceValueElement) {
-        return;
-    }
-
-    if (saleMode === "шт") {
-        priceLabelElement.textContent =
-            "Ціна за шт";
-
-        priceValueElement.innerHTML = `
-            ${formatMoney(product.price)}
-            <span>грн/шт</span>
-        `;
-
-        return;
-    }
-
-    if (selectedUnit === "шт") {
-        const piecePrice =
-            Number(product.price || 0) *
-            Number(
-                product.approximateWeightPerPiece || 0
-            );
-
-        priceLabelElement.textContent =
-            "Ціна за шт приблизно";
-
-        priceValueElement.innerHTML = `
-            ≈ ${formatMoney(piecePrice)}
-            <span>грн/шт</span>
-        `;
-    } else {
-        priceLabelElement.textContent =
-            "Ціна за кг";
-
-        priceValueElement.innerHTML = `
-            ${formatMoney(product.price)}
-            <span>грн/кг</span>
-        `;
-    }
-}
 
 function addToCart(
     product,

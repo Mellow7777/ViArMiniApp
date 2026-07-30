@@ -3188,9 +3188,10 @@ invoiceForm: state.invoiceForm,
             ),
 
         comment:
-            elements.orderComment
-                .value
-                .trim(),
+    document
+        .getElementById("drawerOrderComment")
+        ?.value
+        ?.trim() || "",
 
         createdAt:
             new Date().toISOString()
@@ -3218,7 +3219,14 @@ invoiceForm: state.invoiceForm,
 
         saveCart();
 
-        elements.orderComment.value = "";
+        const drawerComment =
+    document.getElementById(
+        "drawerOrderComment"
+    );
+
+if (drawerComment) {
+    drawerComment.value = "";
+}
 
         renderCart();
         renderProducts();

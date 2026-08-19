@@ -200,6 +200,7 @@ async function initializeApp() {
         loadShops()
     ]);
 
+    await loadCurrentStocks();
     restoreSelectedShop();
 
     renderGroups();
@@ -1187,6 +1188,55 @@ function updatePriceDisplay() {
     return roundMoney(
         quantity * price
     );
+}
+
+async function loadCurrentStocks() {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/stocks?v=${Date.now()}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка загрузки остатков: ${response.status}`
+            );
+        }
+
+        const stocks =
+            await response.json();
+
+        console.log(
+            "Остатки с API:",
+            stocks
+        );
+
+        products.forEach(product => {
+            const stockInfo =
+                stocks[String(product.article)];
+
+            if (!stockInfo) {
+                return;
+            }
+
+            product.stock =
+                Number(stockInfo.stock);
+
+            product.stockUnit =
+                stockInfo.unit;
+        });
+
+        console.log(
+            "Остатки применены к товарам"
+        );
+    } catch (error) {
+        console.error(
+            "Ошибка загрузки остатков:",
+            error
+        );
+    }
 }
 
 

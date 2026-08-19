@@ -929,17 +929,16 @@ card.innerHTML = `
 </div>
 
     <div class="availability ${
+    isAvailable
+        ? "available"
+        : "unavailable"
+}">
+    ${
         isAvailable
-            ? "available"
-            : "unavailable"
-    }">
-        ${
-            isAvailable
-                ? "● В наявності"
-                : "● Немає в наявності"
-        }
-    </div>
-
+            ? `● В наявності · Залишок: ${formatStock(product.stock)} кг`
+            : "● Немає в наявності"
+    }
+</div>
     <div class="product-divider"></div>
 
     ${unitSwitchHtml}
@@ -3529,9 +3528,9 @@ function openProductModal(product) {
             : "Не указан";
 
     elements.productModalAvailability.textContent =
-        product.isAvailable
-            ? "🟢 В наличии"
-            : "🔴 Нет в наличии";
+    product.isAvailable
+        ? `🟢 В наличии · Остаток: ${formatStock(product.stock)} кг`
+        : "🔴 Нет в наличии";
 
     elements.productModalImage.removeAttribute("src");
     elements.productModalImage.style.display = "none";
@@ -3572,4 +3571,17 @@ function openProductModal(product) {
 
     elements.productModal.classList.add("show");
     document.body.style.overflow = "hidden";
+}
+
+function formatStock(value) {
+    const stock = Number(value);
+
+    if (!Number.isFinite(stock)) {
+        return "0";
+    }
+
+    return stock.toLocaleString("uk-UA", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3
+    });
 }

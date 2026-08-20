@@ -200,10 +200,28 @@ async function initializeApp() {
         loadShops()
     ]);
 
-    await loadCurrentStocks();
+    restoreSelectedShop();
+
+    renderGroups();
+    renderProducts();
+
+    // Остатки загружаются в фоне.
+    // Когда придут — перерисуем товары.
+    loadCurrentStocks()
+        .then(() => {
+            renderProducts();
+        })
+        .catch(error => {
+            console.error(
+                "Ошибка загрузки остатков:",
+                error
+            );
+        });
 
     const largeTextEnabled =
-        localStorage.getItem("viar-large-text") === "1";
+        localStorage.getItem(
+            "viar-large-text"
+        ) === "1";
 
     if (largeTextEnabled) {
         document.body.classList.add(
@@ -216,18 +234,7 @@ async function initializeApp() {
         }
     }
 
-    // Сначала строим интерфейс товаров
-    renderGroups();
-    renderProducts();
     renderCart();
-
-    // И уже после этого восстанавливаем точку
-    restoreSelectedShop();
-
-    console.log(
-        "initializeApp завершён, товаров:",
-        products.length
-    );
 }
 
 function openCartDrawer() {

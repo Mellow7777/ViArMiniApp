@@ -201,25 +201,33 @@ async function initializeApp() {
     ]);
 
     await loadCurrentStocks();
-    restoreSelectedShop();
-
-    renderGroups();
 
     const largeTextEnabled =
-    localStorage.getItem("viar-large-text") === "1";
+        localStorage.getItem("viar-large-text") === "1";
 
-if (largeTextEnabled) {
-    document.body.classList.add(
-        "large-text-mode"
-    );
+    if (largeTextEnabled) {
+        document.body.classList.add(
+            "large-text-mode"
+        );
 
-    if (elements.largeTextToggle) {
-        elements.largeTextToggle.textContent =
-            "🔎 Обычный текст";
+        if (elements.largeTextToggle) {
+            elements.largeTextToggle.textContent =
+                "🔎 Обычный текст";
+        }
     }
-}
+
+    // Сначала строим интерфейс товаров
+    renderGroups();
     renderProducts();
     renderCart();
+
+    // И уже после этого восстанавливаем точку
+    restoreSelectedShop();
+
+    console.log(
+        "initializeApp завершён, товаров:",
+        products.length
+    );
 }
 
 function openCartDrawer() {

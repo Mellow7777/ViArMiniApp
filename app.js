@@ -200,7 +200,7 @@ async function initializeApp() {
         loadShops()
     ]);
 
-  
+    await loadCurrentStocks();
     restoreSelectedShop();
 
     renderGroups();

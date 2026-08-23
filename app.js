@@ -3069,33 +3069,61 @@ const recentSalesHtml =
                         );
                 }
 
-                return `
-                    <div class="profile-sale-item">
+return `
+    <div
+        class="profile-sale-item"
+        style="color: #17191c !important;"
+    >
 
-                        <div class="profile-sale-main">
-                            <strong>
-                                ${escapeHtml(
-                                    sale.shopName ||
-                                    "Торгова точка"
-                                )}
-                            </strong>
+        <div
+            class="profile-sale-main"
+            style="color: #17191c !important;"
+        >
+            <strong
+                style="
+                    color: #17191c !important;
+                    display: block;
+                "
+            >
+                ${escapeHtml(
+                    sale.shopName ||
+                    "Торгова точка"
+                )}
+            </strong>
 
-                            <small>
-                                ${escapeHtml(dateText)}
-                            </small>
-                        </div>
+            <small
+                style="
+                    color: #8f949b !important;
+                    display: block;
+                    margin-top: 4px;
+                "
+            >
+                ${escapeHtml(dateText)}
+            </small>
+        </div>
 
-                        <div class="profile-sale-amount">
-                            ${formatMoney(
-                                Number(
-                                    sale.totalAmount || 0
-                                )
-                            )}
-                            <span>грн</span>
-                        </div>
+        <div
+            class="profile-sale-amount"
+            style="
+                color: #17191c !important;
+                font-weight: 800;
+            "
+        >
+            ${formatMoney(
+                Number(
+                    sale.totalAmount || 0
+                )
+            )}
 
-                    </div>
-                `;
+            <span
+                style="color: #8f949b !important;"
+            >
+                грн
+            </span>
+        </div>
+
+    </div>
+`;
             })
             .join("")
         : `

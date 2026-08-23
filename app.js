@@ -503,19 +503,30 @@ function renderUser() {
 }
 
 function initializeAdminAccess() {
-    alert("НОВАЯ ВЕРСИЯ 150");
-    const telegramUser =
-        telegram?.initDataUnsafe?.user;
+    const tg = window.Telegram?.WebApp;
 
     const adminButton =
         document.getElementById("adminButton");
 
     if (!adminButton) {
+        alert("Кнопка adminButton не найдена");
         return;
     }
 
+    if (!tg) {
+        alert("Telegram.WebApp не найден");
+        return;
+    }
+
+    const telegramUser =
+        tg.initDataUnsafe?.user;
+
     if (!telegramUser) {
-        alert("Telegram user не найден");
+        alert(
+            "Telegram user не найден\n" +
+            "initData длина: " +
+            (tg.initData?.length || 0)
+        );
         return;
     }
 

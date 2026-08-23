@@ -2943,13 +2943,6 @@ async function loadMyProfile() {
 
         const profile =
             await response.json();
-
-            alert(
-    JSON.stringify(
-        profile.recentSales
-    )
-);
-
         return profile;
     }
     catch (error) {
@@ -3045,7 +3038,7 @@ async function openProfile() {
             )
             : 0;
 
-            const recentSales =
+           const recentSales =
     Array.isArray(profile.recentSales)
         ? profile.recentSales
         : [];
@@ -3054,25 +3047,31 @@ const recentSalesHtml =
     recentSales.length > 0
         ? recentSales
             .map(sale => {
-                const date =
-                    new Date(
-                        sale.createdAt
-                    );
 
-                const dateText =
-                    date.toLocaleString(
-                        "uk-UA",
-                        {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
+                let dateText = "";
+
+                if (sale.createdAt) {
+                    const date =
+                        new Date(
+                            sale.createdAt
+                        );
+
+                    dateText =
+                        date.toLocaleString(
+                            "uk-UA",
+                            {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
+                }
 
                 return `
                     <div class="profile-sale-item">
+
                         <div class="profile-sale-main">
                             <strong>
                                 ${escapeHtml(
@@ -3088,10 +3087,13 @@ const recentSalesHtml =
 
                         <div class="profile-sale-amount">
                             ${formatMoney(
-                                sale.totalAmount || 0
+                                Number(
+                                    sale.totalAmount || 0
+                                )
                             )}
                             <span>грн</span>
                         </div>
+
                     </div>
                 `;
             })
@@ -3102,178 +3104,194 @@ const recentSalesHtml =
             </div>
         `;
 
-    content.innerHTML = `
-        <div class="profile-user-card">
 
-            <div class="profile-avatar">
-                ${escapeHtml(firstLetter)}
+content.innerHTML = `
+
+    <div class="profile-user-card">
+
+        <div class="profile-avatar">
+            ${escapeHtml(firstLetter)}
+        </div>
+
+        <div class="profile-user-info">
+
+            <div class="profile-user-name">
+                ${escapeHtml(
+                    profile.name ||
+                    "Торговий представник"
+                )}
             </div>
 
-            <div class="profile-user-info">
-
-                <div class="profile-user-name">
-                    ${escapeHtml(
-                        profile.name ||
-                        "Торговий представник"
-                    )}
-                </div>
-
-                <div class="profile-user-username">
-                    ${
-                        profile.username
-                            ? "@" +
-                              escapeHtml(
-                                  profile.username
-                              )
-                            : "Telegram"
-                    }
-                </div>
-
+            <div class="profile-user-username">
+                ${
+                    profile.username
+                        ? "@" +
+                          escapeHtml(
+                              profile.username
+                          )
+                        : "Telegram"
+                }
             </div>
 
         </div>
 
-        <div class="profile-section-title">
-            📊 Продажі
-        </div>
+    </div>
 
-        <div class="profile-stats-grid">
 
-            <div class="profile-stat-box">
-                <div class="profile-stat-icon">
-                    ☀️
-                </div>
+    <div class="profile-section-title">
+        📊 Продажі
+    </div>
 
-                <div class="profile-stat-label">
-                    Сьогодні
-                </div>
+    <div class="profile-stats-grid">
 
-                <div class="profile-stat-number">
-                    ${formatMoney(salesToday)}
-                    <span>грн</span>
-                </div>
+        <div class="profile-stat-box">
 
-                <div class="profile-stat-secondary">
-                    ${ordersToday}
-                    замовлень
-                </div>
+            <div class="profile-stat-icon">
+                ☀️
             </div>
 
-            <div class="profile-stat-box">
-                <div class="profile-stat-icon">
-                    📅
-                </div>
+            <div class="profile-stat-label">
+                Сьогодні
+            </div>
 
-                <div class="profile-stat-label">
-                    За місяць
-                </div>
+            <div class="profile-stat-number">
+                ${formatMoney(salesToday)}
+                <span>грн</span>
+            </div>
 
-                <div class="profile-stat-number">
+            <div class="profile-stat-secondary">
+                ${ordersToday}
+                замовлень
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-box">
+
+            <div class="profile-stat-icon">
+                📅
+            </div>
+
+            <div class="profile-stat-label">
+                За місяць
+            </div>
+
+            <div class="profile-stat-number">
+                ${formatMoney(salesMonth)}
+                <span>грн</span>
+            </div>
+
+            <div class="profile-stat-secondary">
+                ${ordersMonth}
+                замовлень
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-section-title">
+        🎯 План продажів
+    </div>
+
+    <div class="profile-plan-card">
+
+        <div class="profile-plan-row">
+
+            <div>
+                <div class="profile-plan-value">
                     ${formatMoney(salesMonth)}
-                    <span>грн</span>
                 </div>
 
-                <div class="profile-stat-secondary">
-                    ${ordersMonth}
-                    замовлень
+                <div class="profile-plan-caption">
+                    виконано
                 </div>
+            </div>
+
+            <div class="profile-plan-right">
+
+                <strong>
+                    ${planPercent}%
+                </strong>
+
+                <span>
+                    з ${formatMoney(salesPlan)} грн
+                </span>
+
             </div>
 
         </div>
 
-        <div class="profile-section-title">
-            🎯 План продажів
+        <div class="profile-progress">
+            <div
+                class="profile-progress-fill"
+                style="width: ${planPercent}%"
+            ></div>
         </div>
 
-        <div class="profile-plan-card">
+    </div>
 
-            <div class="profile-plan-row">
-                <div>
-                    <div class="profile-plan-value">
-                        ${formatMoney(salesMonth)}
-                    </div>
 
-                    <div class="profile-plan-caption">
-                        виконано
-                    </div>
-                </div>
+    <div class="profile-section-title">
+        📦 Останні продажі
+    </div>
 
-                <div class="profile-plan-right">
-                    <strong>
-                        ${planPercent}%
-                    </strong>
+    <div class="profile-sales-list">
+        ${recentSalesHtml}
+    </div>
 
-                    <span>
-                        з ${formatMoney(salesPlan)} грн
-                    </span>
-                </div>
+
+    <div class="profile-section-title">
+        📋 Робота
+    </div>
+
+    <div class="profile-menu">
+
+        <button
+            type="button"
+            class="profile-menu-item"
+            id="profileTasksButton"
+        >
+            <span>📋</span>
+
+            <div>
+                <strong>
+                    Мої завдання
+                </strong>
+
+                <small>
+                    Поточні задачі
+                </small>
             </div>
 
-            <div class="profile-progress">
-                <div
-                    class="profile-progress-fill"
-                    style="width: ${planPercent}%"
-                ></div>
+            <b>›</b>
+        </button>
+
+
+        <button
+            type="button"
+            class="profile-menu-item"
+            id="profileOrdersButton"
+        >
+            <span>📦</span>
+
+            <div>
+                <strong>
+                    Мої замовлення
+                </strong>
+
+                <small>
+                    Історія продажів
+                </small>
             </div>
 
-                 <div class="profile-section-title">
-            📦 Останні продажі
-        </div>
+            <b>›</b>
+        </button>
 
-        <div class="profile-sales-list">
-            ${recentSalesHtml}
-        </div>
-
-        </div>
-
-        <div class="profile-section-title">
-            📋 Робота
-        </div>
-
-        <div class="profile-menu">
-
-            <button
-                type="button"
-                class="profile-menu-item"
-                id="profileTasksButton"
-            >
-                <span>📋</span>
-
-                <div>
-                    <strong>
-                        Мої завдання
-                    </strong>
-
-                    <small>
-                        Поточні задачі
-                    </small>
-                </div>
-
-                <b>›</b>
-            </button>
-
-            <button
-                type="button"
-                class="profile-menu-item"
-                id="profileOrdersButton"
-            >
-                <span>📦</span>
-
-                <div>
-                    <strong>
-                        Мої замовлення
-                    </strong>
-
-                    <small>
-                        Історія продажів
-                    </small>
-                </div>
-
-                <b>›</b>
-            </button>
-
-        </div>
-    `;
+    </div>
+`;
 }
 
 function closeProfile() {

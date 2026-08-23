@@ -3951,7 +3951,7 @@ function closeProductModal() {
     }
 }
 
-function sendOrder() {
+async function sendOrder() {
    const selectedShopId =
     Number(elements.selectedShopId.value);
 
@@ -4068,45 +4068,99 @@ invoiceForm: state.invoiceForm,
     };
 
     const json =
-        JSON.stringify(order);
+    JSON.stringify(order);
 
-    console.log("Отправляем:", order);
+console.log(
+    "Отправляем:",
+    order
+);
 
-    const openedOutsideTelegram =
-        !telegram ||
-        telegram.platform === "unknown";
+const openedOutsideTelegram =
+    !telegram ||
+    telegram.platform === "unknown";
 
-    if (openedOutsideTelegram) {
-        showOrderForBrowserTesting(json);
-        return;
-    }
-
-    try {
-        telegram.sendData(json);
-
-        state.orderCart = [];
-        state.returnCart = [];
-
-        saveCart();
-
-        const drawerComment =
-    document.getElementById(
-        "drawerOrderComment"
-    );
-
-if (drawerComment) {
-    drawerComment.value = "";
+if (openedOutsideTelegram) {
+    showOrderForBrowserTesting(json);
+    return;
 }
 
-        renderCart();
-        renderProducts();
+try {
+    const response = await fetch(
+        `${API_BASE_URL}/api/orders`,
+        {
+            method: "POST",
 
-        triggerHaptic("success");
-    } catch (error) {
-    console.error("Ошибка отправки:", error);
+            headers: {
+                "Content-Type":
+                    "application/json",
+
+                "X-Telegram-Init-Data":
+                    window.Telegram
+                        ?.WebApp
+                        ?.initData || ""
+            },
+
+            body: json
+        }
+    );
+
+    let result = null;
+
+    try {
+        result =
+            await response.json();
+    }
+    catch {
+        result = null;
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            result?.message ||
+            `Ошибка API: ${response.status}`
+        );
+    }
+
+    console.log(
+        "Заказ успешно отправлен:",
+        result
+    );
+
+    // Очищаем заказ
+    state.orderCart = [];
+    state.returnCart = [];
+
+    saveCart();
+
+    // Очищаем комментарий
+    const drawerComment =
+        document.getElementById(
+            "drawerOrderComment"
+        );
+
+    if (drawerComment) {
+        drawerComment.value = "";
+    }
+
+    // Обновляем интерфейс
+    renderCart();
+    renderProducts();
+
+    showToast(
+        "Заказ отправлен",
+        "success"
+    );
+
+    triggerHaptic("success");
+}
+catch (error) {
+    console.error(
+        "Ошибка отправки заказа:",
+        error
+    );
 
     alert(
-        "Ошибка:\n\n" +
+        "Ошибка отправки заказа:\n\n" +
         (error?.message || error)
     );
 

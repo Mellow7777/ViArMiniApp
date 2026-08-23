@@ -509,24 +509,14 @@ function initializeAdminAccess() {
         document.getElementById("adminButton");
 
     if (!adminButton) {
-        alert("Кнопка adminButton не найдена");
-        return;
-    }
-
-    if (!tg) {
-        alert("Telegram.WebApp не найден");
         return;
     }
 
     const telegramUser =
-        tg.initDataUnsafe?.user;
+        tg?.initDataUnsafe?.user;
 
     if (!telegramUser) {
-        alert(
-            "Telegram user не найден\n" +
-            "initData длина: " +
-            (tg.initData?.length || 0)
-        );
+        adminButton.hidden = true;
         return;
     }
 
@@ -537,13 +527,6 @@ function initializeAdminAccess() {
         ADMIN_TELEGRAM_IDS.includes(
             telegramId
         );
-
-    alert(
-        "Telegram ID: " +
-        telegramId +
-        "\nАдмин: " +
-        isAdmin
-    );
 
     adminButton.hidden =
         !isAdmin;
@@ -2557,6 +2540,36 @@ drawerOrderComment?.addEventListener(
         );
     }
 
+    const adminButton =
+    document.getElementById("adminButton");
+
+if (adminButton) {
+    adminButton.addEventListener(
+        "click",
+        openAdminPanel
+    );
+}
+
+const closeAdminButton =
+    document.getElementById("closeAdminButton");
+
+if (closeAdminButton) {
+    closeAdminButton.addEventListener(
+        "click",
+        closeAdminPanel
+    );
+}
+
+const adminStockSearch =
+    document.getElementById("adminStockSearch");
+
+if (adminStockSearch) {
+    adminStockSearch.addEventListener(
+        "input",
+        renderAdminStocks
+    );
+}
+
     if (elements.largeTextToggle) {
         const toggleLargeText = (event) => {
             if (event) {
@@ -2600,6 +2613,107 @@ drawerOrderComment?.addEventListener(
             toggleLargeText
         );
     }
+}
+
+function openAdminPanel() {
+    const panel =
+        document.getElementById("adminPanel");
+
+    if (!panel) {
+        return;
+    }
+
+    panel.hidden = false;
+
+    renderAdminStocks();
+}
+
+function closeAdminPanel() {
+    const panel =
+        document.getElementById("adminPanel");
+
+    if (!panel) {
+        return;
+    }
+
+    panel.hidden = true;
+}
+
+function renderAdminStocks() {
+    const container =
+        document.getElementById("adminStockList");
+
+    const searchInput =
+        document.getElementById("adminStockSearch");
+
+    if (!container) {
+        return;
+    }
+
+    const query =
+        normalizeText(
+            searchInput?.value || ""
+        );
+
+    const filtered =
+        products.filter(product => {
+            if (!query) {
+                return true;
+            }
+
+            const searchable =
+                normalizeText(
+                    [
+                        product.name,
+                        product.nameRu,
+                        product.orderName,
+                        product.article,
+                        product.searchAliases
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
+                );
+
+            return searchable.includes(query);
+        });
+
+    container.innerHTML = "";
+
+    filtered.forEach(product => {
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "admin-stock-item";
+
+        item.innerHTML = `
+            <div class="admin-stock-info">
+                <strong>
+                    ${escapeHtml(product.name)}
+                </strong>
+
+                <span>
+                    Артикул: ${escapeHtml(product.article)}
+                </span>
+
+                <span>
+                    Остаток:
+                    ${formatStock(product.stock)}
+                    ${product.stockUnit || product.unit1C || "кг"}
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="admin-stock-edit"
+                data-article="${escapeHtml(product.article)}"
+            >
+                Изменить
+            </button>
+        `;
+
+        container.appendChild(item);
+    });
 }
 
 async function openHistory() {

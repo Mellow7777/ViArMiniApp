@@ -250,8 +250,9 @@ async function initializeApp() {
     loadCart();
     initializeTelegram();
     renderUser();
-    bindEvents();
     initializeAdminAccess();
+    bindEvents();
+    
 
     await Promise.all([
         loadProducts(),
@@ -505,24 +506,35 @@ function initializeAdminAccess() {
     const telegramUser =
         telegram?.initDataUnsafe?.user;
 
-    if (!telegramUser) {
+    const adminButton =
+        document.getElementById("adminButton");
+
+    if (!adminButton) {
         return;
     }
 
+    if (!telegramUser) {
+        alert("Telegram user не найден");
+        return;
+    }
+
+    const telegramId =
+        Number(telegramUser.id);
+
     const isAdmin =
         ADMIN_TELEGRAM_IDS.includes(
-            Number(telegramUser.id)
+            telegramId
         );
 
-    const adminButton =
-        document.getElementById(
-            "adminButton"
-        );
+    alert(
+        "Telegram ID: " +
+        telegramId +
+        "\nАдмин: " +
+        isAdmin
+    );
 
-    if (adminButton) {
-        adminButton.hidden =
-            !isAdmin;
-    }
+    adminButton.hidden =
+        !isAdmin;
 }
 
 async function loadShops() {

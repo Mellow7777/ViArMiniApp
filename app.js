@@ -2771,6 +2771,24 @@ async function updateProductStock(product) {
         return;
     }
 
+    const tgUser =
+        window.Telegram?.WebApp
+            ?.initDataUnsafe
+            ?.user;
+
+    const telegramId =
+        tgUser?.id
+            ? String(tgUser.id)
+            : "";
+
+    const userName =
+        [
+            tgUser?.first_name,
+            tgUser?.last_name
+        ]
+            .filter(Boolean)
+            .join(" ");
+
     try {
         const response = await fetch(
             `${API_BASE_URL}/api/stocks/${encodeURIComponent(product.article)}`,
@@ -2783,7 +2801,16 @@ async function updateProductStock(product) {
                 },
 
                 body: JSON.stringify({
-                    stock: newStock
+                    stock: newStock,
+
+                    telegramId:
+                        telegramId,
+
+                    userName:
+                        userName,
+
+                    comment:
+                        "Ручная корректировка"
                 })
             }
         );
@@ -2798,18 +2825,22 @@ async function updateProductStock(product) {
             );
         }
 
-        // Сразу меняем локальный товар
-        product.stock = newStock;
+        // Сразу обновляем остаток
+        // в текущем массиве товаров
+        product.stock =
+            newStock;
 
-        // Перерисовываем админку
+        // Обновляем админку
         renderAdminStocks();
 
-        // Перерисовываем каталог
+        // Обновляем карточки товаров
         renderProducts();
 
         alert(
-            `Остаток обновлён:\n` +
+            `Остаток обновлён:\n\n` +
             `${product.name}\n` +
+            `${formatStock(currentStock)} ${unit}` +
+            ` → ` +
             `${formatStock(newStock)} ${unit}`
         );
     }

@@ -2541,6 +2541,7 @@ drawerOrderComment?.addEventListener(
         );
     }
 
+
     const adminButton =
     document.getElementById("adminButton");
 
@@ -2585,6 +2586,18 @@ if (stockHistoryButton) {
 
             loadStockHistory();
         }
+    );
+}
+
+const saveSalesAdjustmentButton =
+    document.getElementById(
+        "saveSalesAdjustmentButton"
+    );
+
+if (saveSalesAdjustmentButton) {
+    saveSalesAdjustmentButton.addEventListener(
+        "click",
+        saveSalesAdjustment
     );
 }
 
@@ -3614,6 +3627,135 @@ function renderOrderHistory(orders) {
             "click",
             closeOrderHistory
         );
+}
+
+async function saveSalesAdjustment() {
+    const representativeSelect =
+        document.getElementById(
+            "adminSalesRepresentative"
+        );
+
+    const monthInput =
+        document.getElementById(
+            "adminSalesMonth"
+        );
+
+    const amountInput =
+        document.getElementById(
+            "adminSalesAdjustment"
+        );
+
+    if (
+        !representativeSelect ||
+        !monthInput ||
+        !amountInput
+    ) {
+        return;
+    }
+
+    const telegramId =
+        Number(representativeSelect.value);
+
+    const monthValue =
+        monthInput.value;
+
+    const amount =
+        Number(
+            amountInput.value
+                .trim()
+                .replace(",", ".")
+        );
+
+    if (!monthValue) {
+        alert("Оберіть місяць");
+        return;
+    }
+
+    if (
+        !Number.isFinite(amount) ||
+        amount < 0
+    ) {
+        alert("Введіть коректну суму");
+        return;
+    }
+
+    const [year, month] =
+        monthValue
+            .split("-")
+            .map(Number);
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/sales-adjustment`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                body: JSON.stringify({
+                    telegramId: telegramId,
+                    year: year,
+                    month: month,
+                    amount: amount,
+                    comment:
+                        "Продажі до запуску системи"
+                })
+            }
+        );
+
+        let result = null;
+
+        try {
+            result =
+                await response.json();
+        }
+        catch {
+            result = null;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result?.message ||
+                `HTTP ${response.status}`
+            );
+        }
+
+        showToast(
+            "Продажі збережено",
+            "success"
+        );
+
+        triggerHaptic("success");
+
+        console.log(
+            "Стартовые продажи сохранены:",
+            {
+                telegramId,
+                year,
+                month,
+                amount
+            }
+        );
+    }
+    catch (error) {
+        console.error(
+            "Ошибка сохранения продаж:",
+            error
+        );
+
+        alert(
+            "Не вдалося зберегти продажі:\n" +
+            (error?.message || error)
+        );
+    }
 }
 
 async function setMyStartingSales() {

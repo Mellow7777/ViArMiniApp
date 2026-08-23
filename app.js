@@ -8,6 +8,10 @@ let shops = [];
 const API_BASE_URL =
     "https://dev-api.via-r-order.com";
 
+const ADMIN_TELEGRAM_IDS = [
+    564525966
+];
+
 const productGroups = [
     "Все",
     "Тарасівські ковбаси",
@@ -247,6 +251,7 @@ async function initializeApp() {
     initializeTelegram();
     renderUser();
     bindEvents();
+    initializeAdminAccess();
 
     await Promise.all([
         loadProducts(),
@@ -494,6 +499,30 @@ function renderUser() {
 
     elements.userName.textContent =
         fullName || telegramUser.username || `ID: ${telegramUser.id}`;
+}
+
+function initializeAdminAccess() {
+    const telegramUser =
+        telegram?.initDataUnsafe?.user;
+
+    if (!telegramUser) {
+        return;
+    }
+
+    const isAdmin =
+        ADMIN_TELEGRAM_IDS.includes(
+            Number(telegramUser.id)
+        );
+
+    const adminButton =
+        document.getElementById(
+            "adminButton"
+        );
+
+    if (adminButton) {
+        adminButton.hidden =
+            !isAdmin;
+    }
 }
 
 async function loadShops() {

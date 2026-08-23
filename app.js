@@ -2917,9 +2917,9 @@ async function loadMyProfile() {
         const profile =
             await response.json();
 
-       alert(
-    "Telegram ID: " +
-    profile.telegramId
+   console.log(
+    "Мой профиль:",
+    profile
 );
 
         return profile;

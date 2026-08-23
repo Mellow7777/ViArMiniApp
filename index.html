@@ -135,6 +135,40 @@
     ⚙️ Админ
 </button>
 
+<div
+    id="adminPanel"
+    class="admin-panel"
+    hidden
+>
+    <div class="admin-panel-header">
+        <h2>⚙️ Админ</h2>
+
+        <button
+            type="button"
+            id="closeAdminButton"
+            class="admin-close-button"
+        >
+            ✕
+        </button>
+    </div>
+
+    <div class="admin-section">
+        <h3>📦 Остатки</h3>
+
+        <input
+            type="search"
+            id="adminStockSearch"
+            class="admin-stock-search"
+            placeholder="Поиск товара..."
+        >
+
+        <div
+            id="adminStockList"
+            class="admin-stock-list"
+        ></div>
+    </div>
+</div>
+
     <!-- Контейнер истории -->
     <div
         id="historyContainer"
@@ -472,7 +506,7 @@
 </button>
 
 
-<script src="app.js?v=155"></script>
+<script src="app.js?v=157"></script>
 
 </body>
 </html> 

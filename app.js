@@ -2680,9 +2680,104 @@ if (adminStockSearch) {
     }
 }
 
+async function loadAdminRepresentatives() {
+    const select =
+        document.getElementById(
+            "adminSalesRepresentative"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    select.innerHTML = `
+        <option value="">
+            Завантаження...
+        </option>
+    `;
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/representatives`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        const representatives =
+            await response.json();
+
+        select.innerHTML = "";
+
+        representatives
+            .filter(rep =>
+                rep.isActive !== false
+            )
+            .forEach(rep => {
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    String(
+                        rep.telegramId
+                    );
+
+                option.textContent =
+                    rep.username
+                        ? `${rep.name} (@${rep.username})`
+                        : rep.name;
+
+                select.appendChild(
+                    option
+                );
+            });
+
+        if (
+            representatives.length === 0
+        ) {
+            select.innerHTML = `
+                <option value="">
+                    Торгових немає
+                </option>
+            `;
+        }
+    }
+    catch (error) {
+        console.error(
+            "Ошибка загрузки торговых:",
+            error
+        );
+
+        select.innerHTML = `
+            <option value="">
+                Не вдалося завантажити
+            </option>
+        `;
+    }
+}
+
 function openAdminPanel() {
     const panel =
-        document.getElementById("adminPanel");
+        document.getElementById(
+            "adminPanel"
+        );
 
     if (!panel) {
         return;
@@ -2691,6 +2786,8 @@ function openAdminPanel() {
     panel.hidden = false;
 
     renderAdminStocks();
+
+    loadAdminRepresentatives();
 }
 
 function closeAdminPanel() {

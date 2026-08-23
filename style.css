@@ -3228,3 +3228,31 @@ textarea::placeholder,
 body.profile-open {
     overflow: hidden;
 }
+
+.profile-sales-list {
+    color: #17191c;
+}
+
+.profile-sale-item {
+    color: #17191c;
+}
+
+.profile-sale-main strong {
+    color: #17191c !important;
+}
+
+.profile-sale-main small {
+    color: #8f949b !important;
+}
+
+.profile-sale-amount {
+    color: #17191c !important;
+}
+
+.profile-sale-amount span {
+    color: #8f949b !important;
+}
+
+.profile-empty-sales {
+    color: #8f949b !important;
+}

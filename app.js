@@ -503,6 +503,7 @@ function renderUser() {
 }
 
 function initializeAdminAccess() {
+    alert("НОВАЯ ВЕРСИЯ 150");
     const telegramUser =
         telegram?.initDataUnsafe?.user;
 

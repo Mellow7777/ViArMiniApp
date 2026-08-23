@@ -2822,10 +2822,15 @@ async function updateProductStock(product) {
             {
                 method: "PUT",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+headers: {
+    "Content-Type":
+        "application/json",
+
+    "X-Telegram-Init-Data":
+        window.Telegram
+            ?.WebApp
+            ?.initData || ""
+},
 
                 body: JSON.stringify({
                     stock: newStock,

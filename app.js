@@ -2729,6 +2729,291 @@ if (adminStockSearch) {
     }
 }
 
+function openAdminRepresentativeProfile(profile) {
+    const panel =
+        document.getElementById(
+            "profilePanel"
+        );
+
+    const content =
+        document.getElementById(
+            "profileContent"
+        );
+
+    if (!panel || !content) {
+        return;
+    }
+
+    panel.hidden = false;
+
+    document.body.classList.add(
+        "profile-open"
+    );
+
+    const firstLetter =
+        (profile.name || "?")
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+    const salesToday =
+        Number(
+            profile.salesToday || 0
+        );
+
+    const salesMonth =
+        Number(
+            profile.salesMonth || 0
+        );
+
+    const ordersToday =
+        Number(
+            profile.ordersToday || 0
+        );
+
+    const ordersMonth =
+        Number(
+            profile.ordersMonth || 0
+        );
+
+    const salesPlan =
+        Number(
+            profile.salesPlan || 0
+        );
+
+    const planPercent =
+        salesPlan > 0
+            ? Math.min(
+                100,
+                Math.round(
+                    salesMonth /
+                    salesPlan *
+                    100
+                )
+            )
+            : 0;
+
+    const recentSales =
+        Array.isArray(profile.recentSales)
+            ? profile.recentSales
+            : [];
+
+    const recentSalesHtml =
+        recentSales.length > 0
+            ? recentSales
+                .map(sale => {
+
+                    const date =
+                        new Date(
+                            sale.createdAt
+                        );
+
+                    const dateText =
+                        date.toLocaleString(
+                            "uk-UA",
+                            {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
+
+                    return `
+                        <div class="profile-sale-item">
+
+                            <div class="profile-sale-main">
+
+                                <strong
+                                    style="color:#17191c !important;"
+                                >
+                                    ${escapeHtml(
+                                        sale.shopName ||
+                                        "Торгова точка"
+                                    )}
+                                </strong>
+
+                                <small
+                                    style="color:#8f949b !important;"
+                                >
+                                    ${escapeHtml(
+                                        dateText
+                                    )}
+                                </small>
+
+                            </div>
+
+                            <div
+                                class="profile-sale-amount"
+                                style="color:#17191c !important;"
+                            >
+                                ${formatMoney(
+                                    Number(
+                                        sale.totalAmount || 0
+                                    )
+                                )}
+
+                                <span>
+                                    грн
+                                </span>
+                            </div>
+
+                        </div>
+                    `;
+                })
+                .join("")
+            : `
+                <div class="profile-empty-sales">
+                    Продажів поки немає
+                </div>
+            `;
+
+    content.innerHTML = `
+        <div class="profile-user-card">
+
+            <div class="profile-avatar">
+                ${escapeHtml(firstLetter)}
+            </div>
+
+            <div class="profile-user-info">
+
+                <div class="profile-user-name">
+                    ${escapeHtml(
+                        profile.name ||
+                        "Торговий представник"
+                    )}
+                </div>
+
+                <div class="profile-user-username">
+                    ${
+                        profile.username
+                            ? "@" +
+                              escapeHtml(
+                                  profile.username
+                              )
+                            : "Telegram ID: " +
+                              escapeHtml(
+                                  String(
+                                      profile.telegramId
+                                  )
+                              )
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-section-title">
+            📊 Продажі
+        </div>
+
+        <div class="profile-stats-grid">
+
+            <div class="profile-stat-box">
+
+                <div class="profile-stat-icon">
+                    ☀️
+                </div>
+
+                <div class="profile-stat-label">
+                    Сьогодні
+                </div>
+
+                <div class="profile-stat-number">
+                    ${formatMoney(salesToday)}
+                    <span>грн</span>
+                </div>
+
+                <div class="profile-stat-secondary">
+                    ${ordersToday}
+                    замовлень
+                </div>
+
+            </div>
+
+
+            <div class="profile-stat-box">
+
+                <div class="profile-stat-icon">
+                    📅
+                </div>
+
+                <div class="profile-stat-label">
+                    За місяць
+                </div>
+
+                <div class="profile-stat-number">
+                    ${formatMoney(salesMonth)}
+                    <span>грн</span>
+                </div>
+
+                <div class="profile-stat-secondary">
+                    ${ordersMonth}
+                    замовлень
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-section-title">
+            🎯 План продажів
+        </div>
+
+        <div class="profile-plan-card">
+
+            <div class="profile-plan-row">
+
+                <div>
+                    <div class="profile-plan-value">
+                        ${formatMoney(salesMonth)}
+                    </div>
+
+                    <div class="profile-plan-caption">
+                        виконано
+                    </div>
+                </div>
+
+                <div class="profile-plan-right">
+
+                    <strong>
+                        ${planPercent}%
+                    </strong>
+
+                    <span>
+                        з ${formatMoney(salesPlan)} грн
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="profile-progress">
+
+                <div
+                    class="profile-progress-fill"
+                    style="width:${planPercent}%"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-section-title">
+            📦 Останні продажі
+        </div>
+
+        <div class="profile-sales-list">
+            ${recentSalesHtml}
+        </div>
+    `;
+}
+
 async function loadAdminRepresentatives() {
     const select =
         document.getElementById(

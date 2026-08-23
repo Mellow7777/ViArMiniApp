@@ -2933,18 +2933,16 @@ async function loadMyProfile() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                `Ошибка профиля: ${response.status}`
+            console.error(
+                "Ошибка загрузки профиля:",
+                response.status
             );
+
+            return null;
         }
 
         const profile =
             await response.json();
-
-   console.log(
-    "Мой профиль:",
-    profile
-);
 
         return profile;
     }
@@ -2960,10 +2958,14 @@ async function loadMyProfile() {
 
 async function openProfile() {
     const panel =
-        document.getElementById("profilePanel");
+        document.getElementById(
+            "profilePanel"
+        );
 
     const content =
-        document.getElementById("profileContent");
+        document.getElementById(
+            "profileContent"
+        );
 
     if (!panel || !content) {
         return;
@@ -2971,43 +2973,233 @@ async function openProfile() {
 
     panel.hidden = false;
 
-    content.innerHTML =
-        "Загрузка профиля...";
+    document.body.classList.add(
+        "profile-open"
+    );
+
+    content.innerHTML = `
+        <div class="profile-loading">
+            Завантаження профілю...
+        </div>
+    `;
 
     const profile =
         await loadMyProfile();
 
     if (!profile) {
-        content.innerHTML =
-            "Не удалось загрузить профиль.";
+        content.innerHTML = `
+            <div class="profile-error">
+                Не вдалося завантажити профіль
+            </div>
+        `;
 
         return;
     }
 
+    const firstLetter =
+        (profile.name || "?")
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+    const salesToday =
+        Number(
+            profile.salesToday || 0
+        );
+
+    const salesMonth =
+        Number(
+            profile.salesMonth || 0
+        );
+
+    const ordersToday =
+        Number(
+            profile.ordersToday || 0
+        );
+
+    const ordersMonth =
+        Number(
+            profile.ordersMonth || 0
+        );
+
+    const salesPlan =
+        Number(
+            profile.salesPlan || 0
+        );
+
+    const planPercent =
+        salesPlan > 0
+            ? Math.min(
+                100,
+                Math.round(
+                    salesMonth /
+                    salesPlan *
+                    100
+                )
+            )
+            : 0;
+
     content.innerHTML = `
-        <div class="profile-main-card">
+        <div class="profile-user-card">
 
-            <div class="profile-name">
-                ${escapeHtml(profile.name || "Без имени")}
+            <div class="profile-avatar">
+                ${escapeHtml(firstLetter)}
             </div>
 
-            <div class="profile-username">
-                ${
-                    profile.username
-                        ? "@" + escapeHtml(profile.username)
-                        : ""
-                }
+            <div class="profile-user-info">
+
+                <div class="profile-user-name">
+                    ${escapeHtml(
+                        profile.name ||
+                        "Торговий представник"
+                    )}
+                </div>
+
+                <div class="profile-user-username">
+                    ${
+                        profile.username
+                            ? "@" +
+                              escapeHtml(
+                                  profile.username
+                              )
+                            : "Telegram"
+                    }
+                </div>
+
             </div>
 
-            <div class="profile-stat-card">
-                <span class="profile-stat-label">
-                    🎯 План продаж
-                </span>
+        </div>
 
-                <strong class="profile-stat-value">
-                    ${formatMoney(profile.salesPlan || 0)} грн
-                </strong>
+        <div class="profile-section-title">
+            📊 Продажі
+        </div>
+
+        <div class="profile-stats-grid">
+
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon">
+                    ☀️
+                </div>
+
+                <div class="profile-stat-label">
+                    Сьогодні
+                </div>
+
+                <div class="profile-stat-number">
+                    ${formatMoney(salesToday)}
+                    <span>грн</span>
+                </div>
+
+                <div class="profile-stat-secondary">
+                    ${ordersToday}
+                    замовлень
+                </div>
             </div>
+
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon">
+                    📅
+                </div>
+
+                <div class="profile-stat-label">
+                    За місяць
+                </div>
+
+                <div class="profile-stat-number">
+                    ${formatMoney(salesMonth)}
+                    <span>грн</span>
+                </div>
+
+                <div class="profile-stat-secondary">
+                    ${ordersMonth}
+                    замовлень
+                </div>
+            </div>
+
+        </div>
+
+        <div class="profile-section-title">
+            🎯 План продажів
+        </div>
+
+        <div class="profile-plan-card">
+
+            <div class="profile-plan-row">
+                <div>
+                    <div class="profile-plan-value">
+                        ${formatMoney(salesMonth)}
+                    </div>
+
+                    <div class="profile-plan-caption">
+                        виконано
+                    </div>
+                </div>
+
+                <div class="profile-plan-right">
+                    <strong>
+                        ${planPercent}%
+                    </strong>
+
+                    <span>
+                        з ${formatMoney(salesPlan)} грн
+                    </span>
+                </div>
+            </div>
+
+            <div class="profile-progress">
+                <div
+                    class="profile-progress-fill"
+                    style="width: ${planPercent}%"
+                ></div>
+            </div>
+
+        </div>
+
+        <div class="profile-section-title">
+            📋 Робота
+        </div>
+
+        <div class="profile-menu">
+
+            <button
+                type="button"
+                class="profile-menu-item"
+                id="profileTasksButton"
+            >
+                <span>📋</span>
+
+                <div>
+                    <strong>
+                        Мої завдання
+                    </strong>
+
+                    <small>
+                        Поточні задачі
+                    </small>
+                </div>
+
+                <b>›</b>
+            </button>
+
+            <button
+                type="button"
+                class="profile-menu-item"
+                id="profileOrdersButton"
+            >
+                <span>📦</span>
+
+                <div>
+                    <strong>
+                        Мої замовлення
+                    </strong>
+
+                    <small>
+                        Історія продажів
+                    </small>
+                </div>
+
+                <b>›</b>
+            </button>
 
         </div>
     `;
@@ -3015,11 +3207,19 @@ async function openProfile() {
 
 function closeProfile() {
     const panel =
-        document.getElementById("profilePanel");
+        document.getElementById(
+            "profilePanel"
+        );
 
-    if (panel) {
-        panel.hidden = true;
+    if (!panel) {
+        return;
     }
+
+    panel.hidden = true;
+
+    document.body.classList.remove(
+        "profile-open"
+    );
 }
 
 async function loadStockHistory() {

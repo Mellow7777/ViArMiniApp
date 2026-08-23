@@ -2944,6 +2944,12 @@ async function loadMyProfile() {
         const profile =
             await response.json();
 
+            alert(
+    JSON.stringify(
+        profile.recentSales
+    )
+);
+
         return profile;
     }
     catch (error) {

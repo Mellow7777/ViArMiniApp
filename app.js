@@ -3039,6 +3039,63 @@ async function openProfile() {
             )
             : 0;
 
+            const recentSales =
+    Array.isArray(profile.recentSales)
+        ? profile.recentSales
+        : [];
+
+const recentSalesHtml =
+    recentSales.length > 0
+        ? recentSales
+            .map(sale => {
+                const date =
+                    new Date(
+                        sale.createdAt
+                    );
+
+                const dateText =
+                    date.toLocaleString(
+                        "uk-UA",
+                        {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                    );
+
+                return `
+                    <div class="profile-sale-item">
+                        <div class="profile-sale-main">
+                            <strong>
+                                ${escapeHtml(
+                                    sale.shopName ||
+                                    "Торгова точка"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHtml(dateText)}
+                            </small>
+                        </div>
+
+                        <div class="profile-sale-amount">
+                            ${formatMoney(
+                                sale.totalAmount || 0
+                            )}
+                            <span>грн</span>
+                        </div>
+                    </div>
+                `;
+            })
+            .join("")
+        : `
+            <div class="profile-empty-sales">
+                Продажів поки немає
+            </div>
+        `;
+
     content.innerHTML = `
         <div class="profile-user-card">
 
@@ -3152,6 +3209,14 @@ async function openProfile() {
                     style="width: ${planPercent}%"
                 ></div>
             </div>
+
+                 <div class="profile-section-title">
+            📦 Останні продажі
+        </div>
+
+        <div class="profile-sales-list">
+            ${recentSalesHtml}
+        </div>
 
         </div>
 

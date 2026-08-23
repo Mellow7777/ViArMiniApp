@@ -2560,6 +2560,33 @@ if (closeAdminButton) {
     );
 }
 
+const stockHistoryButton =
+    document.getElementById(
+        "stockHistoryButton"
+    );
+
+if (stockHistoryButton) {
+    stockHistoryButton.addEventListener(
+        "click",
+        () => {
+            const container =
+                document.getElementById(
+                    "stockHistoryContainer"
+                );
+
+            if (
+                container &&
+                !container.hidden
+            ) {
+                container.hidden = true;
+                return;
+            }
+
+            loadStockHistory();
+        }
+    );
+}
+
 const adminStockSearch =
     document.getElementById("adminStockSearch");
 
@@ -2854,6 +2881,134 @@ async function updateProductStock(product) {
             "Не удалось изменить остаток:\n" +
             (error?.message || error)
         );
+    }
+}
+
+async function loadStockHistory() {
+    const container =
+        document.getElementById(
+            "stockHistoryContainer"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.hidden = false;
+    container.innerHTML =
+        "<p>Загрузка истории...</p>";
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/stocks/history?limit=50`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка API: ${response.status}`
+            );
+        }
+
+        const history =
+            await response.json();
+
+        if (!history.length) {
+            container.innerHTML =
+                "<p>История пока пустая.</p>";
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        history.forEach(item => {
+            const product =
+                products.find(p =>
+                    String(p.article) ===
+                    String(item.article)
+                );
+
+            const productName =
+                product?.name ||
+                `Артикул ${item.article}`;
+
+            const unit =
+                product?.stockUnit ||
+                product?.unit1C ||
+                "кг";
+
+            const date =
+                new Date(item.createdAt);
+
+            const dateText =
+                date.toLocaleString(
+                    "ru-RU",
+                    {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+            const element =
+                document.createElement("div");
+
+            element.className =
+                "admin-history-item";
+
+            element.innerHTML = `
+                <strong>
+                    📦 ${escapeHtml(productName)}
+                </strong>
+
+                <div>
+                    ${formatStock(item.oldStock)}
+                    →
+                    ${formatStock(item.newStock)}
+                    ${escapeHtml(unit)}
+                </div>
+
+                <small>
+                    ✏️ ${
+                        escapeHtml(
+                            item.comment ||
+                            "Ручная корректировка"
+                        )
+                    }
+                </small>
+
+                <small>
+                    👤 ${
+                        escapeHtml(
+                            item.changedByName ||
+                            "Не указан"
+                        )
+                    }
+                </small>
+
+                <small>
+                    🕒 ${escapeHtml(dateText)}
+                </small>
+            `;
+
+            container.appendChild(
+                element
+            );
+        });
+    }
+    catch (error) {
+        console.error(
+            "Ошибка истории остатков:",
+            error
+        );
+
+        container.innerHTML =
+            "<p>Не удалось загрузить историю.</p>";
     }
 }
 

@@ -249,6 +249,7 @@ initializeApp();
 async function initializeApp() {
     loadCart();
     initializeTelegram();
+    loadMyProfile();
     renderUser();
     initializeAdminAccess();
     bindEvents();
@@ -2886,6 +2887,50 @@ headers: {
             "Не удалось изменить остаток:\n" +
             (error?.message || error)
         );
+    }
+}
+
+async function loadMyProfile() {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/profile/me`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка профиля: ${response.status}`
+            );
+        }
+
+        const profile =
+            await response.json();
+
+        console.log(
+            "Мой профиль:",
+            profile
+        );
+
+        return profile;
+    }
+    catch (error) {
+        console.error(
+            "Ошибка loadMyProfile:",
+            error
+        );
+
+        return null;
     }
 }
 

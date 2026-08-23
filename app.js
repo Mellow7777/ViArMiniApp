@@ -2712,8 +2712,118 @@ function renderAdminStocks() {
             </button>
         `;
 
+        const editButton =
+    item.querySelector(
+        ".admin-stock-edit"
+    );
+
+    if (editButton) {
+    editButton.addEventListener(
+        "click",
+        () => {
+            updateProductStock(
+                product
+            );
+        }
+    );
+}
+
         container.appendChild(item);
     });
+}
+
+async function updateProductStock(product) {
+    const currentStock =
+        Number(product.stock || 0);
+
+    const unit =
+        product.stockUnit ||
+        product.unit1C ||
+        "кг";
+
+    const enteredValue = prompt(
+        `${product.name}\n\n` +
+        `Текущий остаток: ${formatStock(currentStock)} ${unit}\n\n` +
+        `Введите новый остаток:`,
+        String(currentStock)
+    );
+
+    if (enteredValue === null) {
+        return;
+    }
+
+    const normalizedValue =
+        enteredValue
+            .trim()
+            .replace(",", ".");
+
+    const newStock =
+        Number(normalizedValue);
+
+    if (
+        !Number.isFinite(newStock) ||
+        newStock < 0
+    ) {
+        alert(
+            "Введите корректный остаток."
+        );
+
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/stocks/${encodeURIComponent(product.article)}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    stock: newStock
+                })
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result?.message ||
+                `Ошибка API: ${response.status}`
+            );
+        }
+
+        // Сразу меняем локальный товар
+        product.stock = newStock;
+
+        // Перерисовываем админку
+        renderAdminStocks();
+
+        // Перерисовываем каталог
+        renderProducts();
+
+        alert(
+            `Остаток обновлён:\n` +
+            `${product.name}\n` +
+            `${formatStock(newStock)} ${unit}`
+        );
+    }
+    catch (error) {
+        console.error(
+            "Ошибка изменения остатка:",
+            error
+        );
+
+        alert(
+            "Не удалось изменить остаток:\n" +
+            (error?.message || error)
+        );
+    }
 }
 
 async function openHistory() {

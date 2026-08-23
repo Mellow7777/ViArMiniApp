@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=156">
+   <link rel="stylesheet" href="style.css?v=157">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -148,20 +148,37 @@
     class="profile-panel"
     hidden
 >
-    <div class="profile-panel-header">
-        <h2>👤 Профиль</h2>
+    <div class="profile-page">
 
-        <button
-            type="button"
-            id="closeProfileButton"
-            class="profile-close-button"
+        <div class="profile-topbar">
+            <button
+                type="button"
+                id="closeProfileButton"
+                class="profile-back-button"
+            >
+                ←
+            </button>
+
+            <div>
+                <div class="profile-topbar-title">
+                    Мій профіль
+                </div>
+
+                <div class="profile-topbar-subtitle">
+                    Особистий кабінет
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="profileContent"
+            class="profile-content"
         >
-            ✕
-        </button>
-    </div>
+            <div class="profile-loading">
+                Завантаження...
+            </div>
+        </div>
 
-    <div id="profileContent">
-        Загрузка...
     </div>
 </div>
 
@@ -550,7 +567,7 @@
 </button>
 
 
-<script src="app.js?v=166"></script>
+<script src="app.js?v=167"></script>
 
 </body>
 </html> 

@@ -2589,6 +2589,55 @@ if (stockHistoryButton) {
     );
 }
 
+const openRepresentativeProfileButton =
+    document.getElementById(
+        "openRepresentativeProfileButton"
+    );
+
+if (openRepresentativeProfileButton) {
+    openRepresentativeProfileButton
+        .addEventListener(
+            "click",
+            async () => {
+
+                const select =
+                    document.getElementById(
+                        "adminSalesRepresentative"
+                    );
+
+                if (
+                    !select ||
+                    !select.value
+                ) {
+                    alert(
+                        "Оберіть торгового"
+                    );
+
+                    return;
+                }
+
+                const profile =
+                    await loadAdminRepresentativeProfile(
+                        Number(
+                            select.value
+                        )
+                    );
+
+                if (!profile) {
+                    alert(
+                        "Не вдалося завантажити профіль"
+                    );
+
+                    return;
+                }
+
+                openAdminRepresentativeProfile(
+                    profile
+                );
+            }
+        );
+}
+
 const saveSalesAdjustmentButton =
     document.getElementById(
         "saveSalesAdjustmentButton"
@@ -2799,6 +2848,44 @@ function closeAdminPanel() {
     }
 
     panel.hidden = true;
+}
+
+async function loadAdminRepresentativeProfile(
+    telegramId
+) {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/representatives/${telegramId}/profile`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        return await response.json();
+    }
+    catch (error) {
+        console.error(
+            "Ошибка загрузки профиля торгового:",
+            error
+        );
+
+        return null;
+    }
 }
 
 function renderAdminStocks() {

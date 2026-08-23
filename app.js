@@ -2588,6 +2588,30 @@ if (stockHistoryButton) {
     );
 }
 
+const profileButton =
+    document.getElementById(
+        "profileButton"
+    );
+
+if (profileButton) {
+    profileButton.addEventListener(
+        "click",
+        openProfile
+    );
+}
+
+const closeProfileButton =
+    document.getElementById(
+        "closeProfileButton"
+    );
+
+if (closeProfileButton) {
+    closeProfileButton.addEventListener(
+        "click",
+        closeProfile
+    );
+}
+
 const adminStockSearch =
     document.getElementById("adminStockSearch");
 
@@ -2931,6 +2955,70 @@ async function loadMyProfile() {
         );
 
         return null;
+    }
+}
+
+async function openProfile() {
+    const panel =
+        document.getElementById("profilePanel");
+
+    const content =
+        document.getElementById("profileContent");
+
+    if (!panel || !content) {
+        return;
+    }
+
+    panel.hidden = false;
+
+    content.innerHTML =
+        "Загрузка профиля...";
+
+    const profile =
+        await loadMyProfile();
+
+    if (!profile) {
+        content.innerHTML =
+            "Не удалось загрузить профиль.";
+
+        return;
+    }
+
+    content.innerHTML = `
+        <div class="profile-main-card">
+
+            <div class="profile-name">
+                ${escapeHtml(profile.name || "Без имени")}
+            </div>
+
+            <div class="profile-username">
+                ${
+                    profile.username
+                        ? "@" + escapeHtml(profile.username)
+                        : ""
+                }
+            </div>
+
+            <div class="profile-stat-card">
+                <span class="profile-stat-label">
+                    🎯 План продаж
+                </span>
+
+                <strong class="profile-stat-value">
+                    ${formatMoney(profile.salesPlan || 0)} грн
+                </strong>
+            </div>
+
+        </div>
+    `;
+}
+
+function closeProfile() {
+    const panel =
+        document.getElementById("profilePanel");
+
+    if (panel) {
+        panel.hidden = true;
     }
 }
 

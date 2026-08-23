@@ -3616,6 +3616,82 @@ function renderOrderHistory(orders) {
         );
 }
 
+async function setMyStartingSales() {
+    const amountText =
+        prompt(
+            "Введите сумму продаж до запуска бота:",
+            "0"
+        );
+
+    if (amountText === null) {
+        return;
+    }
+
+    const amount =
+        Number(
+            amountText
+                .trim()
+                .replace(",", ".")
+        );
+
+    if (
+        !Number.isFinite(amount) ||
+        amount < 0
+    ) {
+        alert("Некорректная сумма");
+        return;
+    }
+
+    const now =
+        new Date();
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/admin/sales-adjustment`,
+        {
+            method: "PUT",
+
+            headers: {
+                "Content-Type":
+                    "application/json",
+
+                "X-Telegram-Init-Data":
+                    window.Telegram
+                        ?.WebApp
+                        ?.initData || ""
+            },
+
+            body: JSON.stringify({
+                telegramId:
+                    564525966,
+
+                year:
+                    now.getFullYear(),
+
+                month:
+                    now.getMonth() + 1,
+
+                amount:
+                    amount,
+
+                comment:
+                    "Продажи до запуска системы"
+            })
+        }
+    );
+
+    if (!response.ok) {
+        alert(
+            "Не удалось сохранить сумму"
+        );
+
+        return;
+    }
+
+    alert(
+        "Начальные продажи сохранены"
+    );
+}
+
 function createHistoryOrderHtml(
     order,
     index

@@ -87,46 +87,49 @@
         id="shopSearchResults"
     ></div>
 
-    <div
-        class="selected-shop-card selected-shop-modern"
-        id="selectedShopCard"
-        hidden
-    >
-        <div class="selected-shop-icon">
-            🏪
-        </div>
-
-        <div class="selected-shop-info">
-            <span class="selected-shop-small-label">
-                Обрана точка
-            </span>
-
-            <strong id="selectedShopName"></strong>
-
-            <span id="selectedShopAddress"></span>
-        </div>
-
-        <button
-            type="button"
-            id="clearSelectedShopButton"
-            class="selected-shop-clear"
-            aria-label="Змінити торгову точку"
-        >
-            ✕
-        </button>
+   <div
+    class="selected-shop-card selected-shop-modern"
+    id="selectedShopCard"
+    hidden
+>
+    <div class="selected-shop-icon">
+        🏪
     </div>
 
-    <!-- Кнопка истории -->
-    <button
-        type="button"
-        id="historyButton"
-        class="shop-history-button"
-        hidden
-    >
-        📜 Історія замовлень
-    </button>
+    <div class="selected-shop-info">
+        <span class="selected-shop-small-label">
+            Обрана точка
+        </span>
+
+        <strong id="selectedShopName"></strong>
+
+        <span id="selectedShopAddress"></span>
+    </div>
 
     <button
+        type="button"
+        id="clearSelectedShopButton"
+        class="selected-shop-clear"
+        aria-label="Змінити торгову точку"
+    >
+        ✕
+    </button>
+</div>
+
+
+<!-- История -->
+<button
+    type="button"
+    id="historyButton"
+    class="shop-history-button"
+    hidden
+>
+    📜 Історія замовлень
+</button>
+
+
+<!-- Админ -->
+<button
     id="adminButton"
     type="button"
     class="admin-button"
@@ -135,6 +138,127 @@
     ⚙️ Админ
 </button>
 
+
+<!-- Панель админки -->
+<div
+    id="adminPanel"
+    class="admin-panel"
+    hidden
+>
+    <div class="admin-panel-header">
+
+        <h2>
+            ⚙️ Админ
+        </h2>
+
+        <button
+            type="button"
+            id="closeAdminButton"
+            class="admin-close-button"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <!-- Остатки -->
+    <div class="admin-section">
+
+        <h3>
+            📦 Остатки
+        </h3>
+
+        <button
+            type="button"
+            id="stockHistoryButton"
+            class="admin-history-button"
+        >
+            📋 История изменений
+        </button>
+
+        <div
+            id="stockHistoryContainer"
+            class="admin-stock-history"
+            hidden
+        ></div>
+
+        <input
+            type="search"
+            id="adminStockSearch"
+            class="admin-stock-search"
+            placeholder="Поиск товара..."
+        >
+
+        <div
+            id="adminStockList"
+            class="admin-stock-list"
+        ></div>
+
+    </div>
+
+
+    <!-- Продажи торговых -->
+    <div class="admin-section">
+
+        <h3>
+            💰 Продажі торгових
+        </h3>
+
+        <label class="admin-field-label">
+            Торговий представник
+        </label>
+
+        <select
+            id="adminSalesRepresentative"
+            class="admin-input"
+        >
+            <option value="564525966">
+                Стас
+            </option>
+        </select>
+
+
+        <label class="admin-field-label">
+            Місяць
+        </label>
+
+        <input
+            type="month"
+            id="adminSalesMonth"
+            class="admin-input"
+            value="2026-08"
+        >
+
+
+        <label class="admin-field-label">
+            Продажі до запуску системи
+        </label>
+
+        <input
+            type="number"
+            id="adminSalesAdjustment"
+            class="admin-input"
+            min="0"
+            step="0.01"
+            placeholder="Наприклад: 250000"
+        >
+
+
+        <button
+            type="button"
+            id="saveSalesAdjustmentButton"
+            class="admin-save-button"
+        >
+            💾 Зберегти
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Профиль -->
 <button
     id="profileButton"
     type="button"
@@ -142,6 +266,7 @@
 >
     👤 Профиль
 </button>
+
 
 <div
     id="profilePanel"
@@ -151,6 +276,7 @@
     <div class="profile-page">
 
         <div class="profile-topbar">
+
             <button
                 type="button"
                 id="closeProfileButton"
@@ -160,6 +286,7 @@
             </button>
 
             <div>
+
                 <div class="profile-topbar-title">
                     Мій профіль
                 </div>
@@ -167,7 +294,9 @@
                 <div class="profile-topbar-subtitle">
                     Особистий кабінет
                 </div>
+
             </div>
+
         </div>
 
         <div

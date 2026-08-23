@@ -921,7 +921,31 @@ function createProductElement(product) {
     card.id = `product-${product.id}`;
 
     const isAvailable =
-        product.isAvailable === true;
+    product.isAvailable &&
+    canAddProductByStock(product);
+
+    const stock =
+    Number(product.stock || 0);
+
+const stockUnit =
+    product.unit1C ||
+    product.unit ||
+    "кг";
+
+let availabilityText = "";
+
+if (!product.isAvailable) {
+    availabilityText =
+        "● Немає в наявності";
+}
+else if (!canAddProductByStock(product)) {
+    availabilityText =
+        `● Недостатній залишок · ${formatStock(stock)} ${stockUnit}`;
+}
+else {
+    availabilityText =
+        `● В наявності · Залишок: ${formatStock(stock)} ${stockUnit}`;
+}
 
     const canAddProduct =
     state.activeMode === "return" ||
@@ -1034,16 +1058,12 @@ card.innerHTML = `
     </span>
 </div>
 
-    <div class="availability ${
+<div class="availability ${
     isAvailable
         ? "available"
         : "unavailable"
 }">
-    ${
-        isAvailable
-            ? `● В наявності · Залишок: ${formatStock(product.stock)} кг`
-            : "● Немає в наявності"
-    }
+    ${availabilityText}
 </div>
     <div class="product-divider"></div>
 
@@ -2727,6 +2747,32 @@ if (adminStockSearch) {
             toggleLargeText
         );
     }
+}
+
+function canAddProductByStock(product) {
+    const stock =
+        Number(product.stock || 0);
+
+    const unit =
+        String(
+            product.unit1C ||
+            product.unit ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+    // Штучный товар
+    if (unit === "шт") {
+        return stock > 0;
+    }
+
+    // Весовой товар
+    if (unit === "кг") {
+        return stock >= 0.100;
+    }
+
+    return true;
 }
 
 function openAdminRepresentativeProfile(profile) {

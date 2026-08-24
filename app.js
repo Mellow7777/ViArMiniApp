@@ -698,21 +698,35 @@ button.addEventListener("click", () => {
 }
 
 function selectShop(shop) {
+    alert(
+        "selectShop запущена\n" +
+        "ID: " + shop.id + "\n" +
+        "Название: " + getShopDisplayName(shop)
+    );
+
     elements.selectedShopId.value =
         String(shop.id);
 
+    alert("ID записан");
+
     elements.selectedShopName.textContent =
-    getShopDisplayName(shop);
+        getShopDisplayName(shop);
+
+    alert("Название записано");
 
     elements.selectedShopAddress.textContent =
         shop.address || "Адрес не указан";
 
+    alert("Адрес записан");
+
     elements.selectedShopCard.hidden = false;
+
+    alert("Карточка показана");
 
     elements.historyButton.hidden = false;
 
-elements.historyContainer.hidden = true;
-elements.historyContainer.innerHTML = "";
+    elements.historyContainer.hidden = true;
+    elements.historyContainer.innerHTML = "";
 
     elements.shopSearch.value = "";
     elements.shopSearch.style.display = "none";
@@ -728,6 +742,8 @@ elements.historyContainer.innerHTML = "";
     );
 
     triggerHaptic("success");
+
+    alert("selectShop завершена");
 }
 
 function clearSelectedShop() {

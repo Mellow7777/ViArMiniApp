@@ -679,11 +679,6 @@ function renderShopSearchResults() {
         `;
 
 button.addEventListener("click", () => {
-    alert(
-        "Нажали на точку: " +
-        getShopDisplayName(shop)
-    );
-
     selectShop(shop);
 });
 
@@ -698,52 +693,83 @@ button.addEventListener("click", () => {
 }
 
 function selectShop(shop) {
-    alert(
-        "selectShop запущена\n" +
-        "ID: " + shop.id + "\n" +
-        "Название: " + getShopDisplayName(shop)
-    );
+    const selectedShopId =
+        document.getElementById("selectedShopId");
 
-    elements.selectedShopId.value =
-        String(shop.id);
+    const selectedShopName =
+        document.getElementById("selectedShopName");
 
-    alert("ID записан");
+    const selectedShopAddress =
+        document.getElementById("selectedShopAddress");
 
-    elements.selectedShopName.textContent =
-        getShopDisplayName(shop);
+    const selectedShopCard =
+        document.getElementById("selectedShopCard");
 
-    alert("Название записано");
+    const historyButton =
+        document.getElementById("historyButton");
 
-    elements.selectedShopAddress.textContent =
-        shop.address || "Адрес не указан";
+    const historyContainer =
+        document.getElementById("historyContainer");
 
-    alert("Адрес записан");
+    const shopSearch =
+        document.getElementById("shopSearch");
 
-    elements.selectedShopCard.hidden = false;
+    const shopSearchResults =
+        document.getElementById("shopSearchResults");
 
-    alert("Карточка показана");
+    // Записываем выбранную точку
+    if (selectedShopId) {
+        selectedShopId.value =
+            String(shop.id);
+    }
 
-    elements.historyButton.hidden = false;
+    if (selectedShopName) {
+        selectedShopName.textContent =
+            getShopDisplayName(shop);
+    }
 
-    elements.historyContainer.hidden = true;
-    elements.historyContainer.innerHTML = "";
+    if (selectedShopAddress) {
+        selectedShopAddress.textContent =
+            shop.address ||
+            "Адрес не указан";
+    }
 
-    elements.shopSearch.value = "";
-    elements.shopSearch.style.display = "none";
+    // Показываем выбранную точку
+    if (selectedShopCard) {
+        selectedShopCard.hidden = false;
+    }
 
-    elements.shopSearchResults.innerHTML = "";
-    elements.shopSearchResults.classList.remove(
-        "show"
-    );
+    // Показываем историю
+    if (historyButton) {
+        historyButton.hidden = false;
+    }
 
+    if (historyContainer) {
+        historyContainer.hidden = true;
+        historyContainer.innerHTML = "";
+    }
+
+    // Очищаем поиск
+    if (shopSearch) {
+        shopSearch.value = "";
+        shopSearch.style.display = "none";
+    }
+
+    if (shopSearchResults) {
+        shopSearchResults.innerHTML = "";
+
+        shopSearchResults.classList.remove(
+            "show"
+        );
+    }
+
+    // Запоминаем точку
     localStorage.setItem(
         "viar-selected-shop-id",
         String(shop.id)
     );
 
     triggerHaptic("success");
-
-    alert("selectShop завершена");
 }
 
 function clearSelectedShop() {

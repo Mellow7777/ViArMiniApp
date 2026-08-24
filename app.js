@@ -8,9 +8,7 @@ let shops = [];
 const API_BASE_URL =
     "https://dev-api.via-r-order.com";
     
-const ADMIN_TELEGRAM_IDS = [
-    564525966
-];
+const ADMIN_TELEGRAM_IDS = [];
 
 const productGroups = [
     "Все",

@@ -3256,3 +3256,27 @@ body.profile-open {
 .profile-empty-sales {
     color: #8f949b !important;
 }
+
+.shop-search-wrapper {
+    position: relative;
+    z-index: 1000;
+}
+
+.shop-search-results {
+    position: absolute;
+
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+
+    z-index: 9999;
+
+    max-height: 260px;
+    overflow-y: auto;
+
+    background: #ffffff;
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.18);
+}

@@ -4904,16 +4904,22 @@ function closeProductModal() {
 
 async function sendOrder() {
     const selectedShopIdElement =
-        document.getElementById("selectedShopId");
+    document.getElementById("selectedShopId");
 
-    const shopSearch =
-        document.getElementById("shopSearch");
+const shopSearch =
+    document.getElementById("shopSearch");
 
-    const selectedShopId =
-        Number(
-            selectedShopIdElement?.value || 0
-        );
+const savedShopId =
+    localStorage.getItem(
+        "viar-selected-shop-id"
+    );
 
+const selectedShopId =
+    Number(
+        selectedShopIdElement?.value ||
+        savedShopId ||
+        0
+    );
     const selectedShop =
         shops.find(
             (shop) =>

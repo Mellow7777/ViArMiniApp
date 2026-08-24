@@ -4903,6 +4903,8 @@ function closeProductModal() {
 }
 
 async function sendOrder() {
+    async function sendOrder() {
+    alert("sendOrder запущен");
    const selectedShopId =
     Number(elements.selectedShopId.value);
 

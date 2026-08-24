@@ -773,21 +773,75 @@ function selectShop(shop) {
 }
 
 function clearSelectedShop() {
-    elements.selectedShopId.value = "";
+    const selectedShopId =
+        document.getElementById("selectedShopId");
 
-    elements.selectedShopCard.hidden = true;
-    elements.historyButton.hidden = true;
+    const selectedShopName =
+        document.getElementById("selectedShopName");
 
-    elements.historyContainer.hidden = true;
-    elements.historyContainer.innerHTML = "";
-    elements.shopSearch.style.display = "";
+    const selectedShopAddress =
+        document.getElementById("selectedShopAddress");
 
-    elements.shopSearch.value = "";
-    elements.shopSearch.focus();
+    const selectedShopCard =
+        document.getElementById("selectedShopCard");
 
+    const historyButton =
+        document.getElementById("historyButton");
+
+    const historyContainer =
+        document.getElementById("historyContainer");
+
+    const shopSearch =
+        document.getElementById("shopSearch");
+
+    const shopSearchResults =
+        document.getElementById("shopSearchResults");
+
+    // Убираем выбранную точку
+    if (selectedShopId) {
+        selectedShopId.value = "";
+    }
+
+    if (selectedShopName) {
+        selectedShopName.textContent = "";
+    }
+
+    if (selectedShopAddress) {
+        selectedShopAddress.textContent = "";
+    }
+
+    if (selectedShopCard) {
+        selectedShopCard.hidden = true;
+    }
+
+    // Историю выбранной точки тоже скрываем
+    if (historyButton) {
+        historyButton.hidden = true;
+    }
+
+    if (historyContainer) {
+        historyContainer.hidden = true;
+        historyContainer.innerHTML = "";
+    }
+
+    // Возвращаем поиск
+    if (shopSearch) {
+        shopSearch.value = "";
+        shopSearch.style.display = "";
+        shopSearch.focus();
+    }
+
+    if (shopSearchResults) {
+        shopSearchResults.innerHTML = "";
+        shopSearchResults.classList.remove("show");
+    }
+
+    // Удаляем сохранённую точку
     localStorage.removeItem(
         "viar-selected-shop-id"
     );
+
+    triggerHaptic("success");
 }
 
 function restoreSelectedShop() {

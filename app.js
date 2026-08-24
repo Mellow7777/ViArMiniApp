@@ -4903,14 +4903,21 @@ function closeProductModal() {
 }
 
 async function sendOrder() {
-    alert("sendOrder запущен");
-   const selectedShopId =
-    Number(elements.selectedShopId.value);
+    const selectedShopIdElement =
+        document.getElementById("selectedShopId");
+
+    const shopSearch =
+        document.getElementById("shopSearch");
+
+    const selectedShopId =
+        Number(
+            selectedShopIdElement?.value || 0
+        );
 
     const selectedShop =
         shops.find(
             (shop) =>
-                shop.id ===
+                Number(shop.id) ===
                 selectedShopId
         );
 
@@ -4920,8 +4927,13 @@ async function sendOrder() {
             "error"
         );
 
-        elements.shopSelect.focus();
+        if (shopSearch) {
+            shopSearch.style.display = "";
+            shopSearch.focus();
+        }
+
         triggerHaptic("error");
+
         return;
     }
 
@@ -4934,55 +4946,81 @@ async function sendOrder() {
     const returnIsEmpty =
         state.returnCart.length === 0;
 
-    if (orderIsEmpty && returnIsEmpty) {
+    if (
+        orderIsEmpty &&
+        returnIsEmpty
+    ) {
         showToast(
             "Добавьте заказ или возврат",
             "error"
         );
 
         triggerHaptic("error");
+
         return;
     }
 
     const telegramUser =
-        telegram?.initDataUnsafe?.user;
+        window.Telegram
+            ?.WebApp
+            ?.initDataUnsafe
+            ?.user;
 
-  const mapCartItem = (item) => {
-    const product = products.find(
-        product =>
-            Number(product.id) ===
-            Number(item.productId)
-    );
+    const mapCartItem = (item) => {
+        const product =
+            products.find(
+                product =>
+                    Number(product.id) ===
+                    Number(item.productId)
+            );
 
-    const orderName =
-        product?.orderName?.trim() ||
-        item.orderName?.trim() ||
-        item.name;
+        const orderName =
+            product?.orderName?.trim() ||
+            item.orderName?.trim() ||
+            item.name;
 
-    return {
-        productId: item.productId,
-        article:
-            item.article ||
-            product?.article ||
-            "",
-        name: orderName,
-        unit: item.unit,
-        quantity: item.quantity
+        return {
+            productId:
+                item.productId,
+
+            article:
+                item.article ||
+                product?.article ||
+                "",
+
+            name:
+                orderName,
+
+            unit:
+                item.unit,
+
+            quantity:
+                item.quantity
+        };
     };
-};
-
 
     const order = {
-        orderId: createOrderId(),
+        orderId:
+            createOrderId(),
 
-       shop: {
-    id: selectedShop.id,
-    name: getShopDisplayName(selectedShop),
-district: selectedShop.district,
-    address: selectedShop.address
-},
+        shop: {
+            id:
+                selectedShop.id,
 
-invoiceForm: state.invoiceForm,
+            name:
+                getShopDisplayName(
+                    selectedShop
+                ),
+
+            district:
+                selectedShop.district,
+
+            address:
+                selectedShop.address
+        },
+
+        invoiceForm:
+            state.invoiceForm,
 
         salesRepresentative: {
             telegramId:
@@ -5010,121 +5048,129 @@ invoiceForm: state.invoiceForm,
             ),
 
         comment:
-    document
-        .getElementById("drawerOrderComment")
-        ?.value
-        ?.trim() || "",
+            document
+                .getElementById(
+                    "drawerOrderComment"
+                )
+                ?.value
+                ?.trim() || "",
 
         createdAt:
             new Date().toISOString()
     };
 
     const json =
-    JSON.stringify(order);
-
-console.log(
-    "Отправляем:",
-    order
-);
-
-const openedOutsideTelegram =
-    !telegram ||
-    telegram.platform === "unknown";
-
-if (openedOutsideTelegram) {
-    showOrderForBrowserTesting(json);
-    return;
-}
-
-try {
-    const response = await fetch(
-        `${API_BASE_URL}/api/orders`,
-        {
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/json",
-
-                "X-Telegram-Init-Data":
-                    window.Telegram
-                        ?.WebApp
-                        ?.initData || ""
-            },
-
-            body: json
-        }
-    );
-
-    let result = null;
-
-    try {
-        result =
-            await response.json();
-    }
-    catch {
-        result = null;
-    }
-
-    if (!response.ok) {
-        throw new Error(
-            result?.message ||
-            `Ошибка API: ${response.status}`
-        );
-    }
+        JSON.stringify(order);
 
     console.log(
-        "Заказ успешно отправлен:",
-        result
+        "Отправляем:",
+        order
     );
 
-    // Очищаем заказ
-    state.orderCart = [];
-    state.returnCart = [];
+    const tg =
+        window.Telegram?.WebApp;
 
-    saveCart();
+    const openedOutsideTelegram =
+        !tg ||
+        tg.platform === "unknown";
 
-    // Очищаем комментарий
-    const drawerComment =
-        document.getElementById(
-            "drawerOrderComment"
+    if (openedOutsideTelegram) {
+        showOrderForBrowserTesting(
+            json
         );
 
-    if (drawerComment) {
-        drawerComment.value = "";
+        return;
     }
 
-    // Обновляем интерфейс
-    renderCart();
-    renderProducts();
+    try {
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/orders`,
+                {
+                    method: "POST",
 
-    showToast(
-        "Заказ отправлен",
-        "success"
-    );
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-    triggerHaptic("success");
+                        "X-Telegram-Init-Data":
+                            tg.initData || ""
+                    },
+
+                    body:
+                        json
+                }
+            );
+
+        let result = null;
+
+        try {
+            result =
+                await response.json();
+        }
+        catch {
+            result = null;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result?.message ||
+                `Ошибка API: ${response.status}`
+            );
+        }
+
+        console.log(
+            "Заказ успешно отправлен:",
+            result
+        );
+
+        state.orderCart = [];
+        state.returnCart = [];
+
+        saveCart();
+
+        const drawerComment =
+            document.getElementById(
+                "drawerOrderComment"
+            );
+
+        if (drawerComment) {
+            drawerComment.value = "";
+        }
+
+        renderCart();
+        renderProducts();
+
+        showToast(
+            "Заказ отправлен",
+            "success"
+        );
+
+        triggerHaptic(
+            "success"
+        );
+    }
+    catch (error) {
+        console.error(
+            "Ошибка отправки заказа:",
+            error
+        );
+
+        alert(
+            "Ошибка отправки заказа:\n\n" +
+            (error?.message || error)
+        );
+
+        showToast(
+            "Не удалось отправить",
+            "error"
+        );
+
+        triggerHaptic(
+            "error"
+        );
+    }
 }
-catch (error) {
-    console.error(
-        "Ошибка отправки заказа:",
-        error
-    );
-
-    alert(
-        "Ошибка отправки заказа:\n\n" +
-        (error?.message || error)
-    );
-
-    showToast(
-        "Не удалось отправить",
-        "error"
-    );
-
-    triggerHaptic("error");
-}
-}
-
 
 function showOrderForBrowserTesting(json) {
     const formattedJson = JSON.stringify(

@@ -2401,6 +2401,142 @@ function renderDrawerCart() {
     }
 }
 
+async function loadAdminFinance() {
+    const container =
+        document.getElementById(
+            "adminFinanceContainer"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.hidden = false;
+
+    container.innerHTML =
+        "Завантаження...";
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/finance`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        const finance =
+            await response.json();
+
+        container.innerHTML = `
+            <div class="admin-finance-card">
+
+                <h4>
+                    ☀️ Сьогодні
+                </h4>
+
+                <div>
+                    Продажі:
+                    <strong>
+                        ${formatMoney(finance.salesToday)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Собівартість:
+                    <strong>
+                        ${formatMoney(finance.costToday)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Прибуток:
+                    <strong>
+                        ${formatMoney(finance.profitToday)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Маржа:
+                    <strong>
+                        ${Number(
+                            finance.marginToday || 0
+                        ).toFixed(1)}%
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="admin-finance-card">
+
+                <h4>
+                    📅 За місяць
+                </h4>
+
+                <div>
+                    Продажі:
+                    <strong>
+                        ${formatMoney(finance.salesMonth)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Собівартість:
+                    <strong>
+                        ${formatMoney(finance.costMonth)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Прибуток:
+                    <strong>
+                        ${formatMoney(finance.profitMonth)}
+                        грн
+                    </strong>
+                </div>
+
+                <div>
+                    Маржа:
+                    <strong>
+                        ${Number(
+                            finance.marginMonth || 0
+                        ).toFixed(1)}%
+                    </strong>
+                </div>
+
+            </div>
+        `;
+    }
+    catch (error) {
+        console.error(
+            "Ошибка финансов:",
+            error
+        );
+
+        container.innerHTML =
+            "Не вдалося завантажити фінанси.";
+    }
+}
+
 
 function removeFromDrawerCart(cartKey) {
     if (state.drawerMode === "return") {
@@ -2707,6 +2843,18 @@ if (stockHistoryButton) {
 
             loadStockHistory();
         }
+    );
+}
+
+const loadAdminFinanceButton =
+    document.getElementById(
+        "loadAdminFinanceButton"
+    );
+
+if (loadAdminFinanceButton) {
+    loadAdminFinanceButton.addEventListener(
+        "click",
+        loadAdminFinance
     );
 }
 

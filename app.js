@@ -678,15 +678,9 @@ function renderShopSearchResults() {
             </span>
         `;
 
-button.addEventListener(
-    "pointerdown",
-    (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        selectShop(shop);
-    }
-);
+button.addEventListener("click", () => {
+    selectShop(shop);
+});
 
         elements.shopSearchResults.appendChild(
             button

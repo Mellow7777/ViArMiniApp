@@ -12,21 +12,6 @@ const ADMIN_TELEGRAM_IDS = [
     564525966
 ];
 
-const APP_VERSION = "TEST-185";
-
-console.log(
-    "=== VIAR MINI APP VERSION:",
-    APP_VERSION,
-    "==="
-);
-
-setTimeout(() => {
-    alert(
-        "Версия Mini App: " +
-        APP_VERSION
-    );
-}, 1000);
-
 const productGroups = [
     "Все",
     "Тарасівські ковбаси",
@@ -694,6 +679,11 @@ function renderShopSearchResults() {
         `;
 
 button.addEventListener("click", () => {
+    alert(
+        "Нажали на точку: " +
+        getShopDisplayName(shop)
+    );
+
     selectShop(shop);
 });
 

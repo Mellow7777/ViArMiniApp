@@ -4267,16 +4267,14 @@ async function openHistory() {
 
     elements.historyButton.disabled = true;
 
-   try {
-    const response = await fetch(
-        `${API_BASE_URL}/api/shops/${shopId}/orders?days=60`,
-        {
-            headers: {
-                "ngrok-skip-browser-warning": "true"
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/shops/${shopId}/history?days=60`,
+            {
+                method: "GET",
+                cache: "no-store"
             }
-        }
-    );
-
+        );
 
         if (!response.ok) {
             throw new Error(
@@ -4284,14 +4282,22 @@ async function openHistory() {
             );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
+
+        console.log(
+            "История точки:",
+            data
+        );
 
         const orders =
-            Array.isArray(data.orders)
-                ? data.orders
+            Array.isArray(data.items)
+                ? data.items
                 : [];
 
-        renderOrderHistory(orders);
+        renderOrderHistory(
+            orders
+        );
     }
     catch (error) {
         console.error(
@@ -4301,6 +4307,7 @@ async function openHistory() {
 
         elements.historyContainer.innerHTML = `
             <div class="history-empty">
+
                 <div class="history-empty-icon">
                     ❌
                 </div>
@@ -4312,6 +4319,7 @@ async function openHistory() {
                 <span>
                     Перевірте, чи запущений бот та API.
                 </span>
+
             </div>
         `;
     }

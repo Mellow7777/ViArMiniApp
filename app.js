@@ -2581,10 +2581,17 @@ function bindEvents() {
     );
 }
 
-    elements.historyButton.addEventListener(
-    "click",
-    openHistory
-);
+    const historyButton =
+    document.getElementById(
+        "historyButton"
+    );
+
+if (historyButton) {
+    historyButton.addEventListener(
+        "click",
+        openHistory
+    );
+}
 
     if (elements.floatingCartButton) {
         elements.floatingCartButton.onclick =
@@ -4245,8 +4252,32 @@ async function loadStockHistory() {
 }
 
 async function openHistory() {
+    const selectedShopId =
+        document.getElementById(
+            "selectedShopId"
+        );
+
+    const historyButton =
+        document.getElementById(
+            "historyButton"
+        );
+
+    const historyContainer =
+        document.getElementById(
+            "historyContainer"
+        );
+
+    const savedShopId =
+        localStorage.getItem(
+            "viar-selected-shop-id"
+        );
+
     const shopId =
-        Number(elements.selectedShopId.value);
+        Number(
+            selectedShopId?.value ||
+            savedShopId ||
+            0
+        );
 
     if (!shopId) {
         showToast(
@@ -4257,15 +4288,25 @@ async function openHistory() {
         return;
     }
 
-    elements.historyContainer.hidden = false;
+    if (!historyContainer) {
+        console.error(
+            "historyContainer не найден"
+        );
 
-    elements.historyContainer.innerHTML = `
+        return;
+    }
+
+    historyContainer.hidden = false;
+
+    historyContainer.innerHTML = `
         <div class="history-loading">
             ⏳ Завантаження історії...
         </div>
     `;
 
-    elements.historyButton.disabled = true;
+    if (historyButton) {
+        historyButton.disabled = true;
+    }
 
     try {
         const response = await fetch(
@@ -4305,7 +4346,7 @@ async function openHistory() {
             error
         );
 
-        elements.historyContainer.innerHTML = `
+        historyContainer.innerHTML = `
             <div class="history-empty">
 
                 <div class="history-empty-icon">
@@ -4317,14 +4358,19 @@ async function openHistory() {
                 </strong>
 
                 <span>
-                    Перевірте, чи запущений бот та API.
+                    ${escapeHtml(
+                        error?.message ||
+                        "Помилка API"
+                    )}
                 </span>
 
             </div>
         `;
     }
     finally {
-        elements.historyButton.disabled = false;
+        if (historyButton) {
+            historyButton.disabled = false;
+        }
     }
 }
 

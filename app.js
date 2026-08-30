@@ -984,8 +984,11 @@ function selectShop(shop) {
         String(shop.id)
     );
 
-    recalculateCartPrices();
+ // Пересчитываем корзину
+recalculateCartPrices();
 
+// Обновляем цены в каталоге
+renderProducts();
 
     triggerHaptic("success");
 }

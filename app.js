@@ -604,6 +604,7 @@ function getProductPrice(product) {
     const selectedShop =
         getSelectedShop();
 
+
     // Если точка не выбрана —
     // показываем обычную розничную цену
     if (!selectedShop) {
@@ -647,7 +648,10 @@ function getProductPrice(product) {
 }
 
 function recalculateCartPrices() {
-    cart.forEach(item => {
+    const activeCart =
+        getActiveCart();
+
+    activeCart.forEach(item => {
         const product =
             products.find(
                 product =>
@@ -1214,7 +1218,7 @@ const matchesCategory =
     });
 }
 
- function renderProducts(){
+function renderProducts() {
     const filteredProducts = getFilteredProducts();
 
     elements.productsList.innerHTML = "";

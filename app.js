@@ -4,6 +4,7 @@ const telegram = window.Telegram?.WebApp;
 
 let products = [];
 let shops = [];
+let specialPrices = [];
 
 const API_BASE_URL =
     "https://api.via-r-order.com";
@@ -256,10 +257,10 @@ async function initializeApp() {
     
 
     await Promise.all([
-        loadProducts(),
-        loadShops()
-    ]);
-
+    loadProducts(),
+    loadShops(),
+    loadSpecialPrices()
+]);
     restoreSelectedShop();
 
     renderGroups();
@@ -450,6 +451,199 @@ async function loadProducts() {
             </div>
         `;
     }
+}
+
+async function loadSpecialPrices() {
+    try {
+        const response = await fetch(
+            `./special_prices.json?v=${Date.now()}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка загрузки спеццен: ${response.status}`
+            );
+        }
+
+        const loadedSpecialPrices =
+            await response.json();
+
+        if (!Array.isArray(loadedSpecialPrices)) {
+            throw new Error(
+                "special_prices.json должен содержать массив"
+            );
+        }
+
+        specialPrices =
+            loadedSpecialPrices.map(item => ({
+                shopArticle:
+                    String(
+                        item.shopArticle ||
+                        item.ShopArticle ||
+                        ""
+                    ).trim(),
+
+                productArticle:
+                    String(
+                        item.productArticle ||
+                        item.ProductArticle ||
+                        ""
+                    ).trim(),
+
+                price:
+                    Number(
+                        item.price ??
+                        item.Price ??
+                        0
+                    )
+            }));
+
+        console.log(
+            `Загружено спеццен: ${specialPrices.length}`
+        );
+
+        console.log(
+            "Первая спеццена:",
+            specialPrices[0]
+        );
+    }
+    catch (error) {
+        console.error(
+            "Ошибка загрузки спеццен:",
+            error
+        );
+
+        specialPrices = [];
+    }
+}
+
+function getSpecialPrice(
+    shopId,
+    productArticle
+) {
+    if (!shopId || !productArticle) {
+        return null;
+    }
+
+    const shopKey =
+        String(shopId).trim();
+
+    const productKey =
+        String(productArticle).trim();
+
+    const specialPrice =
+        specialPrices.find(item =>
+            String(item.shopArticle).trim() ===
+                shopKey &&
+            String(item.productArticle).trim() ===
+                productKey
+        );
+
+    if (!specialPrice) {
+        return null;
+    }
+
+    const price =
+        Number(specialPrice.price);
+
+    if (!Number.isFinite(price) ||
+        price <= 0) {
+        return null;
+    }
+
+    return price;
+}
+
+function getSelectedShop() {
+    const selectedShopIdElement =
+        document.getElementById(
+            "selectedShopId"
+        );
+
+    const savedShopId =
+        localStorage.getItem(
+            "viar-selected-shop-id"
+        );
+
+    const selectedShopId =
+        Number(
+            selectedShopIdElement?.value ||
+            savedShopId ||
+            0
+        );
+
+    if (!selectedShopId) {
+        return null;
+    }
+
+    return (
+        shops.find(
+            shop =>
+                Number(shop.id) ===
+                selectedShopId
+        ) || null
+    );
+}
+
+function getProductPrice(product) {
+    if (!product) {
+        return 0;
+    }
+
+    const retailPrice =
+        Number(product.price || 0);
+
+    const wholesalePrice =
+        Number(
+            product.wholesalePrice || 0
+        );
+
+    const selectedShop =
+        getSelectedShop();
+
+    // Если точка не выбрана —
+    // показываем обычную розничную цену
+    if (!selectedShop) {
+        return retailPrice;
+    }
+
+    // 1. Сначала проверяем спеццену
+    const specialPrice =
+        getSpecialPrice(
+            selectedShop.id,
+            product.article
+        );
+
+    if (specialPrice !== null) {
+        return specialPrice;
+    }
+
+    // 2. Если спеццены нет —
+    // проверяем тип цены точки
+    const priceType =
+        String(
+            selectedShop.priceType || "Розница"
+        )
+            .trim()
+            .toLowerCase();
+
+    if (priceType === "опт") {
+        // Если вдруг оптовая цена
+        // у товара не заполнена,
+        // не отдаём 0, а используем розницу
+        if (
+            Number.isFinite(wholesalePrice) &&
+            wholesalePrice > 0
+        ) {
+            return wholesalePrice;
+        }
+    }
+
+    // 3. Всё остальное — розница
+    return retailPrice;
 }
 
 function initializeTelegram() {
@@ -1149,7 +1343,7 @@ card.innerHTML = `
 </div>
 
 <div class="product-price-value">
-    ${formatMoney(product.price)}
+    ${formatMoney(getProductPrice(product))}
     <span>
         ${
             selectedUnit === "шт"
@@ -1309,7 +1503,7 @@ function updatePriceDisplay() {
             "Ціна за шт";
 
         priceValueElement.innerHTML = `
-            ${formatMoney(product.price)}
+            ${formatMoney(getProductPrice(product))}
             <span>грн/шт</span>
         `;
 
@@ -1317,8 +1511,8 @@ function updatePriceDisplay() {
     }
 
     if (selectedUnit === "шт") {
-        const piecePrice =
-            Number(product.price || 0) *
+const piecePrice =
+    getProductPrice(product) *
             Number(
                 product.approximateWeightPerPiece || 0
             );
@@ -1335,7 +1529,7 @@ function updatePriceDisplay() {
             "Ціна за кг";
 
         priceValueElement.innerHTML = `
-            ${formatMoney(product.price)}
+            ${formatMoney(getProductPrice(product))}
             <span>грн/кг</span>
         `;
     }
@@ -1378,7 +1572,7 @@ function updatePriceDisplay() {
         parseQuantity(quantityInput.value);
 
     const price =
-        Number(product.price || 0);
+    getProductPrice(product);
 
     const saleMode =
         (product.saleMode || "кг")
@@ -1561,7 +1755,7 @@ function addToCart(
             );
 
         existingItem.price =
-            Number(product.price || 0);
+    getProductPrice(product);
 
         existingItem.approximateWeightPerPiece =
             Number(
@@ -1575,7 +1769,7 @@ function addToCart(
             name: product.name,
             unit: selectedUnit,
             quantity: roundQuantity(quantity),
-            price: Number(product.price || 0),
+            price: getProductPrice(product),
             approximateWeightPerPiece:
                 Number(
                     product.approximateWeightPerPiece || 0

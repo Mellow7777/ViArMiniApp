@@ -646,6 +646,27 @@ function getProductPrice(product) {
     return retailPrice;
 }
 
+function recalculateCartPrices() {
+    cart.forEach(item => {
+        const product =
+            products.find(
+                product =>
+                    String(product.article) ===
+                    String(item.article)
+            );
+
+        if (!product) {
+            return;
+        }
+
+        item.price =
+            getProductPrice(product);
+    });
+
+    saveCart();
+    renderCart();
+}
+
 function initializeTelegram() {
     if (!telegram) {
         console.log("Приложение открыто вне Telegram");
@@ -962,6 +983,9 @@ function selectShop(shop) {
         "viar-selected-shop-id",
         String(shop.id)
     );
+
+    recalculateCartPrices();
+
 
     triggerHaptic("success");
 }

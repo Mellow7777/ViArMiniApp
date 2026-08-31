@@ -4148,49 +4148,6 @@ async function loadMyProfile() {
     }
 }
 
-async function loadProfileSalesPeriod(
-    from,
-    to
-) {
-    try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/profile/sales` +
-            `?from=${encodeURIComponent(from)}` +
-            `&to=${encodeURIComponent(to)}`,
-            {
-                method: "GET",
-
-                headers: {
-                    "X-Telegram-Init-Data":
-                        window.Telegram
-                            ?.WebApp
-                            ?.initData || ""
-                },
-
-                cache: "no-store"
-            }
-        );
-
-        if (!response.ok) {
-            console.error(
-                "Ошибка загрузки продаж за период:",
-                response.status
-            );
-
-            return null;
-        }
-
-        return await response.json();
-    }
-    catch (error) {
-        console.error(
-            "Ошибка loadProfileSalesPeriod:",
-            error
-        );
-
-        return null;
-    }
-}
 
 async function openProfile() {
     const panel =
@@ -4416,6 +4373,75 @@ content.innerHTML = `
         📊 Продажі
     </div>
 
+    <div class="profile-period-card">
+
+    <div class="profile-period-tabs">
+
+        <button
+            type="button"
+            class="profile-period-tab active"
+            id="profileMonthModeButton"
+        >
+            Місяць
+        </button>
+
+        <button
+            type="button"
+            class="profile-period-tab"
+            id="profileCustomModeButton"
+        >
+            Період
+        </button>
+
+    </div>
+
+    <div
+        class="profile-period-month"
+        id="profileMonthControls"
+    >
+        <input
+            type="month"
+            id="profileMonthInput"
+            value="${currentMonth}"
+        >
+    </div>
+
+    <div
+        class="profile-period-custom"
+        id="profileCustomControls"
+        hidden
+    >
+
+        <label>
+            <span>Від</span>
+
+            <input
+                type="date"
+                id="profileDateFrom"
+            >
+        </label>
+
+        <label>
+            <span>До</span>
+
+            <input
+                type="date"
+                id="profileDateTo"
+            >
+        </label>
+
+        <button
+            type="button"
+            id="profileApplyPeriodButton"
+            class="profile-apply-period-button"
+        >
+            Показати
+        </button>
+
+    </div>
+
+</div>
+
     <div class="profile-stats-grid">
 
         <div class="profile-stat-box">
@@ -4447,20 +4473,28 @@ content.innerHTML = `
                 📅
             </div>
 
-            <div class="profile-stat-label">
-                За місяць
-            </div>
+            <div
+    class="profile-stat-label"
+    id="profilePeriodLabel"
+>
+    Поточний місяць
+</div>
 
-            <div class="profile-stat-number">
-                ${formatMoney(salesMonth)}
-                <span>грн</span>
-            </div>
+<div
+    class="profile-stat-number"
+    id="profilePeriodSales"
+>
+    ${formatMoney(salesMonth)}
+    <span>грн</span>
+</div>
 
-            <div class="profile-stat-secondary">
-                ${ordersMonth}
-                замовлень
-            </div>
-
+<div
+    class="profile-stat-secondary"
+    id="profilePeriodOrders"
+>
+    ${ordersMonth}
+    замовлень
+</div>
         </div>
 
     </div>
@@ -4568,6 +4602,422 @@ content.innerHTML = `
 
     </div>
 `;
+
+bindProfilePeriodControls();
+}
+
+async function loadProfileSalesPeriod(
+    from,
+    to
+) {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/profile/sales` +
+            `?from=${encodeURIComponent(from)}` +
+            `&to=${encodeURIComponent(to)}`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            console.error(
+                "Ошибка загрузки продаж:",
+                response.status
+            );
+
+            return null;
+        }
+
+        return await response.json();
+    }
+    catch (error) {
+        console.error(
+            "Ошибка loadProfileSalesPeriod:",
+            error
+        );
+
+        return null;
+    }
+}
+
+function bindProfilePeriodControls() {
+    const monthModeButton =
+        document.getElementById(
+            "profileMonthModeButton"
+        );
+
+    const customModeButton =
+        document.getElementById(
+            "profileCustomModeButton"
+        );
+
+    const monthControls =
+        document.getElementById(
+            "profileMonthControls"
+        );
+
+    const customControls =
+        document.getElementById(
+            "profileCustomControls"
+        );
+
+    const monthInput =
+        document.getElementById(
+            "profileMonthInput"
+        );
+
+    const dateFromInput =
+        document.getElementById(
+            "profileDateFrom"
+        );
+
+    const dateToInput =
+        document.getElementById(
+            "profileDateTo"
+        );
+
+    const applyButton =
+        document.getElementById(
+            "profileApplyPeriodButton"
+        );
+
+
+    monthModeButton?.addEventListener(
+        "click",
+        () => {
+            monthModeButton
+                .classList.add("active");
+
+            customModeButton
+                ?.classList.remove("active");
+
+            if (monthControls) {
+                monthControls.hidden = false;
+            }
+
+            if (customControls) {
+                customControls.hidden = true;
+            }
+        }
+    );
+
+
+    customModeButton?.addEventListener(
+        "click",
+        () => {
+            customModeButton
+                .classList.add("active");
+
+            monthModeButton
+                ?.classList.remove("active");
+
+            if (monthControls) {
+                monthControls.hidden = true;
+            }
+
+            if (customControls) {
+                customControls.hidden = false;
+            }
+        }
+    );
+
+
+    monthInput?.addEventListener(
+        "change",
+        async () => {
+            const value =
+                monthInput.value;
+
+            if (!value) {
+                return;
+            }
+
+            const parts =
+                value.split("-");
+
+            const year =
+                Number(parts[0]);
+
+            const month =
+                Number(parts[1]);
+
+            if (!year || !month) {
+                return;
+            }
+
+            const from =
+                `${year}-` +
+                `${String(month)
+                    .padStart(2, "0")}-01`;
+
+            const lastDay =
+                new Date(
+                    year,
+                    month,
+                    0
+                ).getDate();
+
+            const to =
+                `${year}-` +
+                `${String(month)
+                    .padStart(2, "0")}-` +
+                `${String(lastDay)
+                    .padStart(2, "0")}`;
+
+            await updateProfileSalesPeriod(
+                from,
+                to,
+                "За місяць"
+            );
+        }
+    );
+
+
+    applyButton?.addEventListener(
+        "click",
+        async () => {
+            const from =
+                dateFromInput?.value || "";
+
+            const to =
+                dateToInput?.value || "";
+
+            if (!from || !to) {
+                showToast(
+                    "Оберіть дати"
+                );
+
+                return;
+            }
+
+            if (from > to) {
+                showToast(
+                    "Невірний період"
+                );
+
+                return;
+            }
+
+            await updateProfileSalesPeriod(
+                from,
+                to,
+                "За період"
+            );
+        }
+    );
+}
+
+async function updateProfileSalesPeriod(
+    from,
+    to,
+    label
+) {
+    const salesElement =
+        document.getElementById(
+            "profilePeriodSales"
+        );
+
+    const ordersElement =
+        document.getElementById(
+            "profilePeriodOrders"
+        );
+
+    const labelElement =
+        document.getElementById(
+            "profilePeriodLabel"
+        );
+
+    const salesList =
+        document.getElementById(
+            "profileSalesList"
+        );
+
+
+    if (salesElement) {
+        salesElement.innerHTML =
+            `... <span>грн</span>`;
+    }
+
+    if (ordersElement) {
+        ordersElement.textContent =
+            "Завантаження...";
+    }
+
+
+    const data =
+        await loadProfileSalesPeriod(
+            from,
+            to
+        );
+
+
+    if (!data) {
+        if (salesElement) {
+            salesElement.innerHTML =
+                `0 <span>грн</span>`;
+        }
+
+        if (ordersElement) {
+            ordersElement.textContent =
+                "0 замовлень";
+        }
+
+        return;
+    }
+
+
+    const totalSales =
+        Number(
+            data.totalSales || 0
+        );
+
+    const orders =
+        Number(
+            data.orders || 0
+        );
+
+
+    if (salesElement) {
+        salesElement.innerHTML =
+            `${formatMoney(totalSales)} ` +
+            `<span>грн</span>`;
+    }
+
+    if (ordersElement) {
+        ordersElement.textContent =
+            `${orders} замовлень`;
+    }
+
+    if (labelElement) {
+        labelElement.textContent =
+            label;
+    }
+
+
+    const sales =
+        Array.isArray(data.sales)
+            ? data.sales
+            : [];
+
+
+    if (!salesList) {
+        return;
+    }
+
+
+    if (sales.length === 0) {
+        salesList.innerHTML = `
+            <div class="profile-empty-sales">
+                Продажів за цей період немає
+            </div>
+        `;
+
+        return;
+    }
+
+
+    salesList.innerHTML =
+        sales
+            .map(sale => {
+
+                let dateText = "";
+
+                if (sale.createdAt) {
+                    const date =
+                        new Date(
+                            sale.createdAt
+                        );
+
+                    dateText =
+                        date.toLocaleString(
+                            "uk-UA",
+                            {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
+                }
+
+
+                return `
+                    <div
+                        class="profile-sale-item"
+                        style="color: #17191c !important;"
+                    >
+
+                        <div
+                            class="profile-sale-main"
+                            style="color: #17191c !important;"
+                        >
+
+                            <strong
+                                style="
+                                    color: #17191c !important;
+                                    display: block;
+                                "
+                            >
+                                ${escapeHtml(
+                                    sale.shopName ||
+                                    "Торгова точка"
+                                )}
+                            </strong>
+
+                            <small
+                                style="
+                                    color: #8f949b !important;
+                                    display: block;
+                                    margin-top: 4px;
+                                "
+                            >
+                                ${escapeHtml(
+                                    dateText
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <div
+                            class="profile-sale-amount"
+                            style="
+                                color: #17191c !important;
+                                font-weight: 800;
+                            "
+                        >
+
+                            ${formatMoney(
+                                Number(
+                                    sale.totalAmount || 0
+                                )
+                            )}
+
+                            <span
+                                style="
+                                    color: #8f949b !important;
+                                "
+                            >
+                                грн
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            })
+            .join("");
 }
 
 function closeProfile() {

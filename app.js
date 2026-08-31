@@ -4605,31 +4605,45 @@ content.innerHTML = `
 
 bindProfilePeriodControls();
 
-document
-    .getElementById(
+const tasksButton =
+    document.getElementById(
         "profileTasksButton"
-    )
-    ?.addEventListener(
-        "click",
-        openProfileTasks
     );
+
+console.log(
+    "profileTasksButton:",
+    tasksButton
+);
+
+tasksButton?.addEventListener(
+    "click",
+    () => {
+        console.log("Кнопка задач нажата");
+        openProfileTasks();
+    }
+);
 }
 
 async function loadMyTasks() {
+      console.log("loadMyTasks вызван");
+
     const response =
         await fetch(
             `${API_BASE_URL}/api/profile/tasks`,
             {
                 method: "GET",
-
                 headers: {
                     "X-Telegram-Init-Data":
                         tg?.initData || ""
                 },
-
                 cache: "no-store"
             }
         );
+
+    console.log(
+        "Ответ tasks:",
+        response.status
+    );
 
     if (!response.ok) {
         throw new Error(
@@ -4641,6 +4655,8 @@ async function loadMyTasks() {
 }
 
 async function openProfileTasks() {
+     console.log("openProfileTasks вызван");
+
     const profileContent =
         document.getElementById(
             "profileContent"

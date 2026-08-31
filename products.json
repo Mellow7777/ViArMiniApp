@@ -3192,6 +3192,27 @@
     "canOrderByPiece": true
   },
   {
+    "id": 1531,
+    "article": "1531",
+    "category": "Снеки",
+    "name": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "nameUa": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "nameRu": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "orderName": "Львов цибуля",
+    "price": 425.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 380.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 25,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
     "id": 1503,
     "article": "1503",
     "category": "Снеки",

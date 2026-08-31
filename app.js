@@ -4604,6 +4604,285 @@ content.innerHTML = `
 `;
 
 bindProfilePeriodControls();
+
+document
+    .getElementById(
+        "profileTasksButton"
+    )
+    ?.addEventListener(
+        "click",
+        openProfileTasks
+    );
+}
+
+async function loadMyTasks() {
+    const response =
+        await fetch(
+            `${API_BASE_URL}/api/profile/tasks`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        tg?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+    if (!response.ok) {
+        throw new Error(
+            `Не удалось загрузить задачи: ${response.status}`
+        );
+    }
+
+    return await response.json();
+}
+
+async function openProfileTasks() {
+    const profileContent =
+        document.getElementById(
+            "profileContent"
+        );
+
+    if (!profileContent) {
+        return;
+    }
+
+    profileContent.innerHTML = `
+        <div class="profile-section-header">
+            <button
+                type="button"
+                class="profile-back-button"
+                id="profileTasksBackButton"
+            >
+                ←
+            </button>
+
+            <strong>
+                Мої завдання
+            </strong>
+        </div>
+
+        <div
+            class="profile-tasks-list"
+            id="profileTasksList"
+        >
+            <div class="profile-loading">
+                ⏳ Завантаження...
+            </div>
+        </div>
+    `;
+
+    document
+        .getElementById(
+            "profileTasksBackButton"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+                openProfile();
+            }
+        );
+
+    const tasksList =
+        document.getElementById(
+            "profileTasksList"
+        );
+
+    try {
+        const data =
+            await loadMyTasks();
+
+        const tasks =
+            Array.isArray(data.tasks)
+                ? data.tasks
+                : [];
+
+        if (tasks.length === 0) {
+            tasksList.innerHTML = `
+                <div class="profile-empty">
+                    Активних завдань поки немає
+                </div>
+            `;
+
+            return;
+        }
+
+        tasksList.innerHTML =
+            tasks
+                .map(
+                    task =>
+                        createProfileTaskHtml(
+                            task
+                        )
+                )
+                .join("");
+    }
+    catch (error) {
+        console.error(
+            "Ошибка загрузки задач:",
+            error
+        );
+
+        tasksList.innerHTML = `
+            <div class="profile-empty">
+                Не вдалося завантажити завдання
+            </div>
+        `;
+    }
+}
+
+function createProfileTaskHtml(task) {
+    const target =
+        Number(
+            task.targetQuantity || 0
+        );
+
+    const current =
+        Number(
+            task.currentQuantity || 0
+        );
+
+    const remaining =
+        Number(
+            task.remainingQuantity || 0
+        );
+
+    const percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(
+                    task.progressPercent || 0
+                )
+            )
+        );
+
+    const products =
+        Array.isArray(task.products)
+            ? task.products
+            : [];
+
+    const productsHtml =
+        products
+            .map(
+                product => `
+                    <div class="profile-task-product">
+                        <span>
+                            ${escapeHtml(
+                                product.productName ||
+                                product.article ||
+                                "Товар"
+                            )}
+                        </span>
+                    </div>
+                `
+            )
+            .join("");
+
+    let dueDateText = "";
+
+    if (task.dueDate) {
+        const parts =
+            String(task.dueDate)
+                .split("-");
+
+        if (parts.length === 3) {
+            dueDateText =
+                `${parts[2]}.${parts[1]}.${parts[0]}`;
+        }
+    }
+
+    const isCompleted =
+        task.status === "completed";
+
+    return `
+        <div class="profile-task-card">
+            <div class="profile-task-top">
+                <div>
+                    <strong>
+                        ${isCompleted ? "✅" : "🎯"}
+                        ${escapeHtml(
+                            task.title ||
+                            "Завдання"
+                        )}
+                    </strong>
+
+                    ${
+                        dueDateText
+                            ? `
+                                <span>
+                                    До ${dueDateText}
+                                </span>
+                            `
+                            : ""
+                    }
+                </div>
+
+                ${
+                    isCompleted
+                        ? `
+                            <span class="profile-task-status completed">
+                                Виконано
+                            </span>
+                        `
+                        : `
+                            <span class="profile-task-status active">
+                                Активне
+                            </span>
+                        `
+                }
+            </div>
+
+            ${
+                productsHtml
+                    ? `
+                        <div class="profile-task-products">
+                            ${productsHtml}
+                        </div>
+                    `
+                    : ""
+            }
+
+            <div class="profile-task-progress-text">
+                <strong>
+                    ${formatHistoryQuantity(current)}
+                    /
+                    ${formatHistoryQuantity(target)}
+                    шт
+                </strong>
+
+                <span>
+                    ${percent}%
+                </span>
+            </div>
+
+            <div class="profile-task-progress-bar">
+                <div
+                    class="profile-task-progress-fill"
+                    style="width: ${percent}%"
+                ></div>
+            </div>
+
+            ${
+                !isCompleted
+                    ? `
+                        <div class="profile-task-remaining">
+                            Залишилось:
+                            <strong>
+                                ${formatHistoryQuantity(
+                                    remaining
+                                )} шт
+                            </strong>
+                        </div>
+                    `
+                    : ""
+            }
+        </div>
+    `;
 }
 
 async function loadProfileSalesPeriod(

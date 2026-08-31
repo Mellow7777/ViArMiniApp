@@ -3324,7 +3324,16 @@ function openAdminRepresentativeProfile(profile) {
     Math.max(
         0,
         salesPlan - salesMonth
-    );        
+    );       
+    
+    const now =
+    new Date();
+
+const currentMonth =
+    `${now.getFullYear()}-` +
+    `${String(
+        now.getMonth() + 1
+    ).padStart(2, "0")}`;
 
     const recentSales =
         Array.isArray(profile.recentSales)
@@ -3434,7 +3443,7 @@ return `
             📊 Продажі
         </div>
 
-        <div class="profile-period-card">
+<div class="profile-period-card">
 
     <div class="profile-period-tabs">
 
@@ -3456,7 +3465,6 @@ return `
 
     </div>
 
-
     <div
         class="profile-period-month"
         id="profileMonthControls"
@@ -3467,7 +3475,6 @@ return `
             value="${currentMonth}"
         >
     </div>
-
 
     <div
         class="profile-period-custom"
@@ -3529,63 +3536,36 @@ return `
 
     </div>
 
+          <div class="profile-stat-box">
 
-    <div class="profile-stat-box">
+    <div class="profile-stat-icon">
+        📅
+    </div>
 
-        <div class="profile-stat-icon">
-            📅
-        </div>
+    <div
+        class="profile-stat-label"
+        id="profilePeriodLabel"
+    >
+        Поточний місяць
+    </div>
 
-        <div
-            class="profile-stat-label"
-            id="profilePeriodLabel"
-        >
-            Поточний місяць
-        </div>
+    <div
+        class="profile-stat-number"
+        id="profilePeriodSales"
+    >
+        ${formatMoney(salesMonth)}
+        <span>грн</span>
+    </div>
 
-        <div
-            class="profile-stat-number"
-            id="profilePeriodSales"
-        >
-            ${formatMoney(salesMonth)}
-            <span>грн</span>
-        </div>
-
-        <div
-            class="profile-stat-secondary"
-            id="profilePeriodOrders"
-        >
-            ${ordersMonth}
-            замовлень
-        </div>
-
+    <div
+        class="profile-stat-secondary"
+        id="profilePeriodOrders"
+    >
+        ${ordersMonth}
+        замовлень
     </div>
 
 </div>
-
-            <div class="profile-stat-box">
-
-                <div class="profile-stat-icon">
-                    📅
-                </div>
-
-                <div class="profile-stat-label">
-                    За місяць
-                </div>
-
-                <div class="profile-stat-number">
-                    ${formatMoney(salesMonth)}
-                    <span>грн</span>
-                </div>
-
-                <div class="profile-stat-secondary">
-                    ${ordersMonth}
-                    замовлень
-                </div>
-
-            </div>
-
-        </div>
 
 
 <div class="profile-section-title">
@@ -3641,10 +3621,18 @@ return `
             📦 Останні продажі
         </div>
 
-        <div class="profile-sales-list">
-            ${recentSalesHtml}
-        </div>
-    `;
+
+        <div
+    class="profile-sales-list"
+    id="profileSalesList"
+>
+    ${recentSalesHtml}
+</div>
+
+      
+`;
+
+bindProfilePeriodControls();
 }
 
 function renderProfilePeriodSales(
@@ -4524,10 +4512,12 @@ content.innerHTML = `
         📦 Останні продажі
     </div>
 
-    <div class="profile-sales-list">
-        ${recentSalesHtml}
-    </div>
-
+  <div
+    class="profile-sales-list"
+    id="profileSalesList"
+>
+    ${recentSalesHtml}
+</div>
 
     <div class="profile-section-title">
         📋 Робота

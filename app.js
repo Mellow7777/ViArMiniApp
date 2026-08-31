@@ -4109,14 +4109,6 @@ headers: {
 
 async function loadMyProfile() {
     try {
-        const telegramWebApp =
-            window.Telegram?.WebApp;
-
-        console.log(
-            "TG initData length:",
-            telegramWebApp?.initData?.length || 0
-        );
-
         const response = await fetch(
             `${API_BASE_URL}/api/profile/me`,
             {
@@ -4124,7 +4116,7 @@ async function loadMyProfile() {
 
                 headers: {
                     "X-Telegram-Init-Data":
-                        telegramWebApp?.initData || ""
+                        window.Telegram?.WebApp?.initData || ""
                 },
 
                 cache: "no-store"
@@ -4140,9 +4132,7 @@ async function loadMyProfile() {
             return null;
         }
 
-        const profile =
-            await response.json();
-        return profile;
+        return await response.json();
     }
     catch (error) {
         console.error(
@@ -4153,7 +4143,6 @@ async function loadMyProfile() {
         return null;
     }
 }
-
 
 async function openProfile() {
     const panel =
@@ -4631,16 +4620,9 @@ tasksButton?.addEventListener(
 }
 
 async function loadMyTasks() {
+    const telegramWebApp =
+        window.Telegram?.WebApp;
 
-    console.log(
-    "TG initData:",
-    tg?.initData
-);
-
-console.log(
-    "TG initData length:",
-    tg?.initData?.length || 0
-);
     console.log(
         "loadMyTasks вызван"
     );
@@ -4651,10 +4633,8 @@ console.log(
     );
 
     console.log(
-        "initData:",
-        tg?.initData
-            ? "есть"
-            : "НЕТ"
+        "TG initData length:",
+        telegramWebApp?.initData?.length || 0
     );
 
     const url =
@@ -4673,7 +4653,7 @@ console.log(
 
                 headers: {
                     "X-Telegram-Init-Data":
-                              window.Telegram?.WebApp?.initData || ""
+                        telegramWebApp?.initData || ""
                 },
 
                 cache: "no-store"
@@ -4703,6 +4683,7 @@ console.log(
         ? JSON.parse(responseText)
         : {};
 }
+
 async function openProfileTasks() {
      console.log("openProfileTasks вызван");
 

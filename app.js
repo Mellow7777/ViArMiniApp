@@ -3434,30 +3434,134 @@ return `
             📊 Продажі
         </div>
 
+        <div class="profile-period-card">
+
+    <div class="profile-period-tabs">
+
+        <button
+            type="button"
+            class="profile-period-tab active"
+            id="profileMonthModeButton"
+        >
+            Місяць
+        </button>
+
+        <button
+            type="button"
+            class="profile-period-tab"
+            id="profileCustomModeButton"
+        >
+            Період
+        </button>
+
+    </div>
+
+
+    <div
+        class="profile-period-month"
+        id="profileMonthControls"
+    >
+        <input
+            type="month"
+            id="profileMonthInput"
+            value="${currentMonth}"
+        >
+    </div>
+
+
+    <div
+        class="profile-period-custom"
+        id="profileCustomControls"
+        hidden
+    >
+
+        <label>
+            <span>Від</span>
+
+            <input
+                type="date"
+                id="profileDateFrom"
+            >
+        </label>
+
+        <label>
+            <span>До</span>
+
+            <input
+                type="date"
+                id="profileDateTo"
+            >
+        </label>
+
+        <button
+            type="button"
+            id="profileApplyPeriodButton"
+            class="profile-apply-period-button"
+        >
+            Показати
+        </button>
+
+    </div>
+
+</div>
+
         <div class="profile-stats-grid">
 
-            <div class="profile-stat-box">
+    <div class="profile-stat-box">
 
-                <div class="profile-stat-icon">
-                    ☀️
-                </div>
+        <div class="profile-stat-icon">
+            ☀️
+        </div>
 
-                <div class="profile-stat-label">
-                    Сьогодні
-                </div>
+        <div class="profile-stat-label">
+            Сьогодні
+        </div>
 
-                <div class="profile-stat-number">
-                    ${formatMoney(salesToday)}
-                    <span>грн</span>
-                </div>
+        <div class="profile-stat-number">
+            ${formatMoney(salesToday)}
+            <span>грн</span>
+        </div>
 
-                <div class="profile-stat-secondary">
-                    ${ordersToday}
-                    замовлень
-                </div>
+        <div class="profile-stat-secondary">
+            ${ordersToday}
+            замовлень
+        </div>
 
-            </div>
+    </div>
 
+
+    <div class="profile-stat-box">
+
+        <div class="profile-stat-icon">
+            📅
+        </div>
+
+        <div
+            class="profile-stat-label"
+            id="profilePeriodLabel"
+        >
+            Поточний місяць
+        </div>
+
+        <div
+            class="profile-stat-number"
+            id="profilePeriodSales"
+        >
+            ${formatMoney(salesMonth)}
+            <span>грн</span>
+        </div>
+
+        <div
+            class="profile-stat-secondary"
+            id="profilePeriodOrders"
+        >
+            ${ordersMonth}
+            замовлень
+        </div>
+
+    </div>
+
+</div>
 
             <div class="profile-stat-box">
 
@@ -3541,6 +3645,96 @@ return `
             ${recentSalesHtml}
         </div>
     `;
+}
+
+function renderProfilePeriodSales(
+    sales
+) {
+    const container =
+        document.getElementById(
+            "profileSalesList"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    if (
+        !Array.isArray(sales) ||
+        sales.length === 0
+    ) {
+        container.innerHTML = `
+            <div class="profile-empty-sales">
+                Продажів за цей період немає
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        sales
+            .map(sale => {
+                let dateText = "";
+
+                if (sale.createdAt) {
+                    const date =
+                        new Date(
+                            sale.createdAt
+                        );
+
+                    dateText =
+                        date.toLocaleString(
+                            "uk-UA",
+                            {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
+                }
+
+                return `
+                    <div class="profile-sale-item">
+
+                        <div class="profile-sale-main">
+
+                            <strong>
+                                ${escapeHtml(
+                                    sale.shopName ||
+                                    "Торгова точка"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHtml(
+                                    dateText
+                                )}
+                            </small>
+
+                        </div>
+
+                        <div class="profile-sale-amount">
+
+                            ${formatMoney(
+                                Number(
+                                    sale.totalAmount ||
+                                    0
+                                )
+                            )}
+
+                            <span>
+                                грн
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            })
+            .join("");
 }
 
 async function loadAdminRepresentatives() {
@@ -3966,6 +4160,50 @@ async function loadMyProfile() {
     }
 }
 
+async function loadProfileSalesPeriod(
+    from,
+    to
+) {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/profile/sales` +
+            `?from=${encodeURIComponent(from)}` +
+            `&to=${encodeURIComponent(to)}`,
+            {
+                method: "GET",
+
+                headers: {
+                    "X-Telegram-Init-Data":
+                        window.Telegram
+                            ?.WebApp
+                            ?.initData || ""
+                },
+
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            console.error(
+                "Ошибка загрузки продаж за период:",
+                response.status
+            );
+
+            return null;
+        }
+
+        return await response.json();
+    }
+    catch (error) {
+        console.error(
+            "Ошибка loadProfileSalesPeriod:",
+            error
+        );
+
+        return null;
+    }
+}
+
 async function openProfile() {
     const panel =
         document.getElementById(
@@ -4048,6 +4286,15 @@ async function openProfile() {
                 )
             )
             : 0;
+
+    const now =
+    new Date();
+
+const currentMonth =
+    `${now.getFullYear()}-` +
+    `${String(
+        now.getMonth() + 1
+    ).padStart(2, "0")}`;        
 
            const recentSales =
     Array.isArray(profile.recentSales)

@@ -4625,24 +4625,56 @@ tasksButton?.addEventListener(
 }
 
 async function loadMyTasks() {
-      console.log("loadMyTasks вызван");
+    console.log(
+        "loadMyTasks вызван"
+    );
+
+    console.log(
+        "API_BASE_URL:",
+        API_BASE_URL
+    );
+
+    console.log(
+        "initData:",
+        tg?.initData
+            ? "есть"
+            : "НЕТ"
+    );
+
+    const url =
+        `${API_BASE_URL}/api/profile/tasks`;
+
+    console.log(
+        "Запрос задач:",
+        url
+    );
 
     const response =
         await fetch(
-            `${API_BASE_URL}/api/profile/tasks`,
+            url,
             {
                 method: "GET",
+
                 headers: {
                     "X-Telegram-Init-Data":
                         tg?.initData || ""
                 },
+
                 cache: "no-store"
             }
         );
 
     console.log(
-        "Ответ tasks:",
+        "Ответ /api/profile/tasks:",
         response.status
+    );
+
+    const responseText =
+        await response.text();
+
+    console.log(
+        "Тело ответа:",
+        responseText
     );
 
     if (!response.ok) {
@@ -4651,9 +4683,10 @@ async function loadMyTasks() {
         );
     }
 
-    return await response.json();
+    return responseText
+        ? JSON.parse(responseText)
+        : {};
 }
-
 async function openProfileTasks() {
      console.log("openProfileTasks вызван");
 

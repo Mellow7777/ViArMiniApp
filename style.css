@@ -3398,3 +3398,133 @@ body.profile-open {
     font-size: 14px;
     font-weight: 600;
 }
+
+.profile-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.profile-section-header strong {
+    font-size: 20px;
+}
+
+.profile-back-button {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.06);
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.profile-tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profile-task-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow:
+        0 4px 18px
+        rgba(0, 0, 0, 0.06);
+}
+
+.profile-task-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.profile-task-top > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-task-top strong {
+    font-size: 16px;
+}
+
+.profile-task-top span {
+    font-size: 12px;
+    opacity: 0.65;
+}
+
+.profile-task-status {
+    padding: 5px 8px;
+    border-radius: 10px;
+    font-size: 11px !important;
+    white-space: nowrap;
+}
+
+.profile-task-status.active {
+    background: rgba(255, 170, 0, 0.14);
+}
+
+.profile-task-status.completed {
+    background: rgba(0, 180, 90, 0.14);
+}
+
+.profile-task-products {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-task-product {
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.035);
+}
+
+.profile-task-progress-text {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-task-progress-text strong {
+    font-size: 15px;
+}
+
+.profile-task-progress-text span {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.profile-task-progress-bar {
+    height: 9px;
+    margin-top: 8px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.profile-task-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: currentColor;
+}
+
+.profile-task-remaining {
+    margin-top: 10px;
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+.profile-empty,
+.profile-loading {
+    padding: 24px 12px;
+    text-align: center;
+    opacity: 0.65;
+}

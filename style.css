@@ -3528,3 +3528,90 @@ body.profile-open {
     text-align: center;
     opacity: 0.65;
 }
+
+/* =========================================
+   PROFILE TASKS - FIX MOBILE TELEGRAM THEME
+   ========================================= */
+
+.profile-tasks-list {
+    color: #111111;
+}
+
+.profile-task-card {
+    background: #ffffff;
+    color: #111111;
+}
+
+.profile-task-top {
+    color: #111111;
+}
+
+.profile-task-top strong {
+    color: #111111;
+}
+
+.profile-task-top > div > span {
+    color: #6b7280;
+    opacity: 1;
+}
+
+.profile-task-products {
+    color: #111111;
+}
+
+.profile-task-product {
+    background: #f5f5f5;
+    color: #111111;
+}
+
+.profile-task-product span {
+    color: #111111;
+}
+
+.profile-task-progress-text {
+    color: #111111;
+}
+
+.profile-task-progress-text strong {
+    color: #111111;
+}
+
+.profile-task-progress-text span {
+    color: #6b7280;
+    opacity: 1;
+}
+
+.profile-task-progress-bar {
+    background: #e5e5e5;
+}
+
+.profile-task-progress-fill {
+    background: #111111;
+}
+
+.profile-task-remaining {
+    color: #6b7280;
+    opacity: 1;
+}
+
+.profile-task-remaining strong {
+    color: #111111;
+}
+
+.profile-section-header {
+    color: #111111;
+}
+
+.profile-section-header strong {
+    color: #111111;
+}
+
+.profile-task-status.active {
+    background: #fff7e6;
+    color: #8a5a00;
+}
+
+.profile-task-status.completed {
+    background: #e8f7ee;
+    color: #167a3f;
+}

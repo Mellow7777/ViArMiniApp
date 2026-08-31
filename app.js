@@ -4109,15 +4109,14 @@ headers: {
 
 async function loadMyProfile() {
     try {
-        console.log(
-    "TG initData:",
-    tg?.initData
-);
+        const telegramWebApp =
+            window.Telegram?.WebApp;
 
-console.log(
-    "TG initData length:",
-    tg?.initData?.length || 0
-);
+        console.log(
+            "TG initData length:",
+            telegramWebApp?.initData?.length || 0
+        );
+
         const response = await fetch(
             `${API_BASE_URL}/api/profile/me`,
             {
@@ -4125,9 +4124,7 @@ console.log(
 
                 headers: {
                     "X-Telegram-Init-Data":
-                        window.Telegram
-                            ?.WebApp
-                            ?.initData || ""
+                        telegramWebApp?.initData || ""
                 },
 
                 cache: "no-store"
@@ -4676,7 +4673,7 @@ console.log(
 
                 headers: {
                     "X-Telegram-Init-Data":
-                        tg?.initData || ""
+                              window.Telegram?.WebApp?.initData || ""
                 },
 
                 cache: "no-store"

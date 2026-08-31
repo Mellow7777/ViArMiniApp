@@ -3330,3 +3330,71 @@ body.profile-open {
 .setup-group {
     overflow: visible !important;
 }
+
+.profile-plan-remaining {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #8f949b;
+}
+
+.profile-plan-remaining strong {
+    color: #17191c;
+    font-weight: 700;
+}
+
+.profile-sale-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eceef1;
+
+    color: #17191c;
+}
+
+.profile-sale-item:last-child {
+    border-bottom: none;
+}
+
+.profile-sale-main {
+    min-width: 0;
+}
+
+.profile-sale-main strong {
+    display: block;
+
+    color: #17191c;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.profile-sale-main small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #8f949b;
+
+    font-size: 13px;
+}
+
+.profile-sale-amount {
+    flex-shrink: 0;
+
+    color: #17191c;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.profile-sale-amount span {
+    color: #8f949b;
+    font-size: 14px;
+    font-weight: 600;
+}

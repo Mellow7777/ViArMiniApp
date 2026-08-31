@@ -3320,6 +3320,12 @@ function openAdminRepresentativeProfile(profile) {
             )
             : 0;
 
+    const remainingPlan =
+    Math.max(
+        0,
+        salesPlan - salesMonth
+    );        
+
     const recentSales =
         Array.isArray(profile.recentSales)
             ? profile.recentSales
@@ -3347,47 +3353,38 @@ function openAdminRepresentativeProfile(profile) {
                             }
                         );
 
-                    return `
-                        <div class="profile-sale-item">
+return `
+    <div class="profile-sale-item">
 
-                            <div class="profile-sale-main">
+        <div class="profile-sale-main">
 
-                                <strong
-                                    style="color:#17191c !important;"
-                                >
-                                    ${escapeHtml(
-                                        sale.shopName ||
-                                        "Торгова точка"
-                                    )}
-                                </strong>
+            <strong>
+                ${escapeHtml(
+                    sale.shopName ||
+                    "Торгова точка"
+                )}
+            </strong>
 
-                                <small
-                                    style="color:#8f949b !important;"
-                                >
-                                    ${escapeHtml(
-                                        dateText
-                                    )}
-                                </small>
+            <small>
+                ${escapeHtml(dateText)}
+            </small>
 
-                            </div>
+        </div>
 
-                            <div
-                                class="profile-sale-amount"
-                                style="color:#17191c !important;"
-                            >
-                                ${formatMoney(
-                                    Number(
-                                        sale.totalAmount || 0
-                                    )
-                                )}
+        <div class="profile-sale-amount">
 
-                                <span>
-                                    грн
-                                </span>
-                            </div>
+            ${formatMoney(
+                Number(
+                    sale.totalAmount || 0
+                )
+            )}
 
-                        </div>
-                    `;
+            <span>грн</span>
+
+        </div>
+
+    </div>
+`;
                 })
                 .join("")
             : `
@@ -3487,48 +3484,53 @@ function openAdminRepresentativeProfile(profile) {
         </div>
 
 
-        <div class="profile-section-title">
-            🎯 План продажів
-        </div>
+<div class="profile-section-title">
+    🎯 План продажів
+</div>
 
-        <div class="profile-plan-card">
+<div class="profile-plan-card">
 
-            <div class="profile-plan-row">
+    <div class="profile-plan-row">
 
-                <div>
-                    <div class="profile-plan-value">
-                        ${formatMoney(salesMonth)}
-                    </div>
-
-                    <div class="profile-plan-caption">
-                        виконано
-                    </div>
-                </div>
-
-                <div class="profile-plan-right">
-
-                    <strong>
-                        ${planPercent}%
-                    </strong>
-
-                    <span>
-                        з ${formatMoney(salesPlan)} грн
-                    </span>
-
-                </div>
-
+        <div>
+            <div class="profile-plan-value">
+                ${formatMoney(salesMonth)} грн
             </div>
 
-            <div class="profile-progress">
-
-                <div
-                    class="profile-progress-fill"
-                    style="width:${planPercent}%"
-                ></div>
-
+            <div class="profile-plan-caption">
+                Продано за місяць
             </div>
+        </div>
+
+        <div class="profile-plan-right">
+
+            <strong>
+                ${planPercent}%
+            </strong>
+
+            <span>
+                з ${formatMoney(salesPlan)} грн
+            </span>
 
         </div>
+
+    </div>
+
+    <div class="profile-progress">
+        <div
+            class="profile-progress-fill"
+            style="width: ${planPercent}%"
+        ></div>
+    </div>
+
+    <div class="profile-plan-remaining">
+        Залишилось:
+        <strong>
+            ${formatMoney(remainingPlan)} грн
+        </strong>
+    </div>
+
+</div>
 
 
         <div class="profile-section-title">

@@ -7,7 +7,7 @@ let shops = [];
 let specialPrices = [];
 
 const API_BASE_URL =
-    "https://api.via-r-order.com";
+    "https://dev-api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966

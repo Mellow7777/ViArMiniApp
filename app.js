@@ -5702,15 +5702,18 @@ async function loadPriorityProducts() {
         console.log(
             `🔥 Загружено товаров на продажу: ${priorityProducts.length}`
         );
+        renderPriorityProductsButton();
     }
     catch (error) {
-        console.error(
-            "Ошибка loadPriorityProducts:",
-            error
-        );
+    console.error(
+        "Ошибка loadPriorityProducts:",
+        error
+    );
 
-        priorityProducts = [];
-    }
+    priorityProducts = [];
+
+    renderPriorityProductsButton();
+}
 }
 
 function renderOrderHistory(orders) {
@@ -6853,6 +6856,8 @@ function loadCart() {
         state.orderCart = [];
         state.returnCart = [];
     }
+
+
 }
 
 function createOrderId() {

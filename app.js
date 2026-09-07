@@ -364,6 +364,37 @@ function renderPriorityProductsButton() {
         String(activeItems.length);
 }
 
+function openPriorityDrawer() {
+    if (!elements.priorityDrawer) {
+        return;
+    }
+
+    renderPriorityProducts();
+
+    elements.priorityDrawer.classList.add(
+        "open"
+    );
+
+    document.body.classList.add(
+        "priority-drawer-open"
+    );
+}
+
+
+function closePriorityDrawer() {
+    if (!elements.priorityDrawer) {
+        return;
+    }
+
+    elements.priorityDrawer.classList.remove(
+        "open"
+    );
+
+    document.body.classList.remove(
+        "priority-drawer-open"
+    );
+}
+
 function getPriorityProduct(article) {
     return priorityProducts.find(
         item =>
@@ -2936,6 +2967,27 @@ if (historyButton) {
         );
     }
 
+    if (elements.priorityProductsButton) {
+    elements.priorityProductsButton.addEventListener(
+        "click",
+        openPriorityDrawer
+    );
+}
+
+if (elements.priorityDrawerClose) {
+    elements.priorityDrawerClose.addEventListener(
+        "click",
+        closePriorityDrawer
+    );
+}
+
+if (elements.priorityDrawerOverlay) {
+    elements.priorityDrawerOverlay.addEventListener(
+        "click",
+        closePriorityDrawer
+    );
+}
+
     document
     .querySelectorAll(".operation-button")
     .forEach((button) => {
@@ -3307,6 +3359,321 @@ if (adminStockSearch) {
             toggleLargeText
         );
     }
+}
+
+function renderPriorityProducts() {
+    if (
+        !elements.priorityProductsList ||
+        !elements.priorityProductsEmpty
+    ) {
+        return;
+    }
+
+    const activeItems =
+        priorityProducts.filter(
+            item => item.isActive !== false
+        );
+
+    elements.priorityProductsList.innerHTML = "";
+
+    if (activeItems.length === 0) {
+        elements.priorityProductsEmpty.hidden = false;
+        return;
+    }
+
+    elements.priorityProductsEmpty.hidden = true;
+
+    activeItems.forEach((priorityItem) => {
+
+        const article =
+            String(
+                priorityItem.article || ""
+            ).trim();
+
+        const product =
+            products.find(
+                item =>
+                    String(item.article || "").trim() ===
+                    article
+            );
+
+        if (!product) {
+            console.warn(
+                `🔥 Товар не найден: ${article}`
+            );
+
+            return;
+        }
+
+        const targetPieces =
+            Math.max(
+                1,
+                Number(
+                    priorityItem.targetPieces || 1
+                )
+            );
+
+        const existingCartItem =
+            state.orderCart.find(
+                item =>
+                    String(item.article || "").trim() ===
+                        article &&
+                    item.unit === "шт"
+            );
+
+        const cartQuantity =
+            existingCartItem
+                ? Number(existingCartItem.quantity || 0)
+                : 0;
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "priority-product-card";
+
+        card.innerHTML = `
+            <div class="priority-product-info">
+
+                <strong class="priority-product-name">
+                    🔥 ${escapeHtml(product.name)}
+                </strong>
+
+                <span class="priority-product-target">
+                    Треба продати:
+                    <b>
+                        ${formatQuantity(targetPieces)} шт
+                    </b>
+                </span>
+
+                ${
+                    cartQuantity > 0
+                        ? `
+                            <span class="priority-product-cart-status">
+                                У кошику:
+                                <b>
+                                    ${formatQuantity(cartQuantity)} шт
+                                </b>
+                            </span>
+                        `
+                        : ""
+                }
+
+            </div>
+
+            <div class="priority-product-actions">
+
+                <div class="priority-quantity-control">
+
+                    <button
+                        type="button"
+                        class="priority-quantity-minus"
+                    >
+                        −
+                    </button>
+
+                    <input
+                        type="number"
+                        class="priority-quantity-input"
+                        min="1"
+                        step="1"
+                        value="${
+                            cartQuantity > 0
+                                ? cartQuantity
+                                : 1
+                        }"
+                    >
+
+                    <button
+                        type="button"
+                        class="priority-quantity-plus"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="priority-add-button"
+                >
+                    ${
+                        cartQuantity > 0
+                            ? "Оновити"
+                            : "У кошик"
+                    }
+                </button>
+
+            </div>
+        `;
+
+        const input =
+            card.querySelector(
+                ".priority-quantity-input"
+            );
+
+        const minusButton =
+            card.querySelector(
+                ".priority-quantity-minus"
+            );
+
+        const plusButton =
+            card.querySelector(
+                ".priority-quantity-plus"
+            );
+
+        const addButton =
+            card.querySelector(
+                ".priority-add-button"
+            );
+
+
+        minusButton?.addEventListener(
+            "click",
+            () => {
+                let value =
+                    Number(input.value || 1);
+
+                value =
+                    Math.max(
+                        1,
+                        Math.round(value - 1)
+                    );
+
+                input.value =
+                    String(value);
+            }
+        );
+
+
+        plusButton?.addEventListener(
+            "click",
+            () => {
+                let value =
+                    Number(input.value || 1);
+
+                value =
+                    Math.max(
+                        1,
+                        Math.round(value + 1)
+                    );
+
+                input.value =
+                    String(value);
+            }
+        );
+
+
+        addButton?.addEventListener(
+            "click",
+            () => {
+                const quantity =
+                    Math.max(
+                        1,
+                        Math.round(
+                            Number(
+                                input.value || 1
+                            )
+                        )
+                    );
+
+                addPriorityProductToOrder(
+                    product,
+                    quantity
+                );
+
+                renderPriorityProducts();
+            }
+        );
+
+
+        elements.priorityProductsList
+            .appendChild(card);
+    });
+}
+
+function addPriorityProductToOrder(
+    product,
+    quantity
+) {
+    if (
+        !product ||
+        !Number.isFinite(quantity) ||
+        quantity <= 0
+    ) {
+        return;
+    }
+
+    const article =
+        String(
+            product.article || ""
+        ).trim();
+
+    const existingItem =
+        state.orderCart.find(
+            item =>
+                String(item.article || "").trim() ===
+                    article &&
+                item.unit === "шт"
+        );
+
+    if (existingItem) {
+        existingItem.quantity =
+            roundQuantity(quantity);
+
+        existingItem.price =
+            getProductPrice(product);
+
+        existingItem.approximateWeightPerPiece =
+            Number(
+                product.approximateWeightPerPiece || 0
+            );
+    }
+    else {
+        state.orderCart.push({
+            cartKey:
+                `${product.id}-шт`,
+
+            productId:
+                product.id,
+
+            article:
+                product.article,
+
+            name:
+                product.name,
+
+            unit:
+                "шт",
+
+            quantity:
+                roundQuantity(quantity),
+
+            price:
+                getProductPrice(product),
+
+            approximateWeightPerPiece:
+                Number(
+                    product.approximateWeightPerPiece || 0
+                )
+        });
+    }
+
+    saveCart();
+
+    renderCart();
+    renderProducts();
+    updateSummary();
+    renderDrawerCart();
+
+    showToast(
+        `🔥 ${product.name} додано в замовлення`,
+        "success"
+    );
+
+    triggerHaptic(
+        "success"
+    );
 }
 
 

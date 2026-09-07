@@ -365,13 +365,27 @@ function renderPriorityProductsButton() {
 }
 
 function openPriorityDrawer() {
-    if (!elements.priorityDrawer) {
+    const drawer =
+        document.getElementById(
+            "priorityDrawer"
+        );
+
+    console.log(
+        "🔥 openPriorityDrawer:",
+        drawer
+    );
+
+    if (!drawer) {
+        console.error(
+            "🔥 priorityDrawer не найден"
+        );
+
         return;
     }
 
     renderPriorityProducts();
 
-    elements.priorityDrawer.classList.add(
+    drawer.classList.add(
         "open"
     );
 
@@ -380,6 +394,25 @@ function openPriorityDrawer() {
     );
 }
 
+
+function closePriorityDrawer() {
+    const drawer =
+        document.getElementById(
+            "priorityDrawer"
+        );
+
+    if (!drawer) {
+        return;
+    }
+
+    drawer.classList.remove(
+        "open"
+    );
+
+    document.body.classList.remove(
+        "priority-drawer-open"
+    );
+}
 
 function closePriorityDrawer() {
     if (!elements.priorityDrawer) {
@@ -2966,27 +2999,55 @@ if (historyButton) {
             clearSelectedShop
         );
     }
+    
+    const priorityProductsButton =
+    document.getElementById(
+        "priorityProductsButton"
+    );
 
-    if (elements.priorityProductsButton) {
-    elements.priorityProductsButton.addEventListener(
+const priorityDrawerClose =
+    document.getElementById(
+        "priorityDrawerClose"
+    );
+
+const priorityDrawerOverlay =
+    document.getElementById(
+        "priorityDrawerOverlay"
+    );
+
+console.log(
+    "🔥 Priority button:",
+    priorityProductsButton
+);
+
+if (priorityProductsButton) {
+    priorityProductsButton.addEventListener(
         "click",
-        openPriorityDrawer
+        () => {
+            console.log(
+                "🔥 Нажата кнопка Продати"
+            );
+
+            openPriorityDrawer();
+        }
     );
 }
 
-if (elements.priorityDrawerClose) {
-    elements.priorityDrawerClose.addEventListener(
+if (priorityDrawerClose) {
+    priorityDrawerClose.addEventListener(
         "click",
         closePriorityDrawer
     );
 }
 
-if (elements.priorityDrawerOverlay) {
-    elements.priorityDrawerOverlay.addEventListener(
+if (priorityDrawerOverlay) {
+    priorityDrawerOverlay.addEventListener(
         "click",
         closePriorityDrawer
     );
 }
+
+
 
     document
     .querySelectorAll(".operation-button")
@@ -3362,26 +3423,40 @@ if (adminStockSearch) {
 }
 
 function renderPriorityProducts() {
-    if (
-        !elements.priorityProductsList ||
-        !elements.priorityProductsEmpty
-    ) {
-        return;
-    }
+   const priorityProductsList =
+    document.getElementById(
+        "priorityProductsList"
+    );
+
+const priorityProductsEmpty =
+    document.getElementById(
+        "priorityProductsEmpty"
+    );
+
+if (
+    !priorityProductsList ||
+    !priorityProductsEmpty
+) {
+    console.error(
+        "🔥 Не найден список PriorityProducts"
+    );
+
+    return;
+}
 
     const activeItems =
         priorityProducts.filter(
             item => item.isActive !== false
         );
 
-    elements.priorityProductsList.innerHTML = "";
+    priorityProductsList.innerHTML = "";
 
     if (activeItems.length === 0) {
-        elements.priorityProductsEmpty.hidden = false;
+        priorityProductsEmpty.hidden = false;
         return;
     }
 
-    elements.priorityProductsEmpty.hidden = true;
+    priorityProductsEmpty.hidden = true;
 
     activeItems.forEach((priorityItem) => {
 
@@ -3587,7 +3662,7 @@ function renderPriorityProducts() {
         );
 
 
-        elements.priorityProductsList
+        priorityProductsList
             .appendChild(card);
     });
 }

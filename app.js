@@ -5,6 +5,7 @@ const telegram = window.Telegram?.WebApp;
 let products = [];
 let shops = [];
 let specialPrices = [];
+let priorityProducts = [];
 
 const API_BASE_URL =
     "https://dev-api.via-r-order.com";
@@ -259,7 +260,8 @@ async function initializeApp() {
     await Promise.all([
     loadProducts(),
     loadShops(),
-    loadSpecialPrices()
+    loadSpecialPrices(),
+    loadPriorityProducts()
 ]);
     restoreSelectedShop();
 
@@ -296,6 +298,19 @@ async function initializeApp() {
     }
 
     renderCart();
+}
+
+function getPriorityProduct(article) {
+    return priorityProducts.find(
+        item =>
+            String(item.article).trim() ===
+            String(article || "").trim()
+    ) || null;
+}
+
+
+function isPriorityProduct(article) {
+    return getPriorityProduct(article) !== null;
 }
 
 function openCartDrawer() {
@@ -5611,6 +5626,42 @@ async function openHistory() {
         if (historyButton) {
             historyButton.disabled = false;
         }
+    }
+}
+
+async function loadPriorityProducts() {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/priority-products?v=${Date.now()}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Ошибка загрузки приоритетных товаров: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        priorityProducts =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        console.log(
+            `🔥 Загружено товаров на продажу: ${priorityProducts.length}`
+        );
+    }
+    catch (error) {
+        console.error(
+            "Ошибка loadPriorityProducts:",
+            error
+        );
+
+        priorityProducts = [];
     }
 }
 

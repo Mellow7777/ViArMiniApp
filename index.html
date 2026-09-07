@@ -709,23 +709,55 @@
 </div> 
 
 
+<!-- =========================================
+     ТОВАРИ НА ПРОДАЖ
+     ========================================= -->
+
+<div
+    class="priority-drawer"
+    id="priorityDrawer"
+>
+    <div
+        class="priority-drawer-overlay"
+        id="priorityDrawerOverlay"
+    ></div>
+
+    <div class="priority-drawer-content">
+
+        <div class="priority-drawer-header">
+
+            <div>
+                <h2>
+                    🔥 Товари на продаж
+                </h2>
+
+                <span>
+                    Додайте товар одразу
+                    в замовлення
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="priority-drawer-close"
+                id="priorityDrawerClose"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="priorityProductsList"
+            class="priority-products-list"
+        ></div>
+
         <div
             id="priorityProductsEmpty"
             class="priority-products-empty"
             hidden
         >
-            <div>
-                🎉
-            </div>
-
-            <strong>
-                Товарів немає
-            </strong>
-
-            <span>
-                Зараз немає товарів,
-                які потрібно терміново продати.
-            </span>
+            Зараз товарів немає
         </div>
 
     </div>

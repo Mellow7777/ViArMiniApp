@@ -325,10 +325,21 @@ async function initializeApp() {
 }
 
 function renderPriorityProductsButton() {
-    if (
-        !elements.priorityProductsSection ||
-        !elements.priorityProductsCount
-    ) {
+    const section =
+        document.getElementById(
+            "priorityProductsSection"
+        );
+
+    const countElement =
+        document.getElementById(
+            "priorityProductsCount"
+        );
+
+    if (!section || !countElement) {
+        console.warn(
+            "🔥 Не найдены элементы кнопки PriorityProducts"
+        );
+
         return;
     }
 
@@ -337,14 +348,19 @@ function renderPriorityProductsButton() {
             item => item.isActive !== false
         );
 
+    console.log(
+        "🔥 renderPriorityProductsButton:",
+        activeItems.length
+    );
+
     if (activeItems.length === 0) {
-        elements.priorityProductsSection.hidden = true;
+        section.hidden = true;
         return;
     }
 
-    elements.priorityProductsSection.hidden = false;
+    section.hidden = false;
 
-    elements.priorityProductsCount.textContent =
+    countElement.textContent =
         String(activeItems.length);
 }
 

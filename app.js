@@ -53,6 +53,29 @@ const elements = {
     orderComment: document.getElementById("orderComment"),
     toast: document.getElementById("toast"),
     orderComment: document.getElementById("orderComment"),
+    priorityProductsSection:
+    document.getElementById("priorityProductsSection"),
+
+priorityProductsButton:
+    document.getElementById("priorityProductsButton"),
+
+priorityProductsCount:
+    document.getElementById("priorityProductsCount"),
+
+priorityDrawer:
+    document.getElementById("priorityDrawer"),
+
+priorityDrawerOverlay:
+    document.getElementById("priorityDrawerOverlay"),
+
+priorityDrawerClose:
+    document.getElementById("priorityDrawerClose"),
+
+priorityProductsList:
+    document.getElementById("priorityProductsList"),
+
+priorityProductsEmpty:
+    document.getElementById("priorityProductsEmpty"),
     
 toast: document.getElementById("toast"),
 
@@ -267,6 +290,7 @@ async function initializeApp() {
 
     renderGroups();
     renderProducts();
+    renderPriorityProductsButton();
 
     // Остатки загружаются в фоне.
     // Когда придут — перерисуем товары.
@@ -298,6 +322,30 @@ async function initializeApp() {
     }
 
     renderCart();
+}
+
+function renderPriorityProductsButton() {
+    if (
+        !elements.priorityProductsSection ||
+        !elements.priorityProductsCount
+    ) {
+        return;
+    }
+
+    const activeItems =
+        priorityProducts.filter(
+            item => item.isActive !== false
+        );
+
+    if (activeItems.length === 0) {
+        elements.priorityProductsSection.hidden = true;
+        return;
+    }
+
+    elements.priorityProductsSection.hidden = false;
+
+    elements.priorityProductsCount.textContent =
+        String(activeItems.length);
 }
 
 function getPriorityProduct(article) {

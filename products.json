@@ -882,6 +882,27 @@
     "canOrderByPiece": true
   },
   {
+    "id": 1061,
+    "article": "1061",
+    "category": "Тарасівські Ковбаси",
+    "name": "Пезаро с/в в/с",
+    "nameUa": "Пезаро с/в в/с",
+    "nameRu": "Пезаро с/в в/с",
+    "orderName": "Пезаро",
+    "price": 341.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 243.60,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 4.100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
     "id": 1035,
     "article": "1035",
     "category": "Тарасівські Ковбаси",
@@ -1008,8 +1029,8 @@
     "canOrderByPiece": true
   },
   {
-    "id": 1061,
-    "article": "1061",
+    "id": 1062,
+    "article": "1062",
     "category": "Тарасівські Ковбаси",
     "name": "Салямі Римська т/к в/с",
     "nameUa": "Салямі Римська т/к в/с",

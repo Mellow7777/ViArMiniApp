@@ -1008,6 +1008,27 @@
     "canOrderByPiece": true
   },
   {
+    "id": 1061,
+    "article": "1061",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Римська т/к в/с",
+    "nameUa": "Салямі Римська т/к в/с",
+    "nameRu": "Салямі Римська т/к в/с",
+    "orderName": "Римська",
+    "price": 282.25,
+    "wholesalePrice": 0,
+    "purchasePrice": 201.58,
+    "approximateWeightPerPiece": 0,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 4.100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
     "id": 1040,
     "article": "1040",
     "category": "Тарасівські Ковбаси",

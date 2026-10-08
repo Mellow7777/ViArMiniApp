@@ -2058,6 +2058,27 @@
     "canOrderByPiece": true
   },
   {
+    "id": 1137,
+    "article": "1137",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Бендерівська  н/к в/с",
+    "nameUa": "Бендерівська  н/к в/с",
+    "nameRu": "Бендерівська  н/к в/с",
+    "orderName": "Бендерівська  н/к в/с",
+    "price": 238.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 177.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
     "id": 1201,
     "article": "1201",
     "category": "КБК",

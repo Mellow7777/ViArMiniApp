@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 const telegram = window.Telegram?.WebApp;
 
@@ -8,7 +8,7 @@ let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
-    "https://api.via-r-order.com";
+    "https://dev-api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966
@@ -278,6 +278,7 @@ async function initializeApp() {
     renderUser();
     initializeAdminAccess();
     bindEvents();
+    initializeRouteUi();
     
 
     await Promise.all([
@@ -7517,4 +7518,89 @@ function formatStock(value) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 3
     });
+}
+
+
+// === Today's route (read-only first stage) ===
+function initializeRouteUi() {
+    const button = document.getElementById("myRouteButton");
+    const panel = document.getElementById("myRoutePanel");
+    if (!button || !panel) return;
+    button.addEventListener("click", async () => {
+        const opening = panel.hidden;
+        panel.hidden = !opening;
+        button.setAttribute("aria-expanded", String(opening));
+        if (opening) await loadTodayRoute();
+    });
+}
+
+async function loadTodayRoute() {
+    const panel = document.getElementById("myRoutePanel");
+    if (!panel) return;
+    panel.replaceChildren();
+    const loading = document.createElement("p");
+    loading.textContent = "Завантаження маршруту...";
+    panel.appendChild(loading);
+    try {
+        const initData = window.Telegram?.WebApp?.initData || "";
+        if (!initData) throw new Error("Відкрийте застосунок через Telegram");
+        const response = await fetch(`${API_BASE_URL}/api/routes/today`, {
+            headers: { "X-Telegram-Init-Data": initData },
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`Помилка сервера: ${response.status}`);
+        const route = await response.json();
+        const items = Array.isArray(route.items) ? route.items : [];
+        panel.replaceChildren();
+        const summary = document.createElement("p");
+        summary.className = "route-summary";
+        summary.textContent = `Маршрут на ${route.date || "сьогодні"} · Точок: ${items.length}`;
+        panel.appendChild(summary);
+        if (!items.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "На сьогодні торгових точок немає";
+            panel.appendChild(empty);
+            return;
+        }
+        const statusNames = {
+            pending: "Не відвідано", started: "На точці",
+            order_later: "Замовлення пізніше", no_order: "Без замовлення",
+            closed: "Зачинено", ordered: "Замовлення оформлено"
+        };
+        for (const item of items) {
+            const card = document.createElement("div");
+            card.className = "route-shop-card";
+            const title = document.createElement("strong");
+            title.textContent = item.name || `Магазин ${item.shopId}`;
+            const address = document.createElement("div");
+            address.className = "route-shop-address";
+            address.textContent = item.address || "Адреса не вказана";
+            const status = document.createElement("div");
+            status.className = "route-shop-status";
+            status.textContent = statusNames[item.status] || item.status || "Не відвідано";
+            const select = document.createElement("button");
+            select.type = "button";
+            select.className = "route-select-button";
+            select.textContent = "Обрати для замовлення";
+            select.addEventListener("click", () => {
+                const shop = shops.find(s => Number(s.id) === Number(item.shopId));
+                if (!shop) {
+                    showToast("Точку не знайдено в shops.json", "error");
+                    return;
+                }
+                selectShop(shop);
+                panel.hidden = true;
+                document.getElementById("myRouteButton")?.setAttribute("aria-expanded", "false");
+                document.querySelector(".order-setup-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+            card.append(title, address, status, select);
+            panel.appendChild(card);
+        }
+    } catch (error) {
+        panel.replaceChildren();
+        const message = document.createElement("p");
+        message.textContent = error.message || "Не вдалося завантажити маршрут";
+        panel.appendChild(message);
+        console.error("loadTodayRoute:", error);
+    }
 }

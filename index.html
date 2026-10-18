@@ -10,10 +10,21 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=166">
+   <link rel="stylesheet" href="style.css?v=167">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+.route-section { margin-bottom: 14px; }
+.route-main-button { width:100%; border:0; border-radius:12px; padding:15px; background:#1868c9; color:#fff; font-weight:700; font-size:16px; cursor:pointer; }
+.route-panel { padding-top:12px; }
+.route-panel[hidden] { display:none; }
+.route-summary { font-weight:600; margin:0 0 12px; }
+.route-shop-card { padding:13px; margin:10px 0; border:1px solid #d9e0e7; border-radius:12px; display:flex; flex-direction:column; gap:7px; }
+.route-shop-address { font-size:13px; opacity:.75; }
+.route-shop-status { font-size:13px; font-weight:600; }
+.route-select-button { border:1px solid #1868c9; border-radius:9px; background:transparent; color:#1868c9; padding:10px; font-weight:600; cursor:pointer; }
+</style>
 </head>
 
 <body>
@@ -40,6 +51,12 @@
 <main class="container">
 
     <span id="userName" hidden></span>
+
+    <!-- Маршрут торгового представника -->
+    <section class="card route-section" aria-label="Мій маршрут">
+        <button id="myRouteButton" type="button" class="route-main-button" aria-expanded="false" aria-controls="myRoutePanel">🗺️ Мій маршрут</button>
+        <div id="myRoutePanel" class="route-panel" hidden></div>
+    </section>
 
    <!-- Оформлення замовлення -->
 <section class="card order-setup-card">
@@ -785,7 +802,7 @@
 </button>
 
 
-<script src="app.js?v=239"></script>
+<script src="app.js?v=241></script>
 
 </body>
 </html> 

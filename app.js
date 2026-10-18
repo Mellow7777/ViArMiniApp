@@ -8,7 +8,7 @@ let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
-    "https://dev-api.via-r-order.com";
+    "https://api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966
@@ -7521,7 +7521,9 @@ function formatStock(value) {
 }
 
 
-// === Today's route (read-only first stage) ===
+// === Route visits: server stores timestamps and status ===
+let routeSaving = false;
+
 function initializeRouteUi() {
     const button = document.getElementById("myRouteButton");
     const panel = document.getElementById("myRoutePanel");
@@ -7532,6 +7534,41 @@ function initializeRouteUi() {
         button.setAttribute("aria-expanded", String(opening));
         if (opening) await loadTodayRoute();
     });
+}
+
+async function markRouteVisit(shopId, action, reason = null) {
+    if (routeSaving) return;
+    routeSaving = true;
+    const panel = document.getElementById("myRoutePanel");
+    if (panel) panel.classList.add("route-saving");
+    try {
+        const initData = window.Telegram?.WebApp?.initData || "";
+        if (!initData) throw new Error("Відкрийте застосунок через Telegram");
+        const response = await fetch(`${API_BASE_URL}/api/routes/mark`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Telegram-Init-Data": initData
+            },
+            body: JSON.stringify({ shopId, action, reason })
+        });
+        if (!response.ok) {
+            let message = `Помилка сервера: ${response.status}`;
+            try {
+                const body = await response.json();
+                message = body.message || message;
+            } catch (_) {}
+            throw new Error(message);
+        }
+        showToast("Відвідування збережено", "success");
+        await loadTodayRoute();
+    } catch (error) {
+        console.error("markRouteVisit:", error);
+        showToast(error.message || "Не вдалося зберегти", "error");
+    } finally {
+        routeSaving = false;
+        if (panel) panel.classList.remove("route-saving");
+    }
 }
 
 async function loadTodayRoute() {
@@ -7567,6 +7604,16 @@ async function loadTodayRoute() {
             order_later: "Замовлення пізніше", no_order: "Без замовлення",
             closed: "Зачинено", ordered: "Замовлення оформлено"
         };
+        const reasons = [
+            ["", "Оберіть причину"],
+            ["Все є", "Все є"],
+            ["Немає грошей", "Немає грошей"],
+            ["Немає власника", "Немає власника"],
+            ["Працюють з конкурентом", "Працюють з конкурентом"],
+            ["Дорого", "Дорого"],
+            ["Зачинено", "Зачинено"],
+            ["Інше", "Інше"]
+        ];
         for (const item of items) {
             const card = document.createElement("div");
             card.className = "route-shop-card";
@@ -7578,10 +7625,68 @@ async function loadTodayRoute() {
             const status = document.createElement("div");
             status.className = "route-shop-status";
             status.textContent = statusNames[item.status] || item.status || "Не відвідано";
+            card.append(title, address, status);
+            if (item.reason) {
+                const reasonText = document.createElement("div");
+                reasonText.className = "route-shop-address";
+                reasonText.textContent = `Причина: ${item.reason}`;
+                card.appendChild(reasonText);
+            }
+            if (item.status === "pending") {
+                const checkIn = document.createElement("button");
+                checkIn.type = "button";
+                checkIn.className = "route-action-button";
+                checkIn.textContent = "📍 Я на точці";
+                checkIn.addEventListener("click", () => markRouteVisit(item.shopId, "checkin"));
+                card.appendChild(checkIn);
+            }
+            if (item.status === "started") {
+                const later = document.createElement("button");
+                later.type = "button";
+                later.className = "route-action-button route-secondary-button";
+                later.textContent = "🕒 Замовлення пізніше";
+                later.addEventListener("click", () => markRouteVisit(item.shopId, "order_later"));
+                card.appendChild(later);
+
+                const reasonSelect = document.createElement("select");
+                reasonSelect.className = "route-reason-select";
+                for (const [value, label] of reasons) {
+                    const option = document.createElement("option");
+                    option.value = value;
+                    option.textContent = label;
+                    reasonSelect.appendChild(option);
+                }
+                card.appendChild(reasonSelect);
+                const otherInput = document.createElement("input");
+                otherInput.type = "text";
+                otherInput.className = "route-reason-select";
+                otherInput.placeholder = "Вкажіть причину";
+                otherInput.maxLength = 500;
+                otherInput.hidden = true;
+                card.appendChild(otherInput);
+                reasonSelect.addEventListener("change", () => {
+                    otherInput.hidden = reasonSelect.value !== "Інше";
+                });
+                const noOrder = document.createElement("button");
+                noOrder.type = "button";
+                noOrder.className = "route-action-button route-secondary-button";
+                noOrder.textContent = "❌ Без замовлення";
+                noOrder.addEventListener("click", () => {
+                    const selected = reasonSelect.value;
+                    const reason = selected === "Інше" ? otherInput.value.trim() : selected;
+                    if (!reason) {
+                        showToast("Оберіть або вкажіть причину", "error");
+                        return;
+                    }
+                    const action = selected === "Зачинено" ? "closed" : "no_order";
+                    markRouteVisit(item.shopId, action, reason);
+                });
+                card.appendChild(noOrder);
+            }
             const select = document.createElement("button");
             select.type = "button";
             select.className = "route-select-button";
-            select.textContent = "Обрати для замовлення";
+            select.textContent = "📦 Обрати для замовлення";
             select.addEventListener("click", () => {
                 const shop = shops.find(s => Number(s.id) === Number(item.shopId));
                 if (!shop) {
@@ -7593,7 +7698,7 @@ async function loadTodayRoute() {
                 document.getElementById("myRouteButton")?.setAttribute("aria-expanded", "false");
                 document.querySelector(".order-setup-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
             });
-            card.append(title, address, status, select);
+            card.appendChild(select);
             panel.appendChild(card);
         }
     } catch (error) {

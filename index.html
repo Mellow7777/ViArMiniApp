@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=167">
+   <link rel="stylesheet" href="style.css?v=246">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -244,6 +244,18 @@
 
     </div>
 
+
+
+    <!-- Контроль маршрутів: доступний лише через адмін-панель -->
+    <div class="admin-section" id="adminRouteReportSection">
+        <h3>📊 Контроль маршрутів</h3>
+        <label class="admin-field-label" for="adminRouteRepresentative">Торговий представник</label>
+        <select id="adminRouteRepresentative" class="admin-input"><option value="">Завантаження...</option></select>
+        <label class="admin-field-label" for="adminRouteDate">Дата маршруту</label>
+        <input type="date" id="adminRouteDate" class="admin-input">
+        <button type="button" id="adminRouteLoadButton" class="admin-save-button">📊 Показати маршрут</button>
+        <div id="adminRouteReport" class="admin-route-report" aria-live="polite"></div>
+    </div>
 
     <!-- Продажи торговых -->
 <div class="admin-section">
@@ -806,7 +818,7 @@
 </button>
 
 
-<script src="app.js?v=245"></script>
+<script src="app.js?v=246"></script>
 
 </body>
 </html> 

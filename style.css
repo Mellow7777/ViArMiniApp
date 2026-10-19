@@ -4075,3 +4075,19 @@ body.profile-open {
 body.priority-drawer-open {
     overflow: hidden;
 }
+
+
+/* Адмін: контроль маршрутів */
+.admin-route-report { margin-top: 14px; }
+.admin-route-stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:14px; }
+.admin-route-stat { display:flex; flex-direction:column; gap:4px; padding:12px 9px; border:1px solid var(--border); border-radius:12px; background:var(--tg-theme-secondary-bg-color,#fff); text-align:center; }
+.admin-route-stat strong { font-size:22px; color:var(--tg-theme-text-color,#1c1c1e); }
+.admin-route-stat span { font-size:12px; color:var(--tg-theme-hint-color,#737373); }
+.admin-route-shops { display:flex; flex-direction:column; gap:9px; }
+.admin-route-shop { display:flex; flex-direction:column; gap:5px; padding:13px; border:1px solid var(--border); border-radius:12px; background:var(--tg-theme-secondary-bg-color,#fff); }
+.admin-route-shop strong { font-size:15px; }
+.admin-route-muted { font-size:12px; color:var(--tg-theme-hint-color,#737373); overflow-wrap:anywhere; }
+.admin-route-status { font-size:13px; font-weight:700; }
+.admin-route-empty { padding:12px; font-size:13px; line-height:1.5; color:var(--tg-theme-hint-color,#737373); }
+#adminRouteReportSection .admin-field-label { display:block; margin:12px 0 6px; }
+#adminRouteLoadButton { margin-top:12px; width:100%; }

@@ -1,4093 +1,4223 @@
-/*
- * ВіАр Telegram Mini App
- * Cleaned single-file stylesheet
- *
- * - consolidated repeated selectors
- * - removed duplicate declarations
- * - preserved Telegram theme variables
- * - kept responsive and large-text rules
- */
-:root {
-    --background: #f3f4f6;
-    --card-background: #ffffff;
-    --text: #1c1c1e;
-    --secondary-text: #737373;
-    --border: #e5e7eb;
-    --primary: #2d8cff;
-    --primary-dark: #1475e5;
-    --danger: #ef4444;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --border-radius: 16px;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    min-height: 100vh;
-    background: var(--tg-theme-bg-color, var(--background));
-    color: var(--tg-theme-text-color, var(--text));
-    font-family: -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-}
-
-button,
-input,
-select,
-textarea {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.app-header h1 {
-    font-size: 22px;
-    line-height: 1.1;
-}
-
-.app-header p {
-    margin-top: 3px;
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    font-size: 13px;
-}
-
-.cart-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 40px;
-    height: 40px;
-    padding: 0 12px;
-    border-radius: 20px;
-    background: var(--primary);
-    color: #ffffff;
-    font-weight: 700;
-}
-
-.container {
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 14px;
-}
-
-.card {
-    margin-bottom: 12px;
-    padding: 14px;
-    background: var(--tg-theme-secondary-bg-color, var(--card-background));
-    border: 1px solid var(--border);
-    border-radius: var(--border-radius);
-}
-
-.section-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.user-card strong {
-    font-size: 16px;
-}
-
-select,
-input,
-textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    outline: none;
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, var(--text));
-}
-
-select,
-input {
-    height: 48px;
-    padding: 0 13px;
-}
-
-textarea {
-    min-height: 90px;
-    padding: 12px;
-    resize: vertical;
-}
-
-select:focus,
-input:focus,
-textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(45, 140, 255, 0.12);
-}
-
-.operation-switch {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.operation-button {
-    min-height: 44px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: transparent;
-    color: var(--tg-theme-text-color, var(--text));
-    font-weight: 600;
-}
-
-.operation-button.active {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: #ffffff;
-}
-
-.categories {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-    padding: 5px 0 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-
-.categories::-webkit-scrollbar {
-    display: none;
-}
-
-.category-button {
-    flex-shrink: 0;
-    min-height: 40px;
-    padding: 8px 14px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #1c1c1e);
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.category-button.active {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: #ffffff;
-}
-
-.section-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 18px 2px 10px;
-}
-
-.section-title-row h2 {
-    font-size: 19px;
-}
-
-.section-title-row span {
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    font-size: 13px;
-}
-
-.products-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.quantity-button:active {
-    transform: scale(0.96);
-}
-
-.add-button:active,
-.send-button:active {
-    background: var(--primary-dark);
-    transform: scale(0.98);
-}
-
-.product-in-cart {
-    margin-top: 10px;
-    color: var(--success);
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.clear-cart-button {
-    border: none;
-    background: transparent;
-    color: var(--danger);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.cart-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-}
-
-.cart-item-info {
-    flex: 1;
-}
-
-.cart-item-name {
-    margin-bottom: 4px;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.cart-item-quantity {
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    font-size: 13px;
-}
-
-.remove-cart-button {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 10px;
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    font-size: 17px;
-}
-
-.empty-cart {
-    padding: 25px 10px;
-    border: 1px dashed var(--border);
-    border-radius: 14px;
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    text-align: center;
-}
-
-.order-summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 16px 0;
-}
-
-.order-summary div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 14px;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-}
-
-.order-summary span {
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    font-size: 12px;
-}
-
-.order-summary strong {
-    font-size: 18px;
-}
-
-.send-button {
-    width: 100%;
-    min-height: 54px;
-    border: none;
-    border-radius: 15px;
-    background: var(--primary);
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.send-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.no-products {
-    padding: 35px 15px;
-    border: 1px dashed var(--border);
-    border-radius: 14px;
-    color: var(--tg-theme-hint-color, var(--secondary-text));
-    text-align: center;
-}
-
-.toast {
-    position: fixed;
-    right: 16px;
-    bottom: 110px;
-    left: 16px;
-    z-index: 100;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 13px 16px;
-    border-radius: 13px;
-    background: #1c1c1e;
-    color: #ffffff;
-    text-align: center;
-    font-size: 14px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-    transition: opacity 0.2s ease,
-        transform 0.2s ease;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.error {
-    background: var(--danger);
-}
-
-.toast.success {
-    background: var(--success);
-}
-
-@media (max-width: 420px) {
-    .product-controls {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .quantity-control {
-        justify-content: space-between;
-    }
-
-    .quantity-input {
-        flex: 1;
-    }
-
-    .add-button {
-        width: 100%;
-    }
-}
-
-.product-unavailable {
-    opacity: 0.65;
-}
-
-.product-unavailable .add-button {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-.product-unavailable .quantity-button,
-.product-unavailable .quantity-input {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.product-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.product-modal.show {
-    display: flex;
-}
-
-.product-modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.58);
-}
-
-.product-modal-content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 600px;
-    max-height: 92vh;
-    padding: 18px;
-    overflow-y: auto;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    border-radius: 22px 22px 0 0;
-}
-
-.product-modal-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 3;
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.08);
-    color: var(--tg-theme-text-color, #1c1c1e);
-    font-size: 17px;
-}
-
-.product-modal-image-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 250px;
-    max-height: 380px;
-    margin-bottom: 18px;
-    overflow: hidden;
-    border-radius: 16px;
-    background: #f3f4f6;
-}
-
-.product-modal-image {
-    display: none;
-    width: 100%;
-    max-height: 380px;
-    object-fit: contain;
-}
-
-.product-image-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 250px;
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 14px;
-}
-
-.product-modal-content h2 {
-    margin-bottom: 16px;
-    padding-right: 45px;
-    font-size: 22px;
-}
-
-.product-modal-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.product-modal-details div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 13px;
-    border: 1px solid var(--border);
-    border-radius: 13px;
-}
-
-.product-modal-details span {
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 12px;
-}
-
-.product-modal-details strong {
-    font-size: 15px;
-}
-
-.floating-cart-button {
-    position: fixed;
-    right: 16px;
-    bottom: 18px;
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: var(--primary);
-    color: #ffffff;
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
-    transition: transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.floating-cart-text {
-    display: none;
-}
-
-.floating-cart-icon {
-    font-size: 26px;
-}
-
-.floating-cart-count {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    min-width: 24px;
-    height: 24px;
-    padding: 0 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: #ffffff;
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.cart-section {
-    margin-top: 24px;
-    scroll-margin-top: 95px;
-}
-
-.bottom-space {
-    height: 105px;
-}
-
-@media (max-width: 380px) {
-    .floating-cart-text {
-        display: none;
-    }
-
-    .floating-cart-button {
-        width: 58px;
-        padding: 0;
-        justify-content: center;
-    }
-
-    .floating-cart-count {
-        position: absolute;
-        top: -5px;
-        right: -3px;
-        min-width: 23px;
-        height: 23px;
-        font-size: 11px;
-    }
-}
-
-.product-card.search-highlight {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-    box-shadow: 0 0 0 6px rgba(45, 140, 255, 0.12);
-    transition: outline 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.cart-drawer {
-    position: fixed;
-    inset: 0;
-    z-index: 900;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.cart-drawer.show {
-    display: flex;
-}
-
-.cart-drawer-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-}
-
-@keyframes drawerSlideUp {
-from {
-        transform: translateY(100%);
-    }
-
-    to {
-        transform: translateY(0);
-    }
-}
-
-.cart-drawer-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 14px;
-}
-
-.cart-drawer-header h2 {
-    margin-bottom: 4px;
-}
-
-.cart-drawer-header span {
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 13px;
-}
-
-.cart-drawer-close {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.08);
-    font-size: 17px;
-}
-
-.drawer-mode-switch {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 14px;
-}
-
-.drawer-mode-button {
-    min-height: 45px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: transparent;
-    color: var(--tg-theme-text-color, #1c1c1e);
-    font-weight: 700;
-}
-
-.drawer-mode-button.active {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: #ffffff;
-}
-
-.drawer-mode-button span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 22px;
-    height: 22px;
-    margin-left: 5px;
-    border-radius: 11px;
-    background: rgba(255, 255, 255, 0.22);
-}
-
-.drawer-cart-item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.drawer-cart-item-info strong {
-    font-size: 14px;
-}
-
-.drawer-cart-item-info span,
-.drawer-cart-item-info small {
-    color: var(--tg-theme-hint-color, #737373);
-}
-
-.drawer-cart-item-price {
-    color: var(--success);
-    font-weight: 700;
-}
-
-.drawer-empty-cart {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-}
-
-.shop-picker label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 13px;
-}
-
-.shop-search-input {
-    width: 100%;
-    min-height: 48px;
-    padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #1c1c1e);
-    font-size: 15px;
-    outline: none;
-}
-
-.shop-search-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(45, 140, 255, 0.14);
-}
-
-.shop-search-results {
-    position: absolute;
-    top: calc(100% + 7px);
-    left: 0;
-    right: 0;
-    z-index: 700;
-    display: none;
-    max-height: 330px;
-    overflow-y: auto;
-    padding: 6px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
-}
-
-.shop-search-results.show {
-    display: block;
-}
-
-.shop-result-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--tg-theme-text-color, #1c1c1e);
-    text-align: left;
-}
-
-.shop-result-item:active {
-    background: rgba(45, 140, 255, 0.12);
-}
-
-.shop-result-item strong {
-    font-size: 14px;
-}
-
-.shop-result-item span {
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 12px;
-    line-height: 1.35;
-}
-
-.shop-no-results {
-    padding: 18px 10px;
-    color: var(--tg-theme-hint-color, #737373);
-    text-align: center;
-}
-
-.selected-shop-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 13px;
-    border: 1px solid var(--primary);
-    border-radius: 13px;
-    background: rgba(45, 140, 255, 0.1);
-}
-
-.selected-shop-card[hidden] {
-    display: none;
-}
-
-.selected-shop-card div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.selected-shop-card strong {
-    font-size: 15px;
-}
-
-.selected-shop-card span {
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 12px;
-    line-height: 1.35;
-}
-
-#clearSelectedShopButton {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.08);
-    color: var(--tg-theme-text-color, #1c1c1e);
-}
-
-#selectedShopAddress {
-    display: block;
-    margin-top: 4px;
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 13px;
-    line-height: 1.4;
-    white-space: normal;
-    word-break: break-word;
-}
-
-.large-text-mode {
-    font-size: 18px;
-}
-
-.large-text-mode label,
-.large-text-mode .section-label,
-.large-text-mode .product-code,
-.large-text-mode .product-unit,
-.large-text-mode .product-weight,
-.large-text-mode .selected-shop-card span,
-.large-text-mode .products-count {
-    font-size: 16px !important;
-}
-
-.large-text-mode .product-name {
-    font-size: 22px !important;
-    line-height: 1.3;
-}
-
-.large-text-mode .selected-shop-card strong {
-    font-size: 20px !important;
-}
-
-.large-text-mode .availability {
-    font-size: 18px !important;
-    font-weight: 800;
-}
-
-.large-text-mode .quantity-input {
-    min-width: 92px;
-    min-height: 54px;
-    font-size: 22px !important;
-    font-weight: 800;
-}
-
-.large-text-mode .quantity-button {
-    width: 54px;
-    height: 54px;
-    font-size: 26px !important;
-}
-
-.large-text-mode .unit-switch-button {
-    min-width: 54px;
-    min-height: 44px;
-    font-size: 18px !important;
-}
-
-.large-text-mode .product-estimated-total {
-    font-size: 20px !important;
-    font-weight: 800;
-}
-
-.large-text-mode .add-button {
-    min-height: 56px;
-    padding: 10px 18px;
-    font-size: 18px !important;
-    line-height: 1.2;
-}
-
-.large-text-mode .shop-search-input,
-.large-text-mode #productSearch {
-    min-height: 58px;
-    font-size: 19px !important;
-}
-
-.large-text-mode .category-button {
-    min-height: 48px;
-    padding: 10px 16px;
-    font-size: 16px !important;
-}
-
-.large-text-mode .drawer-summary span,
-.large-text-mode .drawer-cart-item-info span,
-.large-text-mode .drawer-cart-item-info small {
-    font-size: 15px !important;
-}
-
-.large-text-mode .drawer-summary strong,
-.large-text-mode .drawer-cart-item-info strong {
-    font-size: 18px !important;
-}
-
-.product-code,
-.product-unit,
-.product-weight,
-.selected-shop-card span,
-.products-count,
-.shop-picker label {
-    color: var(--tg-theme-text-color, #202020);
-    opacity: 0.85;
-}
-
-.large-text-container {
-    margin: 12px 0;
-    position: relative;
-    z-index: 100;
-    pointer-events: auto;
-}
-
-.large-text-toggle {
-    padding: 10px 16px;
-    position: relative;
-    z-index: 101;
-    width: 100%;
-    min-height: 52px;
-    pointer-events: auto;
-    touch-action: manipulation;
-    cursor: pointer;
-    border: 1px solid var(--primary);
-    border-radius: 12px;
-    background: #ffffff;
-    color: var(--primary);
-    font-size: 16px;
-    font-weight: 700;
-}
-
-@media (max-width: 600px) {
-    body.large-text-mode .product-controls {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 12px;
-        align-items: center;
-    }
-
-    body.large-text-mode .quantity-control {
-        grid-column: 1;
-        display: flex;
-        min-width: 0;
-    }
-
-    body.large-text-mode .product-estimated-total {
-        grid-column: 2;
-        min-width: 95px;
-        font-size: 18px !important;
-        line-height: 1.15;
-        text-align: center;
-        white-space: normal;
-    }
-
-    body.large-text-mode .add-button {
-        grid-column: 1 / -1;
-        width: 100%;
-        min-width: 0;
-        min-height: 58px;
-        font-size: 18px !important;
-        white-space: normal;
-    }
-
-    body.large-text-mode .quantity-input {
-        width: 92px;
-        min-width: 0;
-    }
-
-    body.large-text-mode .product-card {
-        overflow: hidden;
-    }
-}
-
-@media (max-width: 600px) {
-    .app-header {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .large-text-toggle {
-        order: 3;
-        width: 100%;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    body.large-text-mode .product-card .product-controls {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 12px !important;
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    body.large-text-mode .product-card .quantity-control {
-        display: grid !important;
-        grid-template-columns: 58px minmax(80px, 1fr) 58px !important;
-        gap: 10px !important;
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    body.large-text-mode .product-card .quantity-button {
-        width: 58px !important;
-        min-width: 58px !important;
-        height: 58px !important;
-    }
-
-    body.large-text-mode .product-card .quantity-input {
-        width: 100% !important;
-        min-width: 0 !important;
-        height: 58px !important;
-        box-sizing: border-box !important;
-    }
-
-    body.large-text-mode .product-card .product-estimated-total {
-        width: 100% !important;
-        min-width: 0 !important;
-        font-size: 20px !important;
-        text-align: center !important;
-        white-space: normal !important;
-    }
-
-    body.large-text-mode .product-card .add-button {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-        min-height: 60px !important;
-        padding: 12px !important;
-        font-size: 19px !important;
-        line-height: 1.2 !important;
-        white-space: normal !important;
-        box-sizing: border-box !important;
-    }
-
-    body.large-text-mode .product-card {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
-        box-sizing: border-box !important;
-    }
-}
-
-body.large-text-mode {
-    color: var(--tg-theme-text-color, #1c1c1e);
-}
-
-body.large-text-mode .app-header p,
-body.large-text-mode .products-count,
-body.large-text-mode .shop-picker label,
-body.large-text-mode .selected-shop-card span,
-body.large-text-mode .product-weight {
-    color: var(--tg-theme-text-color, #1c1c1e) !important;
-    opacity: 0.9 !important;
-    font-weight: 600 !important;
-}
-
-body.large-text-mode .product-name,
-body.large-text-mode .selected-shop-card strong,
-body.large-text-mode h1,
-body.large-text-mode h2,
-body.large-text-mode h3,
-body.large-text-mode strong {
-    color: var(--tg-theme-text-color, #1c1c1e) !important;
-}
-
-body.large-text-mode .product-code,
-body.large-text-mode .product-unit,
-body.large-text-mode .product-price {
-    color: var(--tg-theme-text-color, #1c1c1e) !important;
-    background: rgba(127, 127, 127, 0.12) !important;
-    border: none !important;
-    opacity: 1 !important;
-}
-
-body.large-text-mode .product-weight {
-    background: transparent !important;
-    border: none !important;
-}
-
-body.large-text-mode input,
-body.large-text-mode textarea {
-    color: var(--tg-theme-text-color, #1c1c1e) !important;
-    background: var(--tg-theme-bg-color, #ffffff) !important;
-    border-color: rgba(127, 127, 127, 0.55) !important;
-}
-
-body.large-text-mode input::placeholder,
-body.large-text-mode textarea::placeholder {
-    color: var(--tg-theme-hint-color, #737373) !important;
-    opacity: 1 !important;
-}
-
-body.large-text-mode .availability.available {
-    color: #00a83a !important;
-    font-weight: 800 !important;
-}
-
-body.large-text-mode .availability.unavailable {
-    color: #d93025 !important;
-    font-weight: 800 !important;
-}
-
-body.large-text-mode .product-estimated-total {
-    color: var(--tg-theme-text-color, #1c1c1e) !important;
-    font-weight: 800 !important;
-}
-
-.app-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    position: static !important;
-    top: auto !important;
-    z-index: auto !important;
-    background: var(--tg-theme-bg-color, #ffffff);
-    border-bottom: 1px solid
-        rgba(127, 127, 127, 0.25);
-    padding-top: calc(12px + env(safe-area-inset-top));
-    padding-bottom: 12px;
-}
-
-.sticky-top-panel {
-    position: static;
-    background: var(--tg-theme-bg-color, #ffffff);
-    border-bottom: 1px solid
-        rgba(127, 127, 127, 0.25);
-    padding-top: env(safe-area-inset-top);
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
-}
-
-.sticky-top-panel .app-header {
-    position: static;
-    border-bottom: none;
-}
-
-.sticky-top-panel .large-text-container {
-    margin: 0;
-    padding: 0 16px 12px;
-}
-
-.sticky-top-panel,
-.app-header,
-.search-section {
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    z-index: auto !important;
-    transform: none !important;
-}
-
-.product-card::before {
-    top: 80px;
-    right: 16px;
-    font-size: clamp(70px, 22vw, 120px);
-    font-weight: 900;
-    letter-spacing: -8px;
-    line-height: 1;
-    color: rgba(55, 111, 196, 0.09);
-    transform: rotate(-4deg);
-    user-select: none;
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    background: linear-gradient(
-            to bottom,
-            transparent 45%,
-            rgba(1, 8, 19, 0.22) 100%
-        );
-    pointer-events: none;
-}
-
-.viar-watermark-logo::before,
-.viar-watermark-logo::after {
-    content: "";
-    position: absolute;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    border-radius: 999px;
-    background: currentColor;
-}
-
-.viar-watermark-logo::before {
-    top: 5px;
-}
-
-.viar-watermark-logo::after {
-    bottom: 3px;
-}
-
-.product-card-header {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
-}
-
-.info-button:active {
-    transform: scale(0.94);
-}
-
-.availability.available {
-    color: #56e47e;
-    background: rgba(33, 190, 84, 0.10);
-    border: 1px solid rgba(61, 222, 106, 0.22);
-}
-
-.availability.unavailable {
-    color: #ff7070;
-    background: rgba(224, 59, 59, 0.11);
-    border: 1px solid rgba(255, 90, 90, 0.23);
-}
-
-.unit-switch:has(.unit-switch-button:only-child) {
-    grid-template-columns: minmax(0, 1fr);
-}
-
-.unit-switch-button.active {
-    color: #ffffff;
-    border-color: #3286ff;
-    background: linear-gradient(
-            145deg,
-            #176de4,
-            #07388f
-        );
-    box-shadow: 0 0 0 2px rgba(50, 134, 255, 0.16),
-        0 8px 22px rgba(0, 92, 255, 0.27),
-        inset 0 1px 0 rgba(255, 255, 255, 0.19);
-}
-
-.unit-name {
-    flex: 1;
-    text-align: left;
-}
-
-.unit-switch-button.active .unit-check {
-    display: grid;
-}
-
-.quantity-button:active:not(:disabled) {
-    transform: scale(0.95);
-    background: #17305a;
-}
-
-.quantity-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.quantity-input:focus {
-    border-color: #3286ff;
-    box-shadow: 0 0 0 3px rgba(50, 134, 255, 0.15);
-}
-
-.quantity-input::-webkit-inner-spin-button,
-.quantity-input::-webkit-outer-spin-button {
-    margin: 0;
-    appearance: none;
-}
-
-.add-button:active:not(:disabled) {
-    transform: scale(0.98);
-}
-
-.add-button:disabled {
-    color: rgba(255, 255, 255, 0.55);
-    background: #333d4d;
-    border-color: #485363;
-    box-shadow: none;
-    cursor: not-allowed;
-}
-
-.add-button-text {
-    text-align: center;
-}
-
-.product-card.product-unavailable {
-    filter: saturate(0.72);
-}
-
-.product-card.product-unavailable .viar-watermark {
-    opacity: 0.6;
-}
-
-.product-card {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    color: #ffffff;
-    border: 1px solid rgba(95, 137, 201, 0.38);
-    background: radial-gradient(
-            circle at 76% 26%,
-            rgba(30, 100, 240, 0.14),
-            transparent 37%
-        ),
-        linear-gradient(
-            145deg,
-            #071426 0%,
-            #081a31 48%,
-            #050d1a 100%
-        );
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
-        0 14px 32px rgba(0, 0, 0, 0.28);
-    padding: 10px 10px 11px;
-    gap: 7px;
-    border-radius: 18px;
-}
-
-.product-name {
-    margin-bottom: 5px;
-    min-width: 0;
-    margin: 0;
-    padding-right: 4px;
-    font-weight: 800;
-    color: #ffffff;
-    overflow-wrap: anywhere;
-    font-size: 16px;
-    line-height: 1.08;
-}
-
-.info-button {
-    display: grid;
-    place-items: center;
-    padding: 0;
-    color: #3789ff;
-    background: rgba(5, 14, 28, 0.85);
-    border: 2px solid #3789ff;
-    border-radius: 50%;
-    font-family: Georgia, serif;
-    font-weight: 700;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: 0 0 0 3px rgba(55, 137, 255, 0.08),
-        inset 0 0 14px rgba(55, 137, 255, 0.08);
-    flex: 0 0 34px;
-    width: 34px;
-    height: 34px;
-    font-size: 21px;
-}
-
-.product-price-section {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 58px;
-    padding-top: 0;
-    gap: 1px;
-}
-
-.product-price-label {
-    color: #80a8e5;
-    font-weight: 500;
-    font-size: 12px;
-}
-
-.product-price-value {
-    display: flex;
-    align-items: baseline;
-    color: #ffffff;
-    font-weight: 850;
-    line-height: 1;
-    gap: 4px;
-    font-size: 25px;
-}
-
-.product-price-value span {
-    font-weight: 700;
-    font-size: 14px;
-}
-
-.viar-watermark {
-    position: absolute;
-    z-index: -1;
-    text-align: center;
-    color: rgba(74, 126, 205, 0.10);
-    pointer-events: none;
-    user-select: none;
-    top: 50px;
-    right: 8px;
-    width: 54%;
-}
-
-.viar-watermark-logo {
-    position: relative;
-    font-weight: 900;
-    line-height: 0.9;
-    letter-spacing: -5px;
-    padding: 12px 0 9px;
-    font-size: clamp(38px, 13vw, 58px);
-}
-
-.viar-watermark-slogan {
-    font-weight: 700;
-    margin-top: 3px;
-    font-size: 5px;
-    letter-spacing: 1px;
-}
-
-.availability {
-    position: relative;
-    z-index: 2;
-    width: max-content;
-    max-width: 100%;
-    border-radius: 999px;
-    font-weight: 750;
-    padding: 4px 7px;
-    font-size: 11px;
-}
-
-.product-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(113, 157, 224, 0.28),
-            transparent
-        );
-    margin: 1px 0;
-}
-
-.product-unit-section {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.unit-section-title {
-    color: #9fb4d6;
-    font-weight: 500;
-    font-size: 12px;
-}
-
-.unit-switch {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-    gap: 7px;
-}
-
-.unit-switch-button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: #9eabc1;
-    background: linear-gradient(
-            145deg,
-            rgba(18, 31, 51, 0.93),
-            rgba(8, 16, 29, 0.96)
-        );
-    border: 1px solid rgba(137, 160, 199, 0.32);
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    min-height: 42px;
-    padding: 7px 9px;
-    gap: 6px;
-    border-radius: 12px;
-    font-size: 14px;
-}
-
-.unit-check {
-    display: none;
-    place-items: center;
-    color: #1d6ce0;
-    background: #ffffff;
-    border-radius: 50%;
-    font-weight: 900;
-    width: 21px;
-    height: 21px;
-    font-size: 13px;
-}
-
-.product-bottom {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.product-controls {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 7px;
-}
-
-.quantity-control {
-    display: grid;
-    align-items: center;
-    width: 100%;
-    grid-template-columns: 40px minmax(58px, 1fr) 40px;
-    gap: 6px;
-}
-
-.quantity-button {
-    display: grid;
-    place-items: center;
-    padding: 0;
-    color: #ffffff;
-    background: linear-gradient(
-            145deg,
-            #101d31,
-            #080f1c
-        );
-    border: 1px solid rgba(142, 162, 195, 0.35);
-    font-weight: 500;
-    line-height: 1;
-    cursor: pointer;
-    width: 40px;
-    height: 42px;
-    border-radius: 11px;
-    font-size: 23px;
-}
-
-.quantity-input {
-    width: 100%;
-    padding: 0 8px;
-    color: #ffffff;
-    background: linear-gradient(
-            145deg,
-            rgba(13, 27, 47, 0.98),
-            rgba(6, 14, 25, 0.98)
-        );
-    border: 1px solid rgba(142, 162, 195, 0.35);
-    outline: none;
-    text-align: center;
-    font-weight: 800;
-    appearance: textfield;
-    height: 42px;
-    border-radius: 11px;
-    font-size: 19px;
-}
-
-.product-estimated-total {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-areas: "symbol value"
-        ". currency";
-    align-items: end;
-    color: #ffffff;
-    min-width: 60px;
-    column-gap: 3px;
-}
-
-.estimated-symbol {
-    grid-area: symbol;
-    align-self: start;
-    color: #3789ff;
-    font-weight: 800;
-    font-size: 17px;
-}
-
-.estimated-value {
-    grid-area: value;
-    font-weight: 800;
-    line-height: 1;
-    font-size: 20px;
-}
-
-.estimated-currency {
-    grid-area: currency;
-    color: #3789ff;
-    font-size: 12px;
-}
-
-.add-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    color: #ffffff;
-    background: linear-gradient(
-            135deg,
-            #2788ff 0%,
-            #1255d5 55%,
-            #07318c 100%
-        );
-    border: 1px solid rgba(84, 157, 255, 0.82);
-    font-weight: 800;
-    line-height: 1.15;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0, 83, 220, 0.30),
-        inset 0 1px 0 rgba(255, 255, 255, 0.22);
-    min-height: 44px;
-    padding: 8px 10px;
-    gap: 7px;
-    border-radius: 13px;
-    font-size: 14px;
-}
-
-.product-card::after {
-    content: "";
-    position: absolute;
-    z-index: -2;
-    left: -15%;
-    right: -15%;
-    opacity: 0.28;
-    background: repeating-radial-gradient(
-            ellipse at center,
-            transparent 0 8px,
-            rgba(43, 112, 255, 0.55) 9px 10px,
-            transparent 11px 17px
-        );
-    transform: scaleX(1.4);
-    pointer-events: none;
-    bottom: -110px;
-    height: 155px;
-}
-
-@media (max-width: 390px) {
-    .product-card {
-        padding: 9px;
-        gap: 6px;
-    }
-
-    .product-name {
-        font-size: 15px;
-    }
-
-    .info-button {
-        flex-basis: 32px;
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
-    }
-
-    .product-price-value {
-        font-size: 23px;
-    }
-
-    .unit-switch-button {
-        min-height: 40px;
-        font-size: 13px;
-    }
-
-    .quantity-control {
-        grid-template-columns: 38px minmax(54px, 1fr) 38px;
-    }
-
-    .quantity-button,
-        .quantity-input {
-        height: 40px;
-    }
-
-    .add-button {
-        min-height: 42px;
-        font-size: 13px;
-    }
-}
-
-.unit-icon,
-.add-button-icon {
-    font-family: "Apple Color Emoji",
-        "Segoe UI Emoji",
-        sans-serif;
-}
-
-.unit-icon {
-    line-height: 1;
-    display: grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    font-size: 17px;
-}
-
-.add-button-icon {
-    display: grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    flex: 0 0 20px;
-    font-size: 17px;
-}
-
-.drawer-cart-item {
-    align-items: center;
-    justify-content: space-between;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    padding: 13px;
-    color: #ffffff;
-    background: linear-gradient(
-            145deg,
-            #08172a,
-            #050d19
-        );
-    border: 1px solid rgba(73, 127, 211, 0.42);
-    border-radius: 16px;
-}
-
-.drawer-item-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.drawer-item-name {
-    font-size: 16px;
-    font-weight: 800;
-    line-height: 1.15;
-}
-
-.drawer-item-unit {
-    margin-top: 4px;
-    color: #89a9d8;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.drawer-remove-button {
-    flex-shrink: 0;
-    flex: 0 0 34px;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    color: #ff6370;
-    background: rgba(124, 24, 34, 0.24);
-    border: 1px solid rgba(255, 89, 104, 0.28);
-    border-radius: 10px;
-    font-size: 19px;
-    line-height: 1;
-}
-
-.drawer-item-editor {
-    display: grid;
-    grid-template-columns: 42px minmax(70px, 1fr) 42px;
-    gap: 7px;
-    align-items: center;
-}
-
-.drawer-edit-button {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    color: #ffffff;
-    background: #0d1b2e;
-    border: 1px solid rgba(130, 158, 201, 0.34);
-    border-radius: 11px;
-    font-size: 24px;
-    line-height: 1;
-}
-
-.drawer-edit-button:active {
-    transform: scale(0.95);
-    background: #17325b;
-}
-
-.drawer-quantity-input {
-    width: 100%;
-    height: 42px;
-    padding: 0 8px;
-    color: #ffffff;
-    background: #091425;
-    border: 1px solid rgba(130, 158, 201, 0.34);
-    border-radius: 11px;
-    outline: none;
-    text-align: center;
-    font-size: 19px;
-    font-weight: 800;
-    appearance: textfield;
-}
-
-.drawer-quantity-input:focus {
-    border-color: #3286ff;
-    box-shadow: 0 0 0 3px rgba(50, 134, 255, 0.14);
-}
-
-.drawer-quantity-input::-webkit-inner-spin-button,
-.drawer-quantity-input::-webkit-outer-spin-button {
-    margin: 0;
-    appearance: none;
-}
-
-.drawer-item-price {
-    color: #41dd76;
-    font-size: 19px;
-    font-weight: 850;
-}
-
-.order-setup-header > div:first-child {
-    min-width: 0;
-}
-
-.order-setup-title {
-    display: block;
-    margin-top: 3px;
-    color: var(--tg-theme-text-color, #ffffff);
-    font-size: 18px;
-    font-weight: 850;
-    line-height: 1.25;
-}
-
-.field-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(
-        --tg-theme-hint-color,
-        rgba(255, 255, 255, 0.62)
-    );
-    font-size: 12px;
-    font-weight: 750;
-    letter-spacing: 0.15px;
-}
-
-.order-setup-card
-.shop-search-input::-webkit-search-cancel-button {
-    opacity: 0.7;
-}
-
-.order-setup-card .shop-search-results {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    left: 0;
-    z-index: 100;
-    display: none;
-    overflow-y: auto;
-    max-height: 270px;
-    padding: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    border-radius: 17px;
-    background: rgba(25, 25, 29, 0.98);
-    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.38);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-}
-
-.order-setup-card .shop-search-results.show {
-    display: block;
-}
-
-.order-setup-card .shop-search-results > * {
-    display: block;
-    width: 100%;
-    padding: 11px 12px;
-    border: 0;
-    border-radius: 12px;
-    background: transparent;
-    color: var(--tg-theme-text-color, #ffffff);
-    font-family: inherit;
-    text-align: left;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
-.order-setup-card .shop-search-results > *:active {
-    background: rgba(51, 144, 255, 0.15);
-}
-
-.selected-shop-clear:active {
-    background: rgba(255, 255, 255, 0.13);
-    transform: scale(0.94);
-}
-
-.order-setup-card .operation-button:active {
-    transform: scale(0.97);
-}
-
-.invoice-form-button:active {
-    transform: scale(0.97);
-}
-
-body:not(.dark-theme) .order-setup-card {
-    border-color: rgba(0, 0, 0, 0.08);
-}
-
-body:not(.dark-theme)
-.order-setup-card .shop-search-input,
-body:not(.dark-theme)
-.order-setup-card .operation-button,
-body:not(.dark-theme)
-.invoice-form-button {
-    border-color: rgba(0, 0, 0, 0.1);
-}
-
-body.large-text-mode .order-setup-title {
-    font-size: 21px;
-}
-
-body.large-text-mode .field-label {
-    font-size: 15px;
-}
-
-body.large-text-mode
-.order-setup-card .shop-search-input {
-    min-height: 58px;
-    font-size: 19px;
-}
-
-body.large-text-mode
-.order-setup-card .operation-button {
-    min-height: 58px;
-    font-size: 18px;
-}
-
-body.large-text-mode .invoice-form-main {
-    font-size: 23px;
-}
-
-body.large-text-mode .invoice-form-caption {
-    font-size: 14px;
-}
-
-@media (max-width: 360px) {
-    .order-setup-card {
-        padding: 13px;
-        border-radius: 19px;
-    }
-
-    .order-setup-title {
-        font-size: 16px;
-    }
-
-    .order-setup-icon {
-        width: 40px;
-        height: 40px;
-        flex-basis: 40px;
-    }
-
-    .order-setup-card .operation-button {
-        font-size: 14px;
-    }
-
-    .invoice-form-button {
-        padding-right: 34px;
-    }
-
-    .invoice-form-check {
-        right: 9px;
-        width: 21px;
-        height: 21px;
-    }
-}
-
-.invoice-group {
-    margin-top: 15px;
-}
-
-.invoice-form-caption {
-    overflow: hidden;
-    max-width: 100%;
-    margin-top: 5px;
-    color: var(
-        --tg-theme-hint-color,
-        rgba(255, 255, 255, 0.52)
-    );
-    font-size: 11px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: none;
-}
-
-.operation-group {
-    margin-top: 18px;
-}
-
-.order-setup-card {
-    position: relative;
-    overflow: visible;
-    padding: 18px;
-    border: 1px solid rgba(51, 144, 255, 0.15);
-    border-radius: 24px;
-    background: radial-gradient(
-            circle at top right,
-            rgba(51, 144, 255, 0.14),
-            transparent 42%
-        ),
-        linear-gradient(
-            145deg,
-            rgba(19, 38, 60, 0.96),
-            rgba(8, 20, 35, 0.98)
-        );
-    box-shadow: 0 15px 36px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.order-setup-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 22px;
-}
-
-.order-setup-heading {
-    color: var(
-        --tg-theme-hint-color,
-        rgba(255, 255, 255, 0.68)
-    );
-    font-size: 17px;
-    font-weight: 750;
-}
-
-.order-setup-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 45px;
-    width: 45px;
-    height: 45px;
-    border: 1px solid rgba(51, 144, 255, 0.34);
-    border-radius: 15px;
-    background: rgba(51, 144, 255, 0.14);
-    font-size: 21px;
-}
-
-.setup-section-title {
-    display: block;
-    margin-bottom: 10px;
-    color: var(--tg-theme-text-color, #ffffff);
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.shop-picker {
-    position: relative;
-}
-
-.shop-search-wrapper {
-    position: relative;
-}
-
-.shop-search-icon {
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    z-index: 2;
-    font-size: 17px;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-.order-setup-card .shop-search-input {
-    transition: border-color 0.16s ease,
-        background 0.16s ease,
-        box-shadow 0.16s ease;
-    display: block;
-    width: 100%;
-    min-height: 54px;
-    padding: 0 42px 0 46px;
-    border: 1px solid rgba(51, 144, 255, 0.5);
-    border-radius: 17px;
-    outline: none;
-    background: rgba(9, 25, 44, 0.92);
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 16px;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.order-setup-card .shop-search-input:focus {
-    background: rgba(51, 144, 255, 0.07);
-    border-color: #3390ff;
-    box-shadow: 0 0 0 3px rgba(51, 144, 255, 0.14);
-}
-
-.order-setup-card .shop-search-input::placeholder {
-    color: rgba(255, 255, 255, 0.45);
-}
-
-.order-setup-card .selected-shop-modern {
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    margin-top: 11px;
-    padding: 14px;
-    border: 1px solid rgba(51, 144, 255, 0.72);
-    border-radius: 20px;
-    background: linear-gradient(
-            135deg,
-            rgba(51, 144, 255, 0.2),
-            rgba(51, 144, 255, 0.065)
-        );
-}
-
-.order-setup-card .selected-shop-modern[hidden] {
-    display: none !important;
-}
-
-.selected-shop-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 48px;
-    width: 48px;
-    height: 48px;
-    border-radius: 15px;
-    background: rgba(51, 144, 255, 0.17);
-    font-size: 23px;
-}
-
-.selected-shop-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.selected-shop-small-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #65aaff;
-    font-size: 11px;
-    font-weight: 850;
-    letter-spacing: 0.7px;
-    text-transform: uppercase;
-}
-
-.selected-shop-info strong {
-    line-height: 1.3;
-    display: block;
-    overflow: hidden;
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 850;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.selected-shop-info #selectedShopAddress {
-    line-height: 1.3;
-    display: block;
-    overflow: hidden;
-    margin-top: 5px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.selected-shop-clear {
-    cursor: pointer;
-    transition: transform 0.14s ease,
-        background 0.14s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 42px;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.12);
-    color: #ffffff;
-    font-size: 19px;
-}
-
-.setup-divider {
-    height: 1px;
-    margin: 21px 0;
-    background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent
-        );
-}
-
-.setup-group + .setup-group {
-    margin-top: 18px;
-}
-
-.invoice-form-switch {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
-}
-
-.invoice-form-button {
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    transition: transform 0.14s ease,
-        border-color 0.14s ease,
-        background 0.14s ease,
-        box-shadow 0.14s ease;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-    display: flex;
-    align-items: center;
-    min-height: 55px;
-    padding: 10px 45px 10px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.045);
-    color: #ffffff;
-    font-family: inherit;
-    text-align: left;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
-.invoice-form-button.active {
-    border-color: #3390ff;
-    background: linear-gradient(
-            135deg,
-            rgba(51, 144, 255, 0.25),
-            rgba(51, 144, 255, 0.08)
-        );
-    box-shadow: 0 7px 18px rgba(51, 144, 255, 0.14);
-}
-
-.invoice-form-main {
-    line-height: 1;
-    font-size: 20px;
-    font-weight: 900;
-}
-
-.invoice-form-check {
-    position: absolute;
-    top: 50%;
-    right: 13px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #3390ff;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 900;
-    transform: translateY(-50%);
-}
-
-.invoice-form-button.active .invoice-form-check {
-    display: flex;
-}
-
-.order-setup-card .operation-switch {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.order-setup-card .operation-button {
-    transition: transform 0.14s ease,
-        border-color 0.14s ease,
-        background 0.14s ease,
-        box-shadow 0.14s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    min-width: 0;
-    min-height: 68px;
-    padding: 13px 9px;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 19px;
-    background: rgba(255, 255, 255, 0.045);
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 900;
-    cursor: pointer;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.order-setup-card .operation-button.active {
-    color: #ffffff;
-    border-color: #3390ff;
-    background: linear-gradient(
-            135deg,
-            #3390ff,
-            #267ddd
-        );
-    box-shadow: 0 10px 24px rgba(51, 144, 255, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-.operation-icon {
-    font-size: 23px;
-}
-
-.product-search-card {
-    width: 100%;
-    margin: 14px 0;
-    padding: 0;
-    background: transparent;
-    box-sizing: border-box;
-}
-
-.product-search-title {
-    display: block;
-    margin: 0 0 9px 3px;
-    color: var(--tg-theme-text-color, #ffffff);
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.product-search-wrapper {
-    position: relative;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.product-search-icon {
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    z-index: 2;
-    color: rgba(255, 255, 255, 0.64);
-    font-size: 18px;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-.product-search-input {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    min-height: 58px;
-    margin: 0;
-    padding: 0 45px 0 49px;
-    border: 1px solid rgba(51, 144, 255, 0.75);
-    border-radius: 19px;
-    outline: none;
-    background: linear-gradient(
-            135deg,
-            rgba(18, 38, 63, 0.98),
-            rgba(11, 25, 43, 0.98)
-        );
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 17px;
-    box-sizing: border-box;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.product-search-input::placeholder {
-    color: rgba(255, 255, 255, 0.43);
-}
-
-.product-search-input:focus {
-    border-color: #3390ff;
-    box-shadow: 0 0 0 3px rgba(51, 144, 255, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-.search-section {
-    position: static !important;
-    top: auto !important;
-    z-index: auto !important;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-.search-section::before,
-.search-section::after {
-    display: none !important;
-}
-
-#productSearch {
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-@media (max-width: 380px) {
-    .order-setup-card {
-        padding: 15px;
-    }
-
-    .order-setup-heading {
-        font-size: 15px;
-    }
-
-    .order-setup-card .operation-button {
-        min-height: 62px;
-        font-size: 15px;
-    }
-
-    .operation-icon {
-        font-size: 20px;
-    }
-
-    .product-search-input {
-        min-height: 55px;
-        font-size: 15px;
-    }
-}
-
-.shop-history-button {
-    width: 100%;
-    margin-top: 12px;
-    padding: 14px 16px;
-    border: none;
-    border-radius: 14px;
-    background: var(--card-background, #ffffff);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.shop-history-button:active {
-    transform: scale(0.98);
-}
-
-.history-loading {
-    padding: 16px;
-    text-align: center;
-    opacity: 0.7;
-}
-
-.history-container {
-    margin-top: 12px;
-}
-
-.history-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.history-header > div {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.history-header strong {
-    font-size: 17px;
-}
-
-.history-header span {
-    font-size: 13px;
-    opacity: 0.65;
-}
-
-.history-close-button {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(127, 127, 127, 0.12);
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.history-orders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.history-order-card {
-    padding: 14px;
-    border-radius: 16px;
-    background: var(
-        --tg-theme-secondary-bg-color,
-        #ffffff
-    );
-    color: var(
-        --tg-theme-text-color,
-        #111827
-    );
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
-}
-
-.history-order-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    padding-bottom: 11px;
-    border-bottom: 1px solid rgba(127, 127, 127, 0.16);
-}
-
-.history-order-date {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-.history-order-calendar {
-    font-size: 22px;
-}
-
-.history-order-date > div {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.history-order-date strong {
-    font-size: 15px;
-}
-
-.history-order-date span {
-    font-size: 12px;
-    opacity: 0.65;
-}
-
-.history-order-products {
-    display: flex;
-    flex-direction: column;
-    padding: 5px 0;
-}
-
-.history-product-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(127, 127, 127, 0.1);
-}
-
-.history-product-row:last-child {
-    border-bottom: none;
-}
-
-.history-product-info {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.history-product-info strong {
-    font-size: 14px;
-    overflow-wrap: anywhere;
-}
-
-.history-product-info span {
-    font-size: 11px;
-    opacity: 0.55;
-}
-
-.history-product-quantity {
-    flex-shrink: 0;
-    font-size: 14px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.repeat-order-button {
-    width: 100%;
-    margin-top: 9px;
-    padding: 12px 14px;
-    border: none;
-    border-radius: 12px;
-    background: #2481cc;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.repeat-order-button:active {
-    transform: scale(0.98);
-}
-
-.repeat-order-button:disabled {
-    opacity: 0.45;
-    cursor: default;
-}
-
-.history-loading,
-.history-empty {
-    padding: 20px 14px;
-    border-radius: 15px;
-    background: var(--card-background, #ffffff);
-    text-align: center;
-}
-
-.history-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
-
-.history-empty-icon {
-    font-size: 30px;
-}
-
-.history-empty span {
-    font-size: 13px;
-    opacity: 0.65;
-}
-
-.history-order-date strong,
-.history-product-info strong,
-.history-product-quantity {
-    color: var(
-        --tg-theme-text-color,
-        #111827
-    );
-}
-
-.history-order-date span,
-.history-product-info span {
-    color: var(
-        --tg-theme-hint-color,
-        #6b7280
-    );
-}
-
-.history-order-top,
-.history-product-row {
-    border-color: var(
-        --tg-theme-section-separator-color,
-        rgba(127, 127, 127, 0.18)
-    );
-}
-
-.history-order-count {
-    padding: 5px 8px;
-    border-radius: 9px;
-    font-size: 12px;
-    white-space: nowrap;
-    color: var(
-        --tg-theme-hint-color,
-        #6b7280
-    );
-    background: rgba(127, 127, 127, 0.13);
-}
-
-.legacy-cart-elements {
-    display: none !important;
-}
-
-.cart-drawer-content {
-    animation: drawerSlideUp .25s ease;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 650px;
-    height: 92dvh;
-    max-height: 92dvh;
-    padding: 16px;
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    border-radius: 22px 22px 0 0;
-    overflow: hidden;
-}
-
-.drawer-cart-list {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 0 2px 12px;
-}
-
-.drawer-footer {
-    flex-shrink: 0;
-    padding: 10px 0
-        max(10px, env(safe-area-inset-bottom));
-    background: var(--tg-theme-secondary-bg-color, #ffffff);
-    border-top: 1px solid var(--border);
-}
-
-.drawer-summary {
-    display: grid;
-    grid-template-columns: 0.75fr 0.9fr 1.6fr;
-    gap: 6px;
-    margin: 0 0 8px;
-}
-
-.drawer-summary div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    min-width: 0;
-    padding: 7px 8px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--tg-theme-bg-color, #f6f7f9);
-}
-
-.drawer-summary span {
-    display: block;
-    margin-bottom: 2px;
-    color: var(--tg-theme-hint-color, #737373);
-    font-size: 9px;
-    line-height: 1.1;
-}
-
-.drawer-summary strong {
-    display: block;
-    overflow: hidden;
-    font-size: 13px;
-    line-height: 1.15;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.drawer-comment {
-    margin: 0 0 8px;
-}
-
-.drawer-comment label {
-    display: none;
-}
-
-.drawer-comment textarea {
-    display: block;
-    width: 100%;
-    height: 44px;
-    min-height: 44px;
-    max-height: 44px;
-    padding: 11px 12px;
-    resize: none;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #1c1c1e);
-    font-size: 14px;
-    line-height: 20px;
-}
-
-.drawer-send-button {
-    margin-top: 14px;
-    display: block;
-    width: 100%;
-    height: 50px;
-    min-height: 50px;
-    margin: 0;
-    border: none;
-    border-radius: 13px;
-    background: var(--primary);
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.drawer-send-button:disabled {
-    opacity: 0.5;
-}
-
-@media (max-width: 430px) {
-    .drawer-summary {
-        grid-template-columns: 0.75fr 0.9fr 1.6fr !important;
-        gap: 5px !important;
-        margin: 0 0 7px !important;
-    }
-
-    .drawer-summary div {
-        min-width: 0 !important;
-        padding: 6px !important;
-        border-radius: 9px !important;
-    }
-
-    .drawer-summary span {
-        margin-bottom: 2px !important;
-        font-size: 8px !important;
-        line-height: 1.05 !important;
-    }
-
-    .drawer-summary strong {
-        font-size: 12px !important;
-        line-height: 1.1 !important;
-        white-space: nowrap !important;
-    }
-
-    .drawer-comment {
-        margin: 0 0 7px !important;
-    }
-
-    .drawer-comment label {
-        display: none !important;
-    }
-
-    .drawer-comment textarea {
-        height: 42px !important;
-        min-height: 42px !important;
-        max-height: 42px !important;
-        padding: 10px 11px !important;
-        overflow: hidden !important;
-        resize: none !important;
-        font-size: 14px !important;
-    }
-
-    .drawer-send-button {
-        display: block !important;
-        width: 100% !important;
-        height: 50px !important;
-        min-height: 50px !important;
-        margin: 0 !important;
-    }
-
-    .drawer-footer {
-        flex-shrink: 0 !important;
-        padding: 8px 0
-                max(8px, env(safe-area-inset-bottom)) !important;
-    }
-
-    .drawer-cart-list {
-        min-height: 0 !important;
-        padding-bottom: 10px !important;
-    }
-}
-
-/* =========================================================
-   TELEGRAM THEME SAFETY
-   Keep form controls readable in both light and dark themes.
-   Dark product cards and dark cart items intentionally retain
-   their own white text rules.
-   ========================================================= */
-
-:root {
-    color-scheme: light dark;
-    --app-bg: var(--tg-theme-bg-color, #f3f4f6);
-    --app-surface: var(--tg-theme-secondary-bg-color, #ffffff);
-    --app-text: var(--tg-theme-text-color, #1c1c1e);
-    --app-muted: var(--tg-theme-hint-color, #737373);
-    --app-link: var(--tg-theme-link-color, #2d8cff);
-    --app-button: var(--tg-theme-button-color, #2d8cff);
-    --app-button-text: var(--tg-theme-button-text-color, #ffffff);
-}
-
-body {
-    background: var(--app-bg);
-    color: var(--app-text);
-}
-
-input:not(.quantity-input):not(.drawer-quantity-input),
-textarea,
-select,
-.shop-search-input,
-.product-search-input,
-#productSearch,
-#shopSearch,
-#drawerOrderComment {
-    background: var(--app-surface) !important;
-    color: var(--app-text) !important;
-    caret-color: var(--app-text);
-}
-
-input::placeholder,
-textarea::placeholder,
-.shop-search-input::placeholder,
-.product-search-input::placeholder,
-#productSearch::placeholder,
-#shopSearch::placeholder,
-#drawerOrderComment::placeholder {
-    color: var(--app-muted) !important;
-    opacity: 1;
-}
-
-.product-search-title,
-.setup-section-title,
-.section-label,
-.shop-picker label,
-.drawer-comment label {
-    color: var(--app-text);
-}
-
-.product-search-card,
-.order-setup-card,
-.card,
-.cart-drawer-content,
-.drawer-footer,
-.product-modal-content {
-    color: var(--app-text);
-}
-
-.cart-drawer-close,
-.selected-shop-clear,
-#clearSelectedShopButton {
-    color: var(--app-text);
-}
-
-.drawer-send-button,
-.send-button,
-.floating-cart-button {
-    background: var(--app-button);
-    color: var(--app-button-text);
-}
-
-.profile-panel {
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    background: #f4f6f8;
-    overflow-y: auto;
-}
-
-.profile-page {
-    min-height: 100%;
-    padding-bottom: 40px;
-}
-
-.profile-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-
-    display: flex;
-    align-items: center;
-    gap: 14px;
-
-    padding: 16px 18px;
-
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(14px);
-
-    border-bottom: 1px solid #e7e9ed;
-}
-
-.profile-back-button {
-    width: 42px;
-    height: 42px;
-
-    border: none;
-    border-radius: 14px;
-
-    background: #f0f2f5;
-
-    font-size: 22px;
-    cursor: pointer;
-}
-
-.profile-topbar-title {
-    font-size: 19px;
-    font-weight: 800;
-    color: #17191c;
-}
-
-.profile-topbar-subtitle {
-    margin-top: 2px;
-    font-size: 12px;
-    color: #92979f;
-}
-
-.profile-content {
-    padding: 18px;
-}
-
-.profile-user-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-
-    padding: 20px;
-
-    background: #ffffff;
-    border-radius: 22px;
-
-    box-shadow:
-        0 6px 24px rgba(0, 0, 0, 0.05);
-}
-
-.profile-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 64px;
-    height: 64px;
-
-    flex-shrink: 0;
-
-    border-radius: 20px;
-
-    background: #17191c;
-    color: white;
-
-    font-size: 28px;
-    font-weight: 900;
-}
-
-.profile-user-name {
-    font-size: 21px;
-    font-weight: 850;
-    color: #17191c;
-}
-
-.profile-user-username {
-    margin-top: 4px;
-
-    font-size: 14px;
-    color: #858a92;
-}
-
-.profile-section-title {
-    margin:
-        26px 4px
-        11px;
-
-    font-size: 15px;
-    font-weight: 800;
-    color: #444850;
-}
-
-.profile-stats-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 12px;
-}
-
-.profile-stat-box {
-    padding: 17px;
-
-    background: #ffffff;
-    border-radius: 20px;
-
-    box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.04);
-}
-
-.profile-stat-icon {
-    font-size: 22px;
-    margin-bottom: 12px;
-}
-
-.profile-stat-label {
-    font-size: 13px;
-    color: #868b93;
-}
-
-.profile-stat-number {
-    margin-top: 5px;
-
-    font-size: 20px;
-    font-weight: 850;
-    color: #17191c;
-}
-
-.profile-stat-number span {
-    font-size: 12px;
-    font-weight: 700;
-    color: #858a92;
-}
-
-.profile-stat-secondary {
-    margin-top: 5px;
-
-    font-size: 12px;
-    color: #9a9ea5;
-}
-
-.profile-plan-card {
-    padding: 20px;
-
-    background: #ffffff;
-    border-radius: 22px;
-
-    box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.04);
-}
-
-.profile-plan-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-}
-
-.profile-plan-value {
-    font-size: 25px;
-    font-weight: 900;
-    color: #17191c;
-}
-
-.profile-plan-caption {
-    margin-top: 3px;
-
-    font-size: 12px;
-    color: #959aa1;
-}
-
-.profile-plan-right {
-    text-align: right;
-}
-
-.profile-plan-right strong {
-    display: block;
-
-    font-size: 21px;
-    color: #17191c;
-}
-
-.profile-plan-right span {
-    display: block;
-    margin-top: 3px;
-
-    font-size: 11px;
-    color: #959aa1;
-}
-
-.profile-progress {
-    height: 9px;
-
-    margin-top: 18px;
-
-    background: #edf0f2;
-    border-radius: 99px;
-
-    overflow: hidden;
-}
-
-.profile-progress-fill {
-    height: 100%;
-
-    background: #17191c;
-    border-radius: inherit;
-
-    transition: width 0.4s ease;
-}
-
-.profile-menu {
-    overflow: hidden;
-
-    background: #ffffff;
-    border-radius: 22px;
-
-    box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.04);
-}
-
-.profile-menu-item {
-    width: 100%;
-
-    display: grid;
-    grid-template-columns:
-        38px 1fr auto;
-
-    align-items: center;
-    gap: 8px;
-
-    padding: 16px 18px;
-
-    border: none;
-    border-bottom:
-        1px solid #eeeeee;
-
-    background: transparent;
-
-    text-align: left;
-}
-
-.profile-menu-item:last-child {
-    border-bottom: none;
-}
-
-.profile-menu-item > span {
-    font-size: 22px;
-}
-
-.profile-menu-item strong {
-    display: block;
-
-    font-size: 15px;
-    color: #22252a;
-}
-
-.profile-menu-item small {
-    display: block;
-
-    margin-top: 2px;
-
-    color: #999da4;
-}
-
-.profile-menu-item b {
-    font-size: 25px;
-    color: #aaaeb5;
-}
-
-.profile-loading,
-.profile-error {
-    padding: 35px;
-    text-align: center;
-    color: #8c9198;
-}
-
-body.profile-open {
-    overflow: hidden;
-}
-
-.profile-sales-list {
-    color: #17191c;
-}
-
-.profile-sale-item {
-    color: #17191c;
-}
-
-.profile-sale-main strong {
-    color: #17191c !important;
-}
-
-.profile-sale-main small {
-    color: #8f949b !important;
-}
-
-.profile-sale-amount {
-    color: #17191c !important;
-}
-
-.profile-sale-amount span {
-    color: #8f949b !important;
-}
-
-.profile-empty-sales {
-    color: #8f949b !important;
-}
-
-.shop-picker {
-    position: relative;
-    z-index: 100;
-}
-
-.shop-search-results {
-    position: relative;
-    z-index: 9999;
-
-    pointer-events: auto !important;
-}
-
-.shop-search-results.show {
-    pointer-events: auto !important;
-}
-
-.shop-result-item {
-    position: relative;
-    z-index: 10000;
-
-    pointer-events: auto !important;
-    cursor: pointer;
-}
-
-/* =========================================
-   ПОИСК ТОРГОВОЙ ТОЧКИ — ВЫПАДАЮЩИЙ СПИСОК
-   ========================================= */
-
-.shop-picker {
-    position: relative !important;
-    overflow: visible !important;
-}
-
-.shop-search-wrapper {
-    position: relative !important;
-    z-index: 1001 !important;
-}
-
-/* Результаты сразу под полем поиска */
-.shop-search-results {
-    position: absolute !important;
-
-    top: 82px !important;
-    left: 0 !important;
-    right: 0 !important;
-
-    width: 100% !important;
-
-    z-index: 9999 !important;
-
-    max-height: 260px;
-    overflow-y: auto;
-
-    pointer-events: auto !important;
-}
-
-.shop-search-results.show {
-    display: block;
-    pointer-events: auto !important;
-}
-
-.shop-result-item {
-    position: relative;
-    z-index: 10000;
-
-    pointer-events: auto !important;
-}
-
-/* Чтобы родительские блоки не обрезали список */
-.setup-card,
-.setup-group {
-    overflow: visible !important;
-}
-
-.profile-plan-remaining {
-    margin-top: 12px;
-    font-size: 14px;
-    color: #8f949b;
-}
-
-.profile-plan-remaining strong {
-    color: #17191c;
-    font-weight: 700;
-}
-
-.profile-sale-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-
-    padding: 14px 0;
-
-    border-bottom: 1px solid #eceef1;
-
-    color: #17191c;
-}
-
-.profile-sale-item:last-child {
-    border-bottom: none;
-}
-
-.profile-sale-main {
-    min-width: 0;
-}
-
-.profile-sale-main strong {
-    display: block;
-
-    color: #17191c;
-
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.profile-sale-main small {
-    display: block;
-
-    margin-top: 4px;
-
-    color: #8f949b;
-
-    font-size: 13px;
-}
-
-.profile-sale-amount {
-    flex-shrink: 0;
-
-    color: #17191c;
-
-    font-size: 17px;
-    font-weight: 800;
-
-    white-space: nowrap;
-}
-
-.profile-sale-amount span {
-    color: #8f949b;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.profile-section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.profile-section-header strong {
-    font-size: 20px;
-}
-
-.profile-back-button {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.06);
-    font-size: 22px;
-    cursor: pointer;
-}
-
-.profile-tasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.profile-task-card {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 16px;
-    box-shadow:
-        0 4px 18px
-        rgba(0, 0, 0, 0.06);
-}
-
-.profile-task-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.profile-task-top > div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.profile-task-top strong {
-    font-size: 16px;
-}
-
-.profile-task-top span {
-    font-size: 12px;
-    opacity: 0.65;
-}
-
-.profile-task-status {
-    padding: 5px 8px;
-    border-radius: 10px;
-    font-size: 11px !important;
-    white-space: nowrap;
-}
-
-.profile-task-status.active {
-    background: rgba(255, 170, 0, 0.14);
-}
-
-.profile-task-status.completed {
-    background: rgba(0, 180, 90, 0.14);
-}
-
-.profile-task-products {
-    margin-top: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.profile-task-product {
-    font-size: 13px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.035);
-}
-
-.profile-task-progress-text {
-    margin-top: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.profile-task-progress-text strong {
-    font-size: 15px;
-}
-
-.profile-task-progress-text span {
-    font-size: 13px;
-    opacity: 0.7;
-}
-
-.profile-task-progress-bar {
-    height: 9px;
-    margin-top: 8px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-.profile-task-progress-fill {
-    height: 100%;
-    border-radius: inherit;
-    background: currentColor;
-}
-
-.profile-task-remaining {
-    margin-top: 10px;
-    font-size: 13px;
-    opacity: 0.75;
-}
-
-.profile-empty,
-.profile-loading {
-    padding: 24px 12px;
-    text-align: center;
-    opacity: 0.65;
-}
-
-/* =========================================
-   PROFILE TASKS - FIX MOBILE TELEGRAM THEME
-   ========================================= */
-
-.profile-tasks-list {
-    color: #111111;
-}
-
-.profile-task-card {
-    background: #ffffff;
-    color: #111111;
-}
-
-.profile-task-top {
-    color: #111111;
-}
-
-.profile-task-top strong {
-    color: #111111;
-}
-
-.profile-task-top > div > span {
-    color: #6b7280;
-    opacity: 1;
-}
-
-.profile-task-products {
-    color: #111111;
-}
-
-.profile-task-product {
-    background: #f5f5f5;
-    color: #111111;
-}
-
-.profile-task-product span {
-    color: #111111;
-}
-
-.profile-task-progress-text {
-    color: #111111;
-}
-
-.profile-task-progress-text strong {
-    color: #111111;
-}
-
-.profile-task-progress-text span {
-    color: #6b7280;
-    opacity: 1;
-}
-
-.profile-task-progress-bar {
-    background: #e5e5e5;
-}
-
-.profile-task-progress-fill {
-    background: #111111;
-}
-
-.profile-task-remaining {
-    color: #6b7280;
-    opacity: 1;
-}
-
-.profile-task-remaining strong {
-    color: #111111;
-}
-
-.profile-section-header {
-    color: #111111;
-}
-
-.profile-section-header strong {
-    color: #111111;
-}
-
-.profile-task-status.active {
-    background: #fff7e6;
-    color: #8a5a00;
-}
-
-.profile-task-status.completed {
-    background: #e8f7ee;
-    color: #167a3f;
-}
-
-/* =========================================
-   PRIORITY PRODUCTS
-   ========================================= */
-
-.priority-products-section {
-    margin: 12px 14px;
-}
-
-.priority-products-section[hidden] {
-    display: none;
-}
-
-.priority-products-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: 100%;
-    min-height: 68px;
-
-    padding: 12px 14px;
-
-    border: 1px solid rgba(255, 120, 40, 0.35);
-    border-radius: 16px;
-
-    background: linear-gradient(
-        135deg,
-        rgba(255, 118, 36, 0.18),
-        rgba(255, 70, 30, 0.08)
-    );
-
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-
-    box-shadow:
-        0 8px 22px rgba(0, 0, 0, 0.08);
-
-    cursor: pointer;
-}
-
-.priority-products-button-left {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-}
-
-.priority-products-button-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 13px;
-
-    background: rgba(255, 98, 34, 0.16);
-
-    font-size: 23px;
-}
-
-.priority-products-button-text {
-    display: flex;
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 3px;
-}
-
-.priority-products-button-text strong {
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.priority-products-button-text small {
-    color: var(
-        --tg-theme-hint-color,
-        #737373
-    );
-
-    font-size: 12px;
-}
-
-.priority-products-button-right {
-    display: flex;
-    align-items: center;
-
-    gap: 9px;
-}
-
-.priority-products-count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 28px;
-    height: 28px;
-
-    padding: 0 8px;
-
-    border-radius: 14px;
-
-    background: #ff6234;
-    color: #ffffff;
-
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.priority-products-arrow {
-    font-size: 28px;
-    line-height: 1;
-
-    opacity: 0.6;
-}
-
-
-/* =========================================
-   PRIORITY DRAWER
-   ========================================= */
-
-.priority-drawer {
-    position: fixed;
-    inset: 0;
-
-    z-index: 99999;
-
-    display: none;
-
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.priority-drawer.open {
-    display: flex;
-}
-
-.priority-drawer-overlay {
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.58);
-}
-
-.priority-drawer-content {
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-    max-width: 700px;
-    max-height: 88vh;
-
-    padding:
-        18px
-        16px
-        calc(
-            22px +
-            env(safe-area-inset-bottom)
-        );
-
-    overflow-y: auto;
-
-    border-radius: 24px 24px 0 0;
-
-    background: var(
-        --tg-theme-secondary-bg-color,
-        #ffffff
-    );
-
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-
-    box-shadow:
-        0 -12px 35px
-        rgba(0, 0, 0, 0.25);
-
-    animation:
-        priorityDrawerSlideUp
-        0.22s ease;
-}
-
-@keyframes priorityDrawerSlideUp {
-    from {
-        transform: translateY(100%);
-    }
-
-    to {
-        transform: translateY(0);
-    }
-}
-
-
-/* HEADER */
-
-.priority-drawer-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 14px;
-
-    margin-bottom: 18px;
-}
-
-.priority-drawer-header h2 {
-    margin: 0 0 4px;
-
-    font-size: 21px;
-    font-weight: 850;
-}
-
-.priority-drawer-header span {
-    color: var(
-        --tg-theme-hint-color,
-        #737373
-    );
-
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.priority-drawer-close {
-    flex: 0 0 40px;
-
-    width: 40px;
-    height: 40px;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background:
-        rgba(127, 127, 127, 0.15);
-
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-
-    font-size: 17px;
-}
-
-
-/* LIST */
-
-.priority-products-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 12px;
-}
-
-
-/* CARD */
-
-.priority-product-card {
-    padding: 15px;
-
-    border: 1px solid
-        rgba(255, 110, 45, 0.22);
-
-    border-radius: 17px;
-
-    background:
-        rgba(255, 110, 45, 0.07);
-}
-
-.priority-product-info {
-    display: flex;
-    flex-direction: column;
-
-    gap: 5px;
-
-    margin-bottom: 14px;
-}
-
-.priority-product-name {
-    font-size: 16px;
-    font-weight: 800;
-
-    line-height: 1.25;
-}
-
-.priority-product-target {
-    color: var(
-        --tg-theme-hint-color,
-        #737373
-    );
-
-    font-size: 13px;
-}
-
-.priority-product-target b {
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-}
-
-.priority-product-cart-status {
-    color: #22a447;
-
-    font-size: 13px;
-    font-weight: 700;
-}
-
-
-/* ACTIONS */
-
-.priority-product-actions {
-    display: flex;
-    align-items: center;
-
-    gap: 10px;
-}
-
-.priority-quantity-control {
-    display: grid;
-
-    grid-template-columns:
-        42px 52px 42px;
-
-    align-items: center;
-
-    overflow: hidden;
-
-    border: 1px solid
-        rgba(127, 127, 127, 0.25);
-
-    border-radius: 13px;
-
-    background: var(
-        --tg-theme-bg-color,
-        #ffffff
-    );
-}
-
-.priority-quantity-minus,
-.priority-quantity-plus {
-    width: 42px;
-    height: 44px;
-
-    padding: 0;
-
-    border: none;
-
-    background: transparent;
-
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-
-    font-size: 23px;
-}
-
-.priority-quantity-input {
-    width: 52px;
-    height: 44px;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 0;
-
-    background: transparent;
-
-    color: var(
-        --tg-theme-text-color,
-        #1c1c1e
-    );
-
-    text-align: center;
-
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.priority-quantity-input:focus {
-    box-shadow: none;
-}
-
-.priority-add-button {
-    flex: 1;
-
-    min-height: 44px;
-
-    padding: 0 15px;
-
-    border: none;
-    border-radius: 13px;
-
-    background: linear-gradient(
-        135deg,
-        #ff7438,
-        #e94822
-    );
-
-    color: #ffffff;
-
-    font-size: 14px;
-    font-weight: 800;
-}
-
-
-/* EMPTY */
-
-.priority-products-empty {
-    padding: 32px 15px;
-
-    color: var(
-        --tg-theme-hint-color,
-        #737373
-    );
-
-    text-align: center;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 390px) {
-
-    .priority-product-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .priority-quantity-control {
-        grid-template-columns:
-            46px 1fr 46px;
-
-        width: 100%;
-    }
-
-    .priority-quantity-input {
-        width: 100%;
-    }
-
-    .priority-add-button {
-        width: 100%;
-        min-height: 46px;
-    }
-}
-
-
-/* BLOCK PAGE SCROLL */
-
-body.priority-drawer-open {
-    overflow: hidden;
-}
-
-
-/* Адмін: контроль маршрутів */
-.admin-route-report { margin-top: 14px; }
-.admin-route-stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:14px; }
-.admin-route-stat { display:flex; flex-direction:column; gap:4px; padding:12px 9px; border:1px solid var(--border); border-radius:12px; background:var(--tg-theme-secondary-bg-color,#fff); text-align:center; }
-.admin-route-stat strong { font-size:22px; color:var(--tg-theme-text-color,#1c1c1e); }
-.admin-route-stat span { font-size:12px; color:var(--tg-theme-hint-color,#737373); }
-.admin-route-shops { display:flex; flex-direction:column; gap:9px; }
-.admin-route-shop { display:flex; flex-direction:column; gap:5px; padding:13px; border:1px solid var(--border); border-radius:12px; background:var(--tg-theme-secondary-bg-color,#fff); }
-.admin-route-shop strong { font-size:15px; }
-.admin-route-muted { font-size:12px; color:var(--tg-theme-hint-color,#737373); overflow-wrap:anywhere; }
-.admin-route-status { font-size:13px; font-weight:700; }
-.admin-route-empty { padding:12px; font-size:13px; line-height:1.5; color:var(--tg-theme-hint-color,#737373); }
-#adminRouteReportSection .admin-field-label { display:block; margin:12px 0 6px; }
-#adminRouteLoadButton { margin-top:12px; width:100%; }
+[
+  {
+    "id": 1000,
+    "article": "1000",
+    "category": "Тарасівські Ковбаси",
+    "name": "BAROLO с/к в/с",
+    "nameUa": "BAROLO с/к в/с",
+    "nameRu": "BAROLO с/к в/с",
+    "orderName": "BAROLO",
+    "price": 730.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 511.21,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Бароло",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1001,
+    "article": "1001",
+    "category": "Тарасівські Ковбаси",
+    "name": "BELORADO c/к в/с",
+    "nameUa": "BELORADO c/к в/с",
+    "nameRu": "BELORADO c/к в/с",
+    "orderName": "BELORADO",
+    "price": 659.35,
+    "wholesalePrice": 0,
+    "purchasePrice": 450.86,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.001,
+    "searchAliases": "Белорадо",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1002,
+    "article": "1002",
+    "category": "Тарасівські Ковбаси",
+    "name": "Piccante с/к в/с",
+    "nameUa": "Piccante с/к в/с",
+    "nameRu": "Piccante с/к в/с",
+    "orderName": "Piccante",
+    "price": 669.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 464.67,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.002,
+    "searchAliases": "Пиканте",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1003,
+    "article": "1003",
+    "category": "Тарасівські Ковбаси",
+    "name": "Salame Dolce A Stafa с/к в/с",
+    "nameUa": "Salame Dolce A Stafa с/к в/с",
+    "nameRu": "Salame Dolce A Stafa с/к в/с",
+    "orderName": "Salame Dolce A Stafa",
+    "price": 709.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 494.13,
+    "approximateWeightPerPiece": 0.15,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.003,
+    "searchAliases": "Салями дольче стафа",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1004,
+    "article": "1004",
+    "category": "Тарасівські Ковбаси",
+    "name": "Salame Piccante a Staffa c/к в/с",
+    "nameUa": "Salame Piccante a Staffa c/к в/с",
+    "nameRu": "Salame Piccante a Staffa c/к в/с",
+    "orderName": "Salame Piccante a Staffa",
+    "price": 595.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 414.42,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Салями пиканте",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1005,
+    "article": "1005",
+    "category": "Тарасівські Ковбаси",
+    "name": "TARTUFO с/к в/с",
+    "nameUa": "TARTUFO с/к в/с",
+    "nameRu": "TARTUFO с/к в/с",
+    "orderName": "TARTUFO",
+    "price": 730.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 511.21,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Тартуфо",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1006,
+    "article": "1006",
+    "category": "Тарасівські Ковбаси",
+    "name": "Velari Smoke с/к в/с",
+    "nameUa": "Velari Smoke с/к в/с",
+    "nameRu": "Velari Smoke с/к в/с",
+    "orderName": "Velari Smoke",
+    "price": 508.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 347.23,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.006,
+    "searchAliases": "Вери смоке",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1007,
+    "article": "1007",
+    "category": "Тарасівські Ковбаси",
+    "name": "Very-Tasty т/к в/с",
+    "nameUa": "Very-Tasty т/к в/с",
+    "nameRu": "Very-Tasty т/к в/с",
+    "orderName": "Very-Tasty",
+    "price": 327.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 215.14,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.007,
+    "searchAliases": "Вери тасти",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1008,
+    "article": "1008",
+    "category": "Тарасівські Ковбаси",
+    "name": "Брауншвейгська с/к",
+    "nameUa": "Брауншвейгська с/к",
+    "nameRu": "Брауншвейгська с/к",
+    "orderName": "Брауншвейгська",
+    "price": 482.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 327.87,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.008,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1009,
+    "article": "1009",
+    "category": "Тарасівські Ковбаси",
+    "name": "Буженина Престиж к/в в/с",
+    "nameUa": "Буженина Престиж к/в в/с",
+    "nameRu": "Буженина Престиж к/в в/с",
+    "orderName": "Буженина Престиж",
+    "price": 408.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 274.34,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.009,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1010,
+    "article": "1010",
+    "category": "Тарасівські Ковбаси",
+    "name": "Бурштин з фісташками с/к в/с",
+    "nameUa": "Бурштин з фісташками с/к в/с",
+    "nameRu": "Бурштын с фисташками с/к в/с",
+    "orderName": "Бурштин з фісташками",
+    "price": 716.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 586.37,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.010,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1011,
+    "article": "1011",
+    "category": "Тарасівські Ковбаси",
+    "name": "Бурштин с/к в/с",
+    "nameUa": "Бурштин с/к в/с",
+    "nameRu": "Бурштын с/к в/с",
+    "orderName": "Бурштин",
+    "price": 670.75,
+    "wholesalePrice": 640.75,
+    "purchasePrice": 485.02,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.011,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1012,
+    "article": "1012",
+    "category": "Тарасівські Ковбаси",
+    "name": "Варена Лагідна 1с п/а",
+    "nameUa": "Варена Лагідна 1с п/а",
+    "nameRu": "Вареная лагидна 1с п/а",
+    "orderName": "Варена Лагідна",
+    "price": 177.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 105.54,
+    "approximateWeightPerPiece": 0.8,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.012,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1013,
+    "article": "1013",
+    "category": "Тарасівські Ковбаси",
+    "name": "Варена Філейна 1с п\\ф",
+    "nameUa": "Варена Філейна 1с п\\ф",
+    "nameRu": "Вареная филейная 1с п\\ф",
+    "orderName": "Варена Філейна",
+    "price": 209.35,
+    "wholesalePrice": 0,
+    "purchasePrice": 128.69,
+    "approximateWeightPerPiece": 1.6,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.013,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1014,
+    "article": "1014",
+    "category": "Тарасівські Ковбаси",
+    "name": "Варена Яловича в/с п/ф",
+    "nameUa": "Варена Яловича в/с п/ф",
+    "nameRu": "Вареная яловича в/с п/ф",
+    "orderName": "Варена Яловича",
+    "price": 198.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 120.72,
+    "approximateWeightPerPiece": 1.6,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.014,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1015,
+    "article": "1015",
+    "category": "Тарасівські Ковбаси",
+    "name": "Гнадська т/к 1с",
+    "nameUa": "Гнадська т/к 1с",
+    "nameRu": "Гнадська т/к 1с",
+    "orderName": "Гнадська",
+    "price": 313.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 204.88,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.015,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1016,
+    "article": "1016",
+    "category": "Тарасівські Ковбаси",
+    "name": "Гранд Філе с/к в/с ( тарас )",
+    "nameUa": "Гранд Філе с/к в/с ( тарас )",
+    "nameRu": "Гранд Филе с/к в/с ( тарас )",
+    "orderName": "Гранд Філе ( тарас )",
+    "price": 613.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 423.55,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1017,
+    "article": "1017",
+    "category": "Тарасівські Ковбаси",
+    "name": "Грудинка пряна с\\к в\\с",
+    "nameUa": "Грудинка пряна с\\к в\\с",
+    "nameRu": "Грудинка пряна с\\к в\\с",
+    "orderName": "Грудинка пряна",
+    "price": 422.10,
+    "wholesalePrice": 0,
+    "purchasePrice": 280.04,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.017,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1054,
+    "article": "1054",
+    "category": "Тарасівські Ковбаси",
+    "name": "Грудка в'ялена в/с",
+    "nameUa": "Грудка в'ялена в/с",
+    "nameRu": "Грудка в'ялена в/с",
+    "orderName": "Грудка в'ялена",
+    "price": 656.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 519.18,
+    "approximateWeightPerPiece": 0.14,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.018,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1018,
+    "article": "1018",
+    "category": "Тарасівські Ковбаси",
+    "name": "Дворянська т/к в/с",
+    "nameUa": "Дворянська т/к в/с",
+    "nameRu": "Дворянська т/к в/с",
+    "orderName": "Дворянська",
+    "price": 379.25,
+    "wholesalePrice": 0,
+    "purchasePrice": 252.71,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.019,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1019,
+    "article": "1019",
+    "category": "Тарасівські Ковбаси",
+    "name": "Довбушівська н/к 1с (1/2)",
+    "nameUa": "Довбушівська н/к 1с (1/2)",
+    "nameRu": "Довбушивська н/к 1с",
+    "orderName": "Довбушівська (1/2)",
+    "price": 263.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 168.43,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.020,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1048,
+    "article": "1048",
+    "category": "Тарасівські Ковбаси",
+    "name": "Довбушівська н/к 1с (ціла)",
+    "nameUa": "Довбушівська н/к 1с (ціла)",
+    "nameRu": "Довбушивська н/к 1с",
+    "orderName": "Довбушівська",
+    "price": 263.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 168.43,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.021,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1020,
+    "article": "1020",
+    "category": "Тарасівські Ковбаси",
+    "name": "Домінікано с/к в/с",
+    "nameUa": "Домінікано с/к в/с",
+    "nameRu": "Доминикано с/к в/с",
+    "orderName": "Домінікано",
+    "price": 385.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 253.97,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.022,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1021,
+    "article": "1021",
+    "category": "Тарасівські Ковбаси",
+    "name": "Дрогобицька н/к в/с (1/2)",
+    "nameUa": "Дрогобицька н/к в/с (1/2)",
+    "nameRu": "Дрогобыцька н/к в/с",
+    "orderName": "Дрогобицька",
+    "price": 446.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 301.67,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.023,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1049,
+    "article": "1049",
+    "category": "Тарасівські Ковбаси",
+    "name": "Дрогобицька н/к в/с (ціла)",
+    "nameUa": "Дрогобицька н/к в/с (ціла)",
+    "nameRu": "Дрогобыцька н/к в/с",
+    "orderName": "Дрогобицька",
+    "price": 446.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 301.67,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.024,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1022,
+    "article": "1022",
+    "category": "Тарасівські Ковбаси",
+    "name": "Елітна колекція с/к в/с",
+    "nameUa": "Елітна колекція с/к в/с",
+    "nameRu": "Елитна колекция с/к в/с",
+    "orderName": "Елітна колекція",
+    "price": 426.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 286.87,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.025,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1023,
+    "article": "1023",
+    "category": "Тарасівські Ковбаси",
+    "name": "З бочки н/к 1с (кільце)",
+    "nameUa": "З бочки н/к 1с (кільце)",
+    "nameRu": "С бочки н/к 1с (кільце)",
+    "orderName": "З бочки",
+    "price": 259.10,
+    "wholesalePrice": 0,
+    "purchasePrice": 165.02,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.026,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1024,
+    "article": "1024",
+    "category": "Тарасівські Ковбаси",
+    "name": "Закарпатська н/к 1с",
+    "nameUa": "Закарпатська н/к 1с",
+    "nameRu": "Закарпатська н/к 1с",
+    "orderName": "Закарпатська",
+    "price": 257.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 163.88,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.027,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1025,
+    "article": "1025",
+    "category": "Тарасівські Ковбаси",
+    "name": "Індича н/к 1с",
+    "nameUa": "Індича н/к 1с",
+    "nameRu": "Индыча н/к 1с",
+    "orderName": "Індича",
+    "price": 323.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 211.71,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.028,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1058,
+    "article": "1058",
+    "category": "Тарасівські Ковбаси",
+    "name": "Каша Гречана (скло 0,5)",
+    "nameUa": "Каша Гречана (скло 0,5)",
+    "nameRu": "Каша Гречана (скло 0,5)",
+    "orderName": "Каша Гречана",
+    "price": 117.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 83.71,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.029,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1059,
+    "article": "1059",
+    "category": "Тарасівські Ковбаси",
+    "name": "Квасоля зі свининою (скло 0,5)",
+    "nameUa": "Квасоля зі свининою (скло 0,5)",
+    "nameRu": "Квасоля зі свининою (скло 0,5)",
+    "orderName": "Квасоля зі свининою",
+    "price": 134.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 96.23,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.030,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1026,
+    "article": "1026",
+    "category": "Тарасівські Ковбаси",
+    "name": "Ковбаса Фундук с\\к в\\с",
+    "nameUa": "Ковбаса Фундук с\\к в\\с",
+    "nameRu": "Колбаса Фундук с\\к в\\с",
+    "orderName": "Ковбаса Фундук",
+    "price": 716.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 535.13,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.031,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1027,
+    "article": "1027",
+    "category": "Тарасівські Ковбаси",
+    "name": "Ковбаски зі свинної шийки н/к в/с",
+    "nameUa": "Ковбаски зі свинної шийки н/к в/с",
+    "nameRu": "Колбаски со свинной шейки н/к в/с",
+    "orderName": "Колбаски со свинной шейки",
+    "price": 329.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 216.26,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.032,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1028,
+    "article": "1028",
+    "category": "Тарасівські Ковбаси",
+    "name": "Копчена на абрикосі т/к 1с",
+    "nameUa": "Копчена на абрикосі т/к 1с",
+    "nameRu": "Копченая на абрикосе т/к 1с",
+    "orderName": "Копчена на абрикосі",
+    "price": 348.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 229.93,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.033,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1029,
+    "article": "1029",
+    "category": "Тарасівські Ковбаси",
+    "name": "Копчена на вишні т/к 1с",
+    "nameUa": "Копчена на вишні т/к 1с",
+    "nameRu": "Копченая на вишне т/к 1с",
+    "orderName": "Копчена на вишні",
+    "price": 351.15,
+    "wholesalePrice": 0,
+    "purchasePrice": 232.21,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.034,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1030,
+    "article": "1030",
+    "category": "Тарасівські Ковбаси",
+    "name": "Копчена на сливі т/к 1с",
+    "nameUa": "Копчена на сливі т/к 1с",
+    "nameRu": "Копченая на сливе т/к 1с",
+    "orderName": "Копчена на сливі",
+    "price": 351.15,
+    "wholesalePrice": 0,
+    "purchasePrice": 232.21,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.035,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1060,
+    "article": "1060",
+    "category": "Тарасівські Ковбаси",
+    "name": "Краківська н/к в/с (тарас)",
+    "nameUa": "Краківська н/к в/с (тарас)",
+    "nameRu": "Краківська н/к в/с (тарас)",
+    "orderName": "Краківська (тарас)",
+    "price": 428.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 306.36,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.036,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1052,
+    "article": "1052",
+    "category": "Тарасівські Ковбаси",
+    "name": "М'ясо курчат шинкове (0,3) (шт)",
+    "nameUa": "М'ясо курчат шинкове (0,3) (шт)",
+    "nameRu": "М'ясо курчат шинкове (0,3)",
+    "orderName": "М'ясо курчат шинкове",
+    "price": 144.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 211.71,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.037,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1031,
+    "article": "1031",
+    "category": "Тарасівські Ковбаси",
+    "name": "Куряча кільце н\\к 1с",
+    "nameUa": "Куряча кільце н\\к 1с",
+    "nameRu": "Куриная кольцо н\\к 1с",
+    "orderName": "Куряча кільце",
+    "price": 323.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 103.07,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.038,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1032,
+    "article": "1032",
+    "category": "Тарасівські Ковбаси",
+    "name": "Махан по Татарськи с/к в/с",
+    "nameUa": "Махан по Татарськи с/к в/с",
+    "nameRu": "Махан по Татарськи с/к в/с",
+    "orderName": "Махан Татар",
+    "price": 725.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 557.90,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.039,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1033,
+    "article": "1033",
+    "category": "Тарасівські Ковбаси",
+    "name": "Махан Султан с/к в/с",
+    "nameUa": "Махан Султан с/к в/с",
+    "nameRu": "Махан Султан с/к в/с",
+    "orderName": "Махан Султан",
+    "price": 725.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 557.90,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.040,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1034,
+    "article": "1034",
+    "category": "Тарасівські Ковбаси",
+    "name": "П'яна вишня с/к в/с",
+    "nameUa": "П'яна вишня с/к в/с",
+    "nameRu": "Пьяная вишня с/к в/с",
+    "orderName": "П'яна вишня",
+    "price": 401.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 265.36,
+    "approximateWeightPerPiece": 0.24,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.041,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1061,
+    "article": "1061",
+    "category": "Тарасівські Ковбаси",
+    "name": "Пезаро с/в в/с",
+    "nameUa": "Пезаро с/в в/с",
+    "nameRu": "Пезаро с/в в/с",
+    "orderName": "Пезаро",
+    "price": 341.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 243.60,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 4.100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1035,
+    "article": "1035",
+    "category": "Тарасівські Ковбаси",
+    "name": "Президентська с/к в/с",
+    "nameUa": "Президентська с/к в/с",
+    "nameRu": "Президентская с/к в/с",
+    "orderName": "Президентська",
+    "price": 367.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 241.32,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.042,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1037,
+    "article": "1037",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Abruzzo с/к в/с",
+    "nameUa": "Салямі Abruzzo с/к в/с",
+    "nameRu": "Салями Abruzzo с/к в/с",
+    "orderName": "Abruzzo",
+    "price": 324.15,
+    "wholesalePrice": 0,
+    "purchasePrice": 212.49,
+    "approximateWeightPerPiece": 0.27,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.043,
+    "searchAliases": "Салями абрузо",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1053,
+    "article": "1053",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі №1 с/к в/с",
+    "nameUa": "Салямі №1 с/к в/с",
+    "nameRu": "Салями №1 с/к в/с",
+    "orderName": "Салями №1",
+    "price": 459.10,
+    "wholesalePrice": 0,
+    "purchasePrice": 327.87,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.044,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1038,
+    "article": "1038",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Prestige с\\к в\\с",
+    "nameUa": "Салямі Prestige с\\к в\\с",
+    "nameRu": "СалямиPrestige с\\к в\\с",
+    "orderName": "Салямі Prestige",
+    "price": 310.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 200.32,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.045,
+    "searchAliases": "Саляит престиж",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1039,
+    "article": "1039",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Монтано с/к в/с",
+    "nameUa": "Салямі Монтано с/к в/с",
+    "nameRu": "СалямиМонтано с/к в/с",
+    "orderName": "Монтано",
+    "price": 307.45,
+    "wholesalePrice": 0,
+    "purchasePrice": 200.32,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.046,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1055,
+    "article": "1055",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Наполі н/к в/с",
+    "nameUa": "Салямі Наполі н/к в/с",
+    "nameRu": "Салямі Наполи н/к в/с",
+    "orderName": "Салямі Наполі",
+    "price": 304.36,
+    "wholesalePrice": 0,
+    "purchasePrice": 217.40,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.047,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1062,
+    "article": "1062",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Римська т/к в/с",
+    "nameUa": "Салямі Римська т/к в/с",
+    "nameRu": "Салямі Римська т/к в/с",
+    "orderName": "Римська",
+    "price": 282.25,
+    "wholesalePrice": 0,
+    "purchasePrice": 201.58,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 4.100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1040,
+    "article": "1040",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі сицилія с/к в/с",
+    "nameUa": "Салямі сицилія с/к в/с",
+    "nameRu": "Салями сицилия с/к в/с",
+    "orderName": "Сицилія",
+    "price": 419.80,
+    "wholesalePrice": 330.60,
+    "purchasePrice": 282.31,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.048,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1041,
+    "article": "1041",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Фінська в/с",
+    "nameUa": "Салямі Фінська в/с",
+    "nameRu": "Салями Финская в/с",
+    "orderName": "Фінська",
+    "price": 349.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 236.89,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.049,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1042,
+    "article": "1042",
+    "category": "Тарасівські Ковбаси",
+    "name": "Салямі Французька т/к 1с",
+    "nameUa": "Салямі Французька т/к 1с",
+    "nameRu": "Салями Француская т/к 1с",
+    "orderName": "Французька",
+    "price": 352.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 233.35,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.050,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1056,
+    "article": "1056",
+    "category": "Тарасівські Ковбаси",
+    "name": "Свинина Козацька (скло 0,5)",
+    "nameUa": "Свинина Козацька (скло 0,5)",
+    "nameRu": "Свинина Козацька (скло 0,5)",
+    "orderName": "Свинина Козацька",
+    "price": 131.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 93.96,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.051,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1043,
+    "article": "1043",
+    "category": "Тарасівські Ковбаси",
+    "name": "Сервелат в/к в/с (1/2)",
+    "nameUa": "Сервелат в/к в/с (1/2)",
+    "nameRu": "Сервелат в/к в/с",
+    "orderName": "Сервелат с/к (1/2)",
+    "price": 300.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 292.56,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.052,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1050,
+    "article": "1050",
+    "category": "Тарасівські Ковбаси",
+    "name": "Сервелат в/к в/с (ціла)",
+    "nameUa": "Сервелат в/к в/с (ціла)",
+    "nameRu": "Сервелат в/к в/с",
+    "orderName": "Сервелат с/к",
+    "price": 300.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 292.56,
+    "approximateWeightPerPiece": 0.15,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.053,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1057,
+    "article": "1057",
+    "category": "Тарасівські Ковбаси",
+    "name": "Тушонка класична (скло 0,3)",
+    "nameUa": "Тушонка класична (скло 0,3)",
+    "nameRu": "Тушонка класична (скло 0,3)",
+    "orderName": "Тушонка 0,3",
+    "price": 83.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 59.79,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.054,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1044,
+    "article": "1044",
+    "category": "Тарасівські Ковбаси",
+    "name": "Тушонка класична (скло 0,5)",
+    "nameUa": "Тушонка класична (скло 0,5)",
+    "nameRu": "Тушонка класична (скло 0,5)",
+    "orderName": "Тушонка  0,5",
+    "price": 123.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 88.26,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.055,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1045,
+    "article": "1045",
+    "category": "Тарасівські Ковбаси",
+    "name": "Філе куряче з курагою в/с",
+    "nameUa": "Філе куряче з курагою в/с",
+    "nameRu": "Филе куриное с курагой в/с",
+    "orderName": "Філе з курагою",
+    "price": 360.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 239.04,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.056,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1046,
+    "article": "1046",
+    "category": "Тарасівські Ковбаси",
+    "name": "Шийка з перцем с/к в/с",
+    "nameUa": "Шийка з перцем с/к в/с",
+    "nameRu": "Шейка с перцем с/к в/с",
+    "orderName": "Шийка з перцем",
+    "price": 709.53,
+    "wholesalePrice": 0,
+    "purchasePrice": 564.74,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.057,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1047,
+    "article": "1047",
+    "category": "Тарасівські Ковбаси",
+    "name": "Шинка рубана н/к в/с (1/2)",
+    "nameUa": "Шинка рубана н/к в/с (1/2)",
+    "nameRu": "Шинка рубана н/к в/с",
+    "orderName": "Шинка рубана (1/2)",
+    "price": 352.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 233.35,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.058,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1051,
+    "article": "1051",
+    "category": "Тарасівські Ковбаси",
+    "name": "Шинка рубана н/к в/с (ціла)",
+    "nameUa": "Шинка рубана н/к в/с (ціла)",
+    "nameRu": "Шинка рубана н/к в/с",
+    "orderName": "Шинка рубана",
+    "price": 352.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 233.35,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1063,
+    "article": "1063",
+    "category": "Тарасівські Ковбаси",
+    "name": "Білий кабан с/к в/в",
+    "nameUa": "Білий кабан с/к в/в",
+    "nameRu": "Білий кабан с/к в/в",
+    "orderName": "Білий кабан",
+    "price": 451.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 307.50,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.001,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1064,
+    "article": "1064",
+    "category": "Тарасівські Ковбаси",
+    "name": "Сало селянське з перцем",
+    "nameUa": "Сало селянське з перцем",
+    "nameRu": "Сало селянське з перцем",
+    "orderName": "Сало черное",
+    "price": 280.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 199.31,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.002,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1065,
+    "article": "1065",
+    "category": "Тарасівські Ковбаси",
+    "name": "Сало селянське паприка",
+    "nameUa": "Сало селянське паприка",
+    "nameRu": "Сало селянське паприка",
+    "orderName": "Сало красное",
+    "price": 280.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 199.31,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.003,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1066,
+    "article": "1066",
+    "category": "Тарасівські Ковбаси",
+    "name": "Чорний кабан н/к в/с",
+    "nameUa": "Чорний кабан н/к в/с",
+    "nameRu": "Чорний кабан н/к в/с",
+    "orderName": "Чорний кабан",
+    "price": 330.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 235.75,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.004,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1101,
+    "article": "1101",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Балик \"Посольский\" в/с",
+    "nameUa": "Балик \"Посольский\" в/с",
+    "nameRu": "Балик \"Посольский\" в/с",
+    "orderName": "Балык Посольский",
+    "price": 422.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 288.00,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.060,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1102,
+    "article": "1102",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Баликова (1/2) 1с",
+    "nameUa": "Баликова (1/2) 1с",
+    "nameRu": "Баликова (1/2) 1с",
+    "orderName": "Балыковая (1/2)",
+    "price": 378.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 256.00,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.061,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1103,
+    "article": "1103",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Баликова (ціла)",
+    "nameUa": "Баликова (ціла)",
+    "nameRu": "Баликова (ціла)",
+    "orderName": "Балыковая (ціла)",
+    "price": 368.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 245.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1104,
+    "article": "1104",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Брізоло с/в в/с",
+    "nameUa": "Брізоло с/в в/с",
+    "nameRu": "Брізоло с/в в/с",
+    "orderName": "Бризоло",
+    "price": 574.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 399.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.063,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1105,
+    "article": "1105",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Віденська (кільце) н/к в/с",
+    "nameUa": "Віденська (кільце) н/к в/с",
+    "nameRu": "Віденська (кільце) н/к в/с",
+    "orderName": "Виденская",
+    "price": 247.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 159.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.064,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1106,
+    "article": "1106",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Гранд - Філе с/к в/с ( круп)",
+    "nameUa": "Гранд - Філе с/к в/с ( круп)",
+    "nameRu": "Гранд - Філе с/к в/с ( круп)",
+    "orderName": "Гранд Филе (круп)",
+    "price": 603.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 420.00,
+    "approximateWeightPerPiece": 0.23,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.065,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1107,
+    "article": "1107",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Дикий Кабан к/з в/с (1/2)",
+    "nameUa": "Дикий Кабан к/з в/с (1/2)",
+    "nameRu": "Дикий Кабан к/з в/с (1/2)",
+    "orderName": "Дикий Кабан (1/2)",
+    "price": 512.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 348.00,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.066,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1108,
+    "article": "1108",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Домашня на соломі н/к 1с (кільце)",
+    "nameUa": "Домашня на соломі н/к 1с (кільце)",
+    "nameRu": "Домашня на соломі н/к 1с (кільце)",
+    "orderName": "Домашняя на соломе",
+    "price": 256.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 165.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.067,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1109,
+    "article": "1109",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Європейська (ціла)  н/к",
+    "nameUa": "Європейська (ціла)  н/к",
+    "nameRu": "Європейська (ціла)  н/к",
+    "orderName": "Европейская",
+    "price": 241.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 137.00,
+    "approximateWeightPerPiece": 0.2,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1110,
+    "article": "1110",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Європейська н/к (1/2)",
+    "nameUa": "Європейська н/к (1/2)",
+    "nameRu": "Європейська н/к (1/2)",
+    "orderName": "Европейская (1/2)",
+    "price": 241.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 154.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.069,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1111,
+    "article": "1111",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Карпачо н/к 1с (1/2)",
+    "nameUa": "Карпачо н/к 1с (1/2)",
+    "nameRu": "Карпачо н/к 1с",
+    "orderName": "Карпачо (1/2)",
+    "price": 291.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 192.00,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.070,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1134,
+    "article": "1134",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Карпачо н/к 1с (круг)",
+    "nameUa": "Карпачо н/к 1с (круг)",
+    "nameRu": "Карпачо н/к 1с",
+    "orderName": "Карпачо (палка)",
+    "price": 291.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 192.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.071,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1135,
+    "article": "1135",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Карпачо н/к 1с (плоска)",
+    "nameUa": "Карпачо н/к 1с (плоска)",
+    "nameRu": "Карпачо н/к 1с",
+    "orderName": "Карпачо (плоска)",
+    "price": 291.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 192.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1112,
+    "article": "1112",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Королівська Варена в/с",
+    "nameUa": "Королівська Варена в/с",
+    "nameRu": "Королівська Варена в/с",
+    "orderName": "Вареная Королевская",
+    "price": 229.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 147.00,
+    "approximateWeightPerPiece": 0.7,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.073,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1113,
+    "article": "1113",
+    "category": "Крупельницькі Ковбаси",
+    "name": "На Дровах н/к 1с",
+    "nameUa": "На Дровах н/к 1с",
+    "nameRu": "На Дровах н/к 1с",
+    "orderName": "На Дровах",
+    "price": 225.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 144.00,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.074,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1114,
+    "article": "1114",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Рулет Альмі Варений в/с (1/2)",
+    "nameUa": "Рулет Альмі Варений в/с (1/2)",
+    "nameRu": "Рулет Альмі Варений в/с (1/2)",
+    "orderName": "Альми",
+    "price": 396.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 269.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.075,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1115,
+    "article": "1115",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Рулет Равлик копчений к/в (1/2)",
+    "nameUa": "Рулет Равлик копчений к/в (1/2)",
+    "nameRu": "Рулет Равлик копчений к/в (1/2)",
+    "orderName": "Равлик",
+    "price": 362.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 241.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.076,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1116,
+    "article": "1116",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Гольштейн н/к в/с",
+    "nameUa": "Салямі Гольштейн н/к в/с",
+    "nameRu": "Салямі Гольштейн н/к в/с",
+    "orderName": "Гольштейн",
+    "price": 251.35,
+    "wholesalePrice": 0,
+    "purchasePrice": 163.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.077,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1117,
+    "article": "1117",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Горіхова н/к 1с",
+    "nameUa": "Салямі Горіхова н/к 1с",
+    "nameRu": "Салямі Горіхова н/к 1с",
+    "orderName": "Горихова",
+    "price": 260.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 170.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.078,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1118,
+    "article": "1118",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі з Гарячим Копченням н/к 1с",
+    "nameUa": "Салямі з Гарячим Копченням н/к 1с",
+    "nameRu": "Салямі з Гарячим Копченням н/к 1с",
+    "orderName": "З Гарячим Копченням",
+    "price": 247.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 160.00,
+    "approximateWeightPerPiece": 0.42,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.079,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1119,
+    "article": "1119",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Зернятко",
+    "nameUa": "Салямі Зернятко",
+    "nameRu": "Салямі Зернятко",
+    "orderName": "Зернятко",
+    "price": 251.35,
+    "wholesalePrice": 0,
+    "purchasePrice": 163.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.080,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1120,
+    "article": "1120",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Карибська н/к 1с",
+    "nameUa": "Салямі Карибська н/к 1с",
+    "nameRu": "Салямі Карибська н/к 1с",
+    "orderName": "Карибская",
+    "price": 260.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 170.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.081,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1121,
+    "article": "1121",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Посольська н/к 1с",
+    "nameUa": "Салямі Посольська н/к 1с",
+    "nameRu": "Салямі Посольська н/к 1с",
+    "orderName": "Посольская",
+    "price": 258.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 167.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.082,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1122,
+    "article": "1122",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Робінгуд н/к в/с",
+    "nameUa": "Салямі Робінгуд н/к в/с",
+    "nameRu": "Салямі Робінгуд н/к в/с",
+    "orderName": "Робингуд",
+    "price": 271.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 178.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.083,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1123,
+    "article": "1123",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Фірмова н/в (1/2)",
+    "nameUa": "Салямі Фірмова н/в (1/2)",
+    "nameRu": "Салямі Фірмова н/в (1/2)",
+    "orderName": "Фирмовая (круп)",
+    "price": 345.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 232.00,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.084,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1124,
+    "article": "1124",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямі Фірмова н/в (ціла)",
+    "nameUa": "Салямі Фірмова н/в (ціла)",
+    "nameRu": "Салямі Фірмова н/в (ціла)",
+    "orderName": "Фирмовая (круп)",
+    "price": 336.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 224.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.085,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1125,
+    "article": "1125",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямчик з Сиром 8% (1/2) н/к 1с",
+    "nameUa": "Салямчик з Сиром 8% (1/2) н/к 1с",
+    "nameRu": "Салямчик з Сиром 8% (1/2) н/к 1с",
+    "orderName": "Салямчик с Сыром (1/2)",
+    "price": 284.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 187.00,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.086,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1126,
+    "article": "1126",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Салямчик з Сиром 8% (ціла) н/к 1с",
+    "nameUa": "Салямчик з Сиром 8% (ціла) н/к 1с",
+    "nameRu": "Салямчик з Сиром 8% (ціла) н/к 1с",
+    "orderName": "Салямчик с Сыром (ц)",
+    "price": 284.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 185.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.087,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1127,
+    "article": "1127",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Сервелат з цукром (1/2) в/к в/c",
+    "nameUa": "Сервелат з цукром (1/2) в/к в/c",
+    "nameRu": "Сервелат з цукром (1/2) в/к в/c",
+    "orderName": "Сервелат с сахаром (1/2)",
+    "price": 423.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 289.00,
+    "approximateWeightPerPiece": 0.22,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1128,
+    "article": "1128",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Сервелат з цукром (трикутник) в/к в/c",
+    "nameUa": "Сервелат з цукром (трикутник) в/к в/c",
+    "nameRu": "Сервелат з цукром (трикутник) в/к в/c",
+    "orderName": "Сервелат с сахаром (трикут)",
+    "price": 423.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 289.00,
+    "approximateWeightPerPiece": 0.27,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.089,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1129,
+    "article": "1129",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Сервелат з цукром (ціла) в/к в/c",
+    "nameUa": "Сервелат з цукром (ціла) в/к в/c",
+    "nameRu": "Сервелат з цукром (ціла) в/к в/c",
+    "orderName": "Сервелат с сахаром",
+    "price": 413.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 280.00,
+    "approximateWeightPerPiece": 0.33,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1136,
+    "article": "1136",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Шинка Брістоль к/в 1с (1/2)",
+    "nameUa": "Шинка Брістоль к/в 1с (1/2)",
+    "nameRu": "Шинка Брістоль к/в 1с",
+    "orderName": "Шинка Бристоль (1/2)",
+    "price": 308.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 205.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1130,
+    "article": "1130",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Шинка Брістоль к/в 1с (ціла)",
+    "nameUa": "Шинка Брістоль к/в 1с (ціла)",
+    "nameRu": "Шинка Брістоль к/в 1с",
+    "orderName": "Шинка Бристоль",
+    "price": 308.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 205.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1131,
+    "article": "1131",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Шинка Королівська в/с",
+    "nameUa": "Шинка Королівська в/с",
+    "nameRu": "Шинка Королівська в/с",
+    "orderName": "Шинка Королевская",
+    "price": 211.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 127.00,
+    "approximateWeightPerPiece": 0.8,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 10.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1132,
+    "article": "1132",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Шинка Фермерська в\\к (1/2)",
+    "nameUa": "Шинка Фермерська в\\к (1/2)",
+    "nameRu": "Шинка Фермерська в\\к (1/2)",
+    "orderName": "Шинка Фермерская (1/2)",
+    "price": 312.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 208.00,
+    "approximateWeightPerPiece": 0.24,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.094,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1133,
+    "article": "1133",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Шинка Фермерська в\\к (ціла)",
+    "nameUa": "Шинка Фермерська в\\к (ціла)",
+    "nameRu": "Шинка Фермерська в\\к (ціла)",
+    "orderName": "Шинка Фермерская ( ціла)",
+    "price": 312.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 208.00,
+    "approximateWeightPerPiece": 0.35,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.095,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1137,
+    "article": "1137",
+    "category": "Крупельницькі Ковбаси",
+    "name": "Бендерівська  н/к в/с",
+    "nameUa": "Бендерівська  н/к в/с",
+    "nameRu": "Бендерівська  н/к в/с",
+    "orderName": "Бендерівська  н/к в/с",
+    "price": 238.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 177.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1201,
+    "article": "1201",
+    "category": "КБК",
+    "name": "Варена з сиром в/с",
+    "nameUa": "Варена з сиром в/с",
+    "nameRu": "Варена з сиром в/с",
+    "orderName": "Варена з сиром",
+    "price": 230.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 148.00,
+    "approximateWeightPerPiece": 0.7,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.096,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1202,
+    "article": "1202",
+    "category": "КБК",
+    "name": "Варена Лікарська в/с",
+    "nameUa": "Варена Лікарська в/с",
+    "nameRu": "Варена Лікарська в/с",
+    "orderName": "Варена Лікарська",
+    "price": 228.05,
+    "wholesalePrice": 0,
+    "purchasePrice": 146.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.097,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1203,
+    "article": "1203",
+    "category": "КБК",
+    "name": "Дніпровська с/к в/с",
+    "nameUa": "Дніпровська с/к в/с",
+    "nameRu": "Дніпровська с/к в/с",
+    "orderName": "Дніпровська",
+    "price": 545.86,
+    "wholesalePrice": 0,
+    "purchasePrice": 388.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.098,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1204,
+    "article": "1204",
+    "category": "КБК",
+    "name": "Домашня Рублена нк в/с 1/2",
+    "nameUa": "Домашня Рублена нк в/с 1/2",
+    "nameRu": "Домашня Рублена нк в/с 1/2",
+    "orderName": "Домашня Рублена",
+    "price": 441.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 302.00,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.099,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1205,
+    "article": "1205",
+    "category": "КБК",
+    "name": "Елітна",
+    "nameUa": "Елітна",
+    "nameRu": "Елітна",
+    "orderName": "Елітна",
+    "price": 204.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 129.00,
+    "approximateWeightPerPiece": 0.7,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1206,
+    "article": "1206",
+    "category": "КБК",
+    "name": "Єврейська в/с",
+    "nameUa": "Єврейська в/с",
+    "nameRu": "Єврейська в/с",
+    "orderName": "Єврейська",
+    "price": 296.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 212.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.101,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1207,
+    "article": "1207",
+    "category": "КБК",
+    "name": "Київська",
+    "nameUa": "Київська",
+    "nameRu": "Київська",
+    "orderName": "Київська",
+    "price": 496.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 342.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.102,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1208,
+    "article": "1208",
+    "category": "КБК",
+    "name": "Королівська з сиром та горіхами с/к в/с",
+    "nameUa": "Королівська з сиром та горіхами с/к в/с",
+    "nameRu": "Королівська з сиром та горіхами с/к в/с",
+    "orderName": "Королівська з сиром та горіхами",
+    "price": 434.90,
+    "wholesalePrice": 0,
+    "purchasePrice": 297.00,
+    "approximateWeightPerPiece": 0.24,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.103,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1209,
+    "article": "1209",
+    "category": "КБК",
+    "name": "Краківська в/с с/с",
+    "nameUa": "Краківська в/с с/с",
+    "nameRu": "Краківська в/с с/с",
+    "orderName": "Краківська КБК",
+    "price": 304.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 212.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.104,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1210,
+    "article": "1210",
+    "category": "КБК",
+    "name": "Палермо в/с с/в",
+    "nameUa": "Палермо в/с с/в",
+    "nameRu": "Палермо в/с с/в",
+    "orderName": "Палермо",
+    "price": 549.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 381.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.105,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1211,
+    "article": "1211",
+    "category": "КБК",
+    "name": "Салямі з телятиною н/к в/с",
+    "nameUa": "Салямі з телятиною н/к в/с",
+    "nameRu": "Салямі з телятиною н/к в/с",
+    "orderName": "Салямі з телятиною",
+    "price": 286.30,
+    "wholesalePrice": 0,
+    "purchasePrice": 188.50,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.106,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1212,
+    "article": "1212",
+    "category": "КБК",
+    "name": "Салямі Італія н/к в/с",
+    "nameUa": "Салямі Італія н/к в/с",
+    "nameRu": "Салямі Італія н/к в/с",
+    "orderName": "Салямі Італія",
+    "price": 348.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 234.00,
+    "approximateWeightPerPiece": 0.27,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.107,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1213,
+    "article": "1213",
+    "category": "КБК",
+    "name": "Салямі фірмова в/с",
+    "nameUa": "Салямі фірмова в/с",
+    "nameRu": "Салямі фірмова в/с",
+    "orderName": "Салямі фірмова КБК",
+    "price": 292.45,
+    "wholesalePrice": 0,
+    "purchasePrice": 193.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.108,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1214,
+    "article": "1214",
+    "category": "КБК",
+    "name": "Сардельки Колобок в/с",
+    "nameUa": "Сардельки Колобок в/с",
+    "nameRu": "Сардельки Колобок в/с",
+    "orderName": "Сардельки Колобок",
+    "price": 254.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 182.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.109,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1215,
+    "article": "1215",
+    "category": "КБК",
+    "name": "Сарделькі \"Вершкові\"",
+    "nameUa": "Сарделькі \"Вершкові\"",
+    "nameRu": "Сарделькі \"Вершкові\"",
+    "orderName": "Сарделькі \"Вершкові",
+    "price": 261.10,
+    "wholesalePrice": 0,
+    "purchasePrice": 186.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.110,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1216,
+    "article": "1216",
+    "category": "КБК",
+    "name": "Сервелат Швейцарський в/с",
+    "nameUa": "Сервелат Швейцарський в/с",
+    "nameRu": "Сервелат Швейцарський в/с",
+    "orderName": "Сервелат Швейцарський",
+    "price": 289.70,
+    "wholesalePrice": 0,
+    "purchasePrice": 191.00,
+    "approximateWeightPerPiece": 0.24,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.111,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1217,
+    "article": "1217",
+    "category": "КБК",
+    "name": "Сосиски \"Телячі\" в/с",
+    "nameUa": "Сосиски \"Телячі\" в/с",
+    "nameRu": "Сосиски \"Телячі\" в/с",
+    "orderName": "Сосиски \"Телячі\"",
+    "price": 281.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 201.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.112,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1218,
+    "article": "1218",
+    "category": "КБК",
+    "name": "Сосиски \"Тигреня\"",
+    "nameUa": "Сосиски \"Тигреня\"",
+    "nameRu": "Сосиски \"Тигреня\"",
+    "orderName": "Сосиски \"Тигреня\"",
+    "price": 292.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 209.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.113,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1219,
+    "article": "1219",
+    "category": "КБК",
+    "name": "Сосиски \"Філейні\" в/с",
+    "nameUa": "Сосиски \"Філейні\" в/с",
+    "nameRu": "Сосиски \"Філейні\" в/с",
+    "orderName": "Сосиски \"Філейні\"",
+    "price": 200.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 160.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.114,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1220,
+    "article": "1220",
+    "category": "КБК",
+    "name": "Сосиски \"Шкільні\"",
+    "nameUa": "Сосиски \"Шкільні\"",
+    "nameRu": "Сосиски \"Шкільні\"",
+    "orderName": "Сосиски \"Шкільні\"",
+    "price": 247.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 177.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.115,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1221,
+    "article": "1221",
+    "category": "КБК",
+    "name": "Суха зі свинини",
+    "nameUa": "Суха зі свинини",
+    "nameRu": "Суха зі свинини",
+    "orderName": "Суха зі свинини",
+    "price": 286.95,
+    "wholesalePrice": 0,
+    "purchasePrice": 189.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.116,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1222,
+    "article": "1222",
+    "category": "КБК",
+    "name": "Флорентійська",
+    "nameUa": "Флорентійська",
+    "nameRu": "Флорентійська",
+    "orderName": "Флорентійська",
+    "price": 530.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 367.00,
+    "approximateWeightPerPiece": 0.3,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.117,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1223,
+    "article": "1223",
+    "category": "КБК",
+    "name": "Шварцвальд в/с",
+    "nameUa": "Шварцвальд в/с",
+    "nameRu": "Шварцвальд в/с",
+    "orderName": "Шварцвальд",
+    "price": 443.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 317.00,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.118,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1224,
+    "article": "1224",
+    "category": "КБК",
+    "name": "Яловича н/к в/с",
+    "nameUa": "Яловича н/к в/с",
+    "nameRu": "Яловича н/к в/с",
+    "orderName": "Яловича н/к в/с",
+    "price": 366.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 257.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.118,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1225,
+    "article": "1225",
+    "category": "КБК",
+    "name": "Варена Лікарська карамель",
+    "nameUa": "Варена Лікарська карамель",
+    "nameRu": "Варена Лікарська карамель",
+    "orderName": "Варена Лікарська карамель",
+    "price": 259.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 192.00,
+    "approximateWeightPerPiece": 0.6,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1226,
+    "article": "1226",
+    "category": "КБК",
+    "name": "З телятною варена",
+    "nameUa": "З телятною варена",
+    "nameRu": "З телятною варена",
+    "orderName": "З телятною варена",
+    "price": 259.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 192.00,
+    "approximateWeightPerPiece": 0.8,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.001,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1227,
+    "article": "1227",
+    "category": "КБК",
+    "name": "Ретро варена в/с",
+    "nameUa": "Ретро варена в/с",
+    "nameRu": "Ретро варена в/с",
+    "orderName": "Ретро варена в/с",
+    "price": 206.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 133.00,
+    "approximateWeightPerPiece": 1.7,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.002,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1228,
+    "article": "1228",
+    "category": "КБК",
+    "name": "Сарделька Смачна",
+    "nameUa": "Сарделька Смачна",
+    "nameRu": "Сарделька Смачна",
+    "orderName": "Сарделька Смачна",
+    "price": 222.75,
+    "wholesalePrice": 0,
+    "purchasePrice": 165.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1229,
+    "article": "1229",
+    "category": "КБК",
+    "name": "Сарделька Шкільна",
+    "nameUa": "Сарделька Шкільна",
+    "nameRu": "Сарделька Шкільна",
+    "orderName": "Сарделька Шкільна",
+    "price": 274.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 203.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.004,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1301,
+    "article": "1301",
+    "category": "Домашня продукція",
+    "name": "Бочок в/с",
+    "nameUa": "Бочок в/с",
+    "nameRu": "Бочек в/с",
+    "orderName": "Бочок",
+    "price": 350.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 250.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1302,
+    "article": "1302",
+    "category": "Домашня продукція",
+    "name": "Окорок з часником в/с",
+    "nameUa": "Окорок з часником в/с",
+    "nameRu": "Окорок з чесноком в/с",
+    "orderName": "Окорок",
+    "price": 365.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 230.00,
+    "approximateWeightPerPiece": 0.32,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1303,
+    "article": "1303",
+    "category": "Домашня продукція",
+    "name": "Сало солоне в/с",
+    "nameUa": "Сало солоне в/с",
+    "nameRu": "Сало солоне в/c",
+    "orderName": "Сало",
+    "price": 135.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 150.00,
+    "approximateWeightPerPiece": 0.24,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1304,
+    "article": "1304",
+    "category": "Домашня продукція",
+    "name": "Грудина копчена",
+    "nameUa": "Грудина копчена",
+    "nameRu": "Грудина копченая",
+    "orderName": "Грудина копченая",
+    "price": 345.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 220.00,
+    "approximateWeightPerPiece": 0.34,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1305,
+    "article": "1305",
+    "category": "Домашня продукція",
+    "name": "Куряча Селянська (кільце) 1с",
+    "nameUa": "Куряча Селянська (кільце) 1с",
+    "nameRu": "Куриная сельская (кільце) 1с",
+    "orderName": "Ковбаса Куряча Селянська",
+    "price": 140.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 105.00,
+    "approximateWeightPerPiece": 0.6,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1306,
+    "article": "1306",
+    "category": "Домашня продукція",
+    "name": "Ребро Копчене",
+    "nameUa": "Ребро Копчене",
+    "nameRu": "Ребро Копченое",
+    "orderName": "Ребро Копчене",
+    "price": 205.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 170.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1307,
+    "article": "1307",
+    "category": "Домашня продукція",
+    "name": "Рулет Курячий 1с",
+    "nameUa": "Рулет Курячий 1с",
+    "nameRu": "Рулет Куриный 1с",
+    "orderName": "Рулет Курячий",
+    "price": 215.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 165.00,
+    "approximateWeightPerPiece": 1.6,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1308,
+    "article": "1308",
+    "category": "Домашня продукція",
+    "name": "Шинка Куряча 1с",
+    "nameUa": "Шинка Куряча 1с",
+    "nameRu": "Шинка Куриная 1с",
+    "orderName": "Шинка Куряча",
+    "price": 195.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 160.00,
+    "approximateWeightPerPiece": 0.4,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1309,
+    "article": "1309",
+    "category": "Домашня продукція",
+    "name": "Зельц Домашній",
+    "nameUa": "Зельц Домашній",
+    "nameRu": "Зельц Домашний",
+    "orderName": "Зельц Домашній",
+    "price": 147.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 105.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1310,
+    "article": "1310",
+    "category": "Домашня продукція",
+    "name": "Зельц Мозаїчний",
+    "nameUa": "Зельц Мозаїчний",
+    "nameRu": "Зельц Мозаичный",
+    "orderName": "Зельц Мозаїчний",
+    "price": 146.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 105.00,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1311,
+    "article": "1311",
+    "category": "Домашня продукція",
+    "name": "Зельц Язиковий",
+    "nameUa": "Зельц Язиковий",
+    "nameRu": "Зельц Языковый",
+    "orderName": "Зельц Язиковий",
+    "price": 160.55,
+    "wholesalePrice": 0,
+    "purchasePrice": 115.00,
+    "approximateWeightPerPiece": 0.7,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1312,
+    "article": "1312",
+    "category": "Домашня продукція",
+    "name": "Кровянка",
+    "nameUa": "Кровянка",
+    "nameRu": "Кровянка",
+    "orderName": "Кровянка",
+    "price": 133.15,
+    "wholesalePrice": 0,
+    "purchasePrice": 95.00,
+    "approximateWeightPerPiece": 0.45,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 100,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1401,
+    "article": "1401",
+    "category": "Молочна продукція",
+    "name": "Десерт 9% Вишня 400г ТМ Гаврюша",
+    "nameUa": "Десерт 9% Вишня 400г ТМ Гаврюша",
+    "nameRu": "Десерт 9% Вишня 400г ТМ Гаврюша",
+    "orderName": "Десерт Вишня",
+    "price": 40.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 29.30,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1402,
+    "article": "1402",
+    "category": "Молочна продукція",
+    "name": "Десерт 9% Ківі 400г ТМ Гаврюша",
+    "nameUa": "Десерт 9% Ківі 400г ТМ Гаврюша",
+    "nameRu": "Десерт 9% Киви 400г ТМ Гаврюша",
+    "orderName": "Десерт Ківі",
+    "price": 40.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 29.30,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1403,
+    "article": "1403",
+    "category": "Молочна продукція",
+    "name": "Десерт 9% Лісові ягоди 400г ТМ Гаврюша",
+    "nameUa": "Десерт 9% Лісові ягоди 400г ТМ Гаврюша",
+    "nameRu": "Десерт 9% Лесные ягоды 400г ТМ Гаврюша",
+    "orderName": "Десерт Ягоди",
+    "price": 40.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 29.30,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1404,
+    "article": "1404",
+    "category": "Молочна продукція",
+    "name": "Десерт 9% Персик 400г ТМ Гаврюша",
+    "nameUa": "Десерт 9% Персик 400г ТМ Гаврюша",
+    "nameRu": "Десерт 9% Персик 400г ТМ Гаврюша",
+    "orderName": "Десерт Персик",
+    "price": 40.20,
+    "wholesalePrice": 0,
+    "purchasePrice": 29.30,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1405,
+    "article": "1405",
+    "category": "Молочна продукція",
+    "name": "Сирок з родзинками 18% жиру ТМ Гаврюша",
+    "nameUa": "Сирок з родзинками 18% жиру ТМ Гаврюша",
+    "nameRu": "Сыр с изюмом 18% жиру ТМ Гаврюша",
+    "orderName": "Сирок з родзинками",
+    "price": 84.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 63.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1406,
+    "article": "1406",
+    "category": "Молочна продукція",
+    "name": "Косичка біла в/у",
+    "nameUa": "Косичка біла в/у",
+    "nameRu": "Коса белая в/у",
+    "orderName": "Косичка біла",
+    "price": 297.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 225.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1407,
+    "article": "1407",
+    "category": "Молочна продукція",
+    "name": "Косичка копчена в/у",
+    "nameUa": "Косичка копчена в/у",
+    "nameRu": "Коса копченая в/у",
+    "orderName": "Косичка копчена",
+    "price": 302.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 230.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 5.878,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1408,
+    "article": "1408",
+    "category": "Молочна продукція",
+    "name": "Масло з какао 62%",
+    "nameUa": "Масло з какао 62%",
+    "nameRu": "Масло з какао 62%",
+    "orderName": "Масло з какао",
+    "price": 235.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 184.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1409,
+    "article": "1409",
+    "category": "Молочна продукція",
+    "name": "Масло Попільнянське 1 кг",
+    "nameUa": "Масло Попільнянське 1 кг",
+    "nameRu": "Масло Попільнянське 1 кг",
+    "orderName": "Масло  1 кг",
+    "price": 255.85,
+    "wholesalePrice": 0,
+    "purchasePrice": 180.18,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 8.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1410,
+    "article": "1410",
+    "category": "Молочна продукція",
+    "name": "Масло Попільнянське 400 гр",
+    "nameUa": "Масло Попільнянське 400 гр",
+    "nameRu": "Масло Попільнянське 400 гр",
+    "orderName": "Масло  400 гр",
+    "price": 98.60,
+    "wholesalePrice": 0,
+    "purchasePrice": 72.40,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20.00,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1411,
+    "article": "1411",
+    "category": "Молочна продукція",
+    "name": "Продукт \"Моцарелла\" 45%",
+    "nameUa": "Продукт \"Моцарелла\" 45%",
+    "nameRu": "Продукт \"Моцарелла\" 45%",
+    "orderName": "Продукт Моцарелла",
+    "price": 239.40,
+    "wholesalePrice": 0,
+    "purchasePrice": 169.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 10.049,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1412,
+    "article": "1412",
+    "category": "Молочна продукція",
+    "name": "Продукт \"Сулугуні\" 45%",
+    "nameUa": "Продукт \"Сулугуні\" 45%",
+    "nameRu": "Продукт \"Сулугуні\" 45%",
+    "orderName": "Продукт Сулугуні",
+    "price": 240.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 170.00,
+    "approximateWeightPerPiece": 0.5,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 9.459,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1413,
+    "article": "1413",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений  \"Голландський\"  70г.",
+    "nameUa": "Сир плавлений  \"Голландський\"  70г.",
+    "nameRu": "Сыр плавленый  \"Голландський\"  70г.",
+    "orderName": "Плавлений  Голландський",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1414,
+    "article": "1414",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений \"Вершковий\" 70г.",
+    "nameUa": "Сир плавлений \"Вершковий\" 70г.",
+    "nameRu": "Сыр плавленый \"Вершковий\" 70г.",
+    "orderName": "Сир плавлений Вершковий",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1415,
+    "article": "1415",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений \"Дружба 70г.",
+    "nameUa": "Сир плавлений \"Дружба 70г.",
+    "nameRu": "Сыр плавленый \"Дружба 70г.",
+    "orderName": "Плавлений Дружба",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1416,
+    "article": "1416",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений \"З зеленню та часником\" 70г.",
+    "nameUa": "Сир плавлений \"З зеленню та часником\" 70г.",
+    "nameRu": "Сыр плавленый \"З зеленню та часником\" 70г.",
+    "orderName": "Плавлений з зеленню та часником",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 24.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1417,
+    "article": "1417",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений \"З шинкою\" 70г.",
+    "nameUa": "Сир плавлений \"З шинкою\" 70г.",
+    "nameRu": "Сыр плавленый \"З шинкою\" 70г.",
+    "orderName": "Плавлений з шинкою",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1418,
+    "article": "1418",
+    "category": "Молочна продукція",
+    "name": "Сир плавлений \"Моцарелла\" 70г.",
+    "nameUa": "Сир плавлений \"Моцарелла\" 70г.",
+    "nameRu": "Сыр плавленый \"Моцарелла\" 70г.",
+    "orderName": "Плавлений Моцарелла",
+    "price": 19.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1419,
+    "article": "1419",
+    "category": "Молочна продукція",
+    "name": "Сир твердий \"Гном\" 45%",
+    "nameUa": "Сир твердий \"Гном\" 45%",
+    "nameRu": "Сыр твердый \"Гном\" 45%",
+    "orderName": "Сир Гном",
+    "price": 360.80,
+    "wholesalePrice": 350.80,
+    "purchasePrice": 304.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 9.500,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1420,
+    "article": "1420",
+    "category": "Молочна продукція",
+    "name": "Сир твердий \"Король Арчер\" 50%",
+    "nameUa": "Сир твердий \"Король Арчер\" 50%",
+    "nameRu": "Сыр твердый \"Король Арчер\" 50%",
+    "orderName": "Сир Арчер",
+    "price": 360.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 300.50,
+    "approximateWeightPerPiece": 2,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 13.137,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1421,
+    "article": "1421",
+    "category": "Молочна продукція",
+    "name": "Сир твердий \"Чеддар\" 45%",
+    "nameUa": "Сир твердий \"Чеддар\" 45%",
+    "nameRu": "Сыр твердый \"Чеддар\" 45%",
+    "orderName": "Сир Чеддар",
+    "price": 360.80,
+    "wholesalePrice": 350.80,
+    "purchasePrice": 304.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 10.174,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1422,
+    "article": "1422",
+    "category": "Молочна продукція",
+    "name": "Сир твердий Гауда (Gauda) 50% L`extra  0.150 гр",
+    "nameUa": "Сир твердий Гауда (Gauda) 50% L`extra  0.150 гр",
+    "nameRu": "Сыр твердый Гауда (Gauda) 50% L`extra  0.150 гр",
+    "orderName": "Сир Гауда 0.150 гр",
+    "price": 82.25,
+    "wholesalePrice": 0,
+    "purchasePrice": 55.65,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 8.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1423,
+    "article": "1423",
+    "category": "Молочна продукція",
+    "name": "Сир твердий Гауда ЦІЛИЙ (Gauda) 50% L`extra0.150 гр",
+    "nameUa": "Сир твердий Гауда ЦІЛИЙ (Gauda) 50% L`extra0.150 гр",
+    "nameRu": "Сыр твердый Гауда ЦІЛИЙ (Gauda) 50% L`extra0.150 гр",
+    "orderName": "Сир Гауда ЦІЛИЙ 0.150 гр",
+    "price": 65.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 48.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1424,
+    "article": "1424",
+    "category": "Молочна продукція",
+    "name": "Сир твердий Тільзіт (Tilzit) 50% L`extra 0.150 гр",
+    "nameUa": "Сир твердий Тільзіт (Tilzit) 50% L`extra 0.150 гр",
+    "nameRu": "Сыр твердый Тильзит (Tilzit) 50% L`extra 0.150 гр",
+    "orderName": "Сир Тільзіт 0.150 гр",
+    "price": 82.25,
+    "wholesalePrice": 0,
+    "purchasePrice": 55.65,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 10.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1425,
+    "article": "1425",
+    "category": "Молочна продукція",
+    "name": "Сир твердий Тільзіт ЦІЛИЙ (Tilzit) 50% L`extra 0.150 гр",
+    "nameUa": "Сир твердий Тільзіт ЦІЛИЙ (Tilzit) 50% L`extra 0.150 гр",
+    "nameRu": "Сир твердий Тильзит ЦІЛИЙ (Tilzit) 50% L`extra 0.150 гр",
+    "orderName": "Сир Тільзіт ЦІЛИЙ 0.150 гр",
+    "price": 65.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 48.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1426,
+    "article": "1426",
+    "category": "Молочна продукція",
+    "name": "Сосиски Добрич Копчені зі скоринкою",
+    "nameUa": "Сосиски Добрич Копчені зі скоринкою",
+    "nameRu": "Сосискы Добрыч копченые с корочкой",
+    "orderName": "Сосиски Добрич з корочкой",
+    "price": 133.80,
+    "wholesalePrice": 0,
+    "purchasePrice": 106.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 10.000,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1501,
+    "article": "1501",
+    "category": "Снеки",
+    "name": "Gust Jerky Курка вишня 0.5 кг",
+    "nameUa": "Gust Jerky Курка вишня 0.5 кг",
+    "nameRu": "Gust Jerky Курка вишня 0.5 кг",
+    "orderName": "Львов вишня",
+    "price": 425.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 380.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1502,
+    "article": "1502",
+    "category": "Снеки",
+    "name": "Gust Jerky Курка гострий перець \"хабанеро\" 0.5 кг",
+    "nameUa": "Gust Jerky Курка гострий перець \"хабанеро\" 0.5 кг",
+    "nameRu": "Gust Jerky Курка гострий перець \"хабанеро\" 0.5 кг",
+    "orderName": "Львов хабанеро",
+    "price": 425.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 380.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 2,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1531,
+    "article": "1531",
+    "category": "Снеки",
+    "name": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "nameUa": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "nameRu": "Gust Jerky Курка карамелізована цибуля 0.5 кг",
+    "orderName": "Львов цибуля",
+    "price": 425.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 380.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1503,
+    "article": "1503",
+    "category": "Снеки",
+    "name": "Kupaty Pork н/к 1с",
+    "nameUa": "Kupaty Pork н/к 1с",
+    "nameRu": "Купаты н/к 1с",
+    "orderName": "Kupaty",
+    "price": 80.10,
+    "wholesalePrice": 0,
+    "purchasePrice": 62.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 26,
+    "searchAliases": "Купаты; купати",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1504,
+    "article": "1504",
+    "category": "Снеки",
+    "name": "Снек Пепероні с/в в/с",
+    "nameUa": "Снек Пепероні с/в в/с",
+    "nameRu": "Снек Пеперони с/в в/с",
+    "orderName": "Снек Пепероні",
+    "price": 510.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 340.53,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 4.708,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1505,
+    "article": "1505",
+    "category": "Снеки",
+    "name": "Снек Хамончик с/в в/с",
+    "nameUa": "Снек Хамончик с/в в/с",
+    "nameRu": "Снек Хамончик с/в в/с",
+    "orderName": "Снек Хамончик",
+    "price": 520.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 393.92,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "кг/шт",
+    "unit1C": "кг",
+    "isAvailable": true,
+    "stock": 15.250,
+    "searchAliases": "",
+    "image": "",
+    "unit": "кг",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1506,
+    "article": "1506",
+    "category": "Снеки",
+    "name": "Ковбаски \"Хмизок\" н/к 1с",
+    "nameUa": "Ковбаски \"Хмизок\" н/к 1с",
+    "nameRu": "Ковбаски \"Хмызок\" н/к 1с",
+    "orderName": "Хмизок",
+    "price": 37.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 22.47,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 163,
+    "searchAliases": "",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1507,
+    "article": "1507",
+    "category": "Снеки",
+    "name": "Снеки м`ясні з м'яса птиці - Аджика",
+    "nameUa": "Снеки м`ясні з м'яса птиці - Аджика",
+    "nameRu": "Снеки м`ясні з м'яса птиці - Аджика",
+    "orderName": "Снеки Аджика",
+    "price": 72.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 65.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 164.000,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1508,
+    "article": "1508",
+    "category": "Снеки",
+    "name": "Снеки м`ясні з м'яса птиці - Азіатські",
+    "nameUa": "Снеки м`ясні з м'яса птиці - Азіатські",
+    "nameRu": "Снеки м`ясні з м'яса птиці - Азіатські",
+    "orderName": "Снеки Азіатські",
+    "price": 72.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 65.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 85.000,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1509,
+    "article": "1509",
+    "category": "Снеки",
+    "name": "Снеки м`ясні з м'яса птиці - З сиром",
+    "nameUa": "Снеки м`ясні з м'яса птиці - З сиром",
+    "nameRu": "Снеки м`ясні з м'яса птиці - З сиром",
+    "orderName": "Снеки З сиром",
+    "price": 72.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 65.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 174.000,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1510,
+    "article": "1510",
+    "category": "Снеки",
+    "name": "Снеки м`ясні з м'яса птиці - Суджук",
+    "nameUa": "Снеки м`ясні з м'яса птиці - Суджук",
+    "nameRu": "Снеки м`ясні з м'яса птиці - Суджук",
+    "orderName": "Снеки Суджук",
+    "price": 72.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 65.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 7.000,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1511,
+    "article": "1511",
+    "category": "Снеки",
+    "name": "Чіпси курячі аджика м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі аджика м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі аджика м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси аджика 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 21.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1512,
+    "article": "1512",
+    "category": "Снеки",
+    "name": "Чіпси курячі барбекю м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі барбекю м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі барбекю м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпсибарбекю 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 11.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1513,
+    "article": "1513",
+    "category": "Снеки",
+    "name": "Чіпси курячі вишня м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі вишня м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі вишня м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси вишня 0.250 кг",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1514,
+    "article": "1514",
+    "category": "Снеки",
+    "name": "Чіпси курячі гирчиця та мед м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі гирчиця та мед м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі гирчиця та мед м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси гирчиця 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1515,
+    "article": "1515",
+    "category": "Снеки",
+    "name": "Чіпси курячі паприка м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі паприка м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі паприка м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси паприка 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 16.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1516,
+    "article": "1516",
+    "category": "Снеки",
+    "name": "Чіпси курячі сир м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі сир м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі сир м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси сир 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 28.600,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1517,
+    "article": "1517",
+    "category": "Снеки",
+    "name": "Чіпси курячі сметана та цибуля м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі сметана та цибуля м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі сметана та цибуля м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси сметана 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1518,
+    "article": "1518",
+    "category": "Снеки",
+    "name": "Чіпси курячі фісташка м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі фісташка м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі фісташка м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси фісташка 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 5.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1519,
+    "article": "1519",
+    "category": "Снеки",
+    "name": "Чіпси курячі хабанеро м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі хабанеро м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі хабанеро м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси хабанеро 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1520,
+    "article": "1520",
+    "category": "Снеки",
+    "name": "Чіпси курячі часник м'ясо.їж (0.250 кг)",
+    "nameUa": "Чіпси курячі часник м'ясо.їж (0.250 кг)",
+    "nameRu": "Чипсы курячі часник м'ясо.їж (0.250 кг)",
+    "orderName": "Чіпси часник 0.250",
+    "price": 220.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 162.50,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 23.000,
+    "searchAliases": "Чипсы; чипси",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1521,
+    "article": "1521",
+    "category": "Снеки",
+    "name": "Птиця по Пекінськи 0,5",
+    "nameUa": "Птиця по Пекінськи 0,5",
+    "nameRu": "Птиця по Пекински 0,5",
+    "orderName": "По Пекінськи",
+    "price": 300.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 250.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1522,
+    "article": "1522",
+    "category": "Снеки",
+    "name": "Снек Птиця Баварська 50г",
+    "nameUa": "Снек Птиця Баварська 50г",
+    "nameRu": "Снек Птиця Бавария 50г",
+    "orderName": "Бавария",
+    "price": 41.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 33.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 20,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1523,
+    "article": "1523",
+    "category": "Снеки",
+    "name": "Снек Свинина Мексиканська 50г",
+    "nameUa": "Снек Свинина Мексиканська 50г",
+    "nameRu": "Снек Свинина Мексиканська 50г",
+    "orderName": "Мексика",
+    "price": 44.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 36.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 1,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1524,
+    "article": "1524",
+    "category": "Снеки",
+    "name": "Снек Соломка Свиняча до пива 50г",
+    "nameUa": "Снек Соломка Свиняча до пива 50г",
+    "nameRu": "Снек Соломка Свиняча до пива 50г",
+    "orderName": "Соломка",
+    "price": 39.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 33.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1525,
+    "article": "1525",
+    "category": "Снеки",
+    "name": "Снек Філе Куряче 50г",
+    "nameUa": "Снек Філе Куряче 50г",
+    "nameRu": "Снек Филе Куряче 50г",
+    "orderName": "Филе",
+    "price": 40.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 33.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 200,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1526,
+    "article": "1526",
+    "category": "Снеки",
+    "name": "Філе курча з томатами",
+    "nameUa": "Філе курча з томатами",
+    "nameRu": "Филе курча з томатами",
+    "orderName": "Филе с томатом",
+    "price": 33.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 25.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1527,
+    "article": "1527",
+    "category": "Снеки",
+    "name": "Філе з часником",
+    "nameUa": "Філе з часником",
+    "nameRu": "Филе з часником",
+    "orderName": "Филе с чесноком",
+    "price": 33.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 25.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 0,
+    "searchAliases": "Снеки",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1528,
+    "article": "1528",
+    "category": "Снеки",
+    "name": "Вушка Свині Паприка 100г.",
+    "nameUa": "Вушка Свині Паприка 100г.",
+    "nameRu": "Уши паприка",
+    "orderName": "Уши паприка",
+    "price": 21.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 1000,
+    "searchAliases": "Уши",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1529,
+    "article": "1529",
+    "category": "Снеки",
+    "name": "Вушка Свині Сільські 100г.",
+    "nameUa": "Вушка Свині Сільські 100г.",
+    "nameRu": "Уши село",
+    "orderName": "Уши село",
+    "price": 21.50,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 1000,
+    "searchAliases": "Уши",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  },
+  {
+    "id": 1530,
+    "article": "1530",
+    "category": "Снеки",
+    "name": "Вушка Свині Томат 100г.",
+    "nameUa": "Вушка Свині Томат 100г.",
+    "nameRu": "Уши томат",
+    "orderName": "Уши томат",
+    "price": 22.00,
+    "wholesalePrice": 0,
+    "purchasePrice": 15.00,
+    "approximateWeightPerPiece": 1,
+    "saleMode": "шт",
+    "unit1C": "шт",
+    "isAvailable": true,
+    "stock": 1000,
+    "searchAliases": "Уши",
+    "image": "",
+    "unit": "шт",
+    "canOrderByPiece": true
+  }
+]

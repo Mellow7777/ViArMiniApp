@@ -4356,6 +4356,7 @@ function openAdminPanel() {
     renderAdminStocks();
 
     loadAdminRepresentatives();
+    initializeAdminRouteReport();
 }
 
 function closeAdminPanel() {
@@ -7707,5 +7708,125 @@ async function loadTodayRoute() {
         message.textContent = error.message || "Не вдалося завантажити маршрут";
         panel.appendChild(message);
         console.error("loadTodayRoute:", error);
+    }
+}
+
+
+// Адмін: перегляд збережених маршрутів (лише читання).
+let adminRouteReportInitialized = false;
+
+function adminRouteLocalDate() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+function initializeAdminRouteReport() {
+    const repSelect = document.getElementById("adminRouteRepresentative");
+    const dateInput = document.getElementById("adminRouteDate");
+    const loadButton = document.getElementById("adminRouteLoadButton");
+    if (!repSelect || !dateInput || !loadButton) return;
+    if (!dateInput.value) dateInput.value = adminRouteLocalDate();
+    if (!adminRouteReportInitialized) {
+        loadButton.addEventListener("click", loadAdminRouteReport);
+        adminRouteReportInitialized = true;
+    }
+    loadAdminRouteRepresentatives();
+}
+
+async function loadAdminRouteRepresentatives() {
+    const select = document.getElementById("adminRouteRepresentative");
+    if (!select) return;
+    const previous = select.value;
+    select.innerHTML = '<option value="">Завантаження...</option>';
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/representatives`, {
+            headers: { "X-Telegram-Init-Data": telegram?.initData || "" },
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const reps = await response.json();
+        if (!Array.isArray(reps)) throw new Error("Невірний формат списку торгових");
+        select.replaceChildren();
+        for (const rep of reps) {
+            if (rep.isActive === false) continue;
+            const option = document.createElement("option");
+            option.value = String(rep.telegramId);
+            option.textContent = rep.username ? `${rep.name} (@${rep.username})` : String(rep.name || rep.telegramId);
+            select.appendChild(option);
+        }
+        if (previous && [...select.options].some(o => o.value === previous)) select.value = previous;
+        if (!select.options.length) select.add(new Option("Торгових немає", ""));
+    } catch (error) {
+        console.error("Контроль маршрутів: торгові", error);
+        select.innerHTML = '<option value="">Помилка завантаження торгових</option>';
+    }
+}
+
+function adminRouteStatus(status) {
+    const labels = {
+        ordered: "📦 Замовлення оформлено",
+        order_later: "🕒 Замовлення пізніше",
+        no_order: "🚫 Без замовлення",
+        closed: "🔒 Зачинено",
+        pending: "⚪ Не завершено"
+    };
+    return labels[String(status || "").toLowerCase()] || "⚪ Не відвідано";
+}
+
+function adminRouteFormatTime(iso) {
+    if (!iso) return "";
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return String(iso);
+    return date.toLocaleString("uk-UA", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+async function loadAdminRouteReport() {
+    const rep = document.getElementById("adminRouteRepresentative")?.value;
+    const date = document.getElementById("adminRouteDate")?.value;
+    const container = document.getElementById("adminRouteReport");
+    const button = document.getElementById("adminRouteLoadButton");
+    if (!container) return;
+    if (!rep || !date) {
+        container.textContent = "Оберіть торгового представника та дату.";
+        return;
+    }
+    button.disabled = true;
+    container.textContent = "⏳ Завантаження маршруту...";
+    try {
+        const params = new URLSearchParams({ telegramId: rep, date });
+        const response = await fetch(`${API_BASE_URL}/api/admin/routes/report?${params}`, {
+            headers: { "X-Telegram-Init-Data": telegram?.initData || "" },
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const report = await response.json();
+        if (!report || !Array.isArray(report.items)) throw new Error("Невірний формат звіту");
+        if (!report.hasSnapshot || report.items.length === 0) {
+            container.innerHTML = '<p class="admin-route-empty">Немає збереженого маршруту за цю дату. Історичні призначення не відновлюються з поточного Excel.</p>';
+            return;
+        }
+        const stats = [
+            ["Заплановано", report.total], ["Відвідано", report.visited],
+            ["Не відвідано", report.notVisited], ["Замовлень", report.ordered],
+            ["Пізніше", report.later], ["Без замовлення", report.noOrder],
+            ["Зачинено", report.closed], ["Очікують", report.pending]
+        ];
+        const summary = stats.map(([label, value]) => `<div class="admin-route-stat"><strong>${Number(value) || 0}</strong><span>${label}</span></div>`).join("");
+        const cards = report.items.map(item => `
+            <article class="admin-route-shop">
+                <strong>${escapeHtml(item.name || `Точка №${item.shopId}`)}</strong>
+                <div class="admin-route-muted">${escapeHtml(item.address || "")}</div>
+                <div class="admin-route-status">${adminRouteStatus(item.status)}</div>
+                ${item.checkInUtc ? `<div class="admin-route-muted">📍 Відмітка: ${escapeHtml(adminRouteFormatTime(item.checkInUtc))}</div>` : '<div class="admin-route-muted">📍 Відмітки немає</div>'}
+                ${item.resultUtc ? `<div class="admin-route-muted">Результат: ${escapeHtml(adminRouteFormatTime(item.resultUtc))}</div>` : ""}
+                ${item.reason ? `<div class="admin-route-muted">Причина: ${escapeHtml(item.reason)}</div>` : ""}
+                ${item.orderId ? `<div class="admin-route-muted">Замовлення: ${escapeHtml(item.orderId)}</div>` : ""}
+            </article>`).join("");
+        container.innerHTML = `<div class="admin-route-stats">${summary}</div><div class="admin-route-shops">${cards}</div>`;
+    } catch (error) {
+        console.error("Контроль маршрутів: звіт", error);
+        container.textContent = `Не вдалося завантажити звіт: ${error.message}`;
+    } finally {
+        button.disabled = false;
     }
 }

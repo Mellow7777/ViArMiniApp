@@ -4431,6 +4431,26 @@ async function loadAdminRepresentativeProfile(
     }
 }
 
+let adminStockFilter = "all";
+function getAdminStockThreshold() {
+    const value = Number(document.getElementById("adminStockThreshold")?.value);
+    return Number.isFinite(value) && value > 0 ? value : 5;
+}
+document.querySelectorAll("[data-stock-filter]").forEach(button => {
+    button.addEventListener("click", () => {
+        adminStockFilter = button.dataset.stockFilter;
+        document.querySelectorAll("[data-stock-filter]").forEach(item => {
+            const active = item.dataset.stockFilter === adminStockFilter;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-pressed", String(active));
+        });
+        const threshold = document.getElementById("adminStockThresholdWrap");
+        if (threshold) threshold.hidden = adminStockFilter !== "low";
+        renderAdminStocks();
+    });
+});
+document.getElementById("adminStockThreshold")?.addEventListener("input", renderAdminStocks);
+
 function renderAdminStocks() {
     const container =
         document.getElementById("adminStockList");
@@ -4449,6 +4469,9 @@ function renderAdminStocks() {
 
     const filtered =
         products.filter(product => {
+            const stock = Number(product.stock);
+            if (adminStockFilter === "zero" && !(Number.isFinite(stock) && stock === 0)) return false;
+            if (adminStockFilter === "low" && !(Number.isFinite(stock) && stock > 0 && stock <= getAdminStockThreshold())) return false;
             if (!query) {
                 return true;
             }
@@ -4471,10 +4494,10 @@ function renderAdminStocks() {
 
     container.innerHTML = "";
     const count = document.getElementById("adminStockCount");
-    const visible = query ? filtered : filtered.slice(0, 30);
-    if (count) count.textContent = query
-        ? `Знайдено: ${filtered.length}`
-        : `Показано ${visible.length} з ${filtered.length}. Введіть назву для пошуку.`;
+    const visible = (query || adminStockFilter !== "all") ? filtered : filtered.slice(0, 30);
+    if (count) count.textContent =
+        `Знайдено: ${filtered.length} · Показано: ${visible.length}` +
+        (!query && filtered.length > visible.length ? " · Введіть назву для пошуку решти товарів." : "");
 
     visible.forEach(product => {
         const item =
@@ -4659,6 +4682,12 @@ headers: {
             .find(btn => btn.dataset.article === String(product.article))?.closest(".admin-stock-item");
         const stockSpan = row?.querySelector(".admin-stock-info span:last-child");
         if (stockSpan) stockSpan.textContent = `Залишок: ${formatStock(newStock)} ${unit}`;
+        if (adminStockFilter !== "all") {
+            const panel = document.getElementById("adminPanel");
+            const scroll = panel?.scrollTop ?? 0;
+            renderAdminStocks();
+            if (panel) panel.scrollTop = scroll;
+        }
         renderProducts();
         if (typeof showToast === "function") showToast("Залишок оновлено", "success");
     }

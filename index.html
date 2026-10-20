@@ -69,6 +69,14 @@
 .admin-stock-modal-card label {font-weight:600}.admin-stock-modal-card input {font-size:18px;padding:12px;border:1px solid #b9cce1;border-radius:10px;color:#152238;background:#fff}
 .admin-stock-modal-actions {display:flex;gap:10px;margin-top:8px}.admin-stock-modal-actions button {flex:1;padding:12px 8px;border-radius:10px;border:1px solid #c5d4e5;background:#f1f5fb;color:#1d385a;font-weight:700}
 .admin-stock-modal-actions button[type=submit] {background:#1868c9;color:#fff;border-color:#1868c9}
+
+/* Фільтри залишків у панелі адміністратора */
+.admin-stock-filterbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.admin-stock-filter{border:1px solid #cad8e8;border-radius:999px;background:#f1f5fb;color:#234567;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.admin-stock-filter.active{background:#1868c9;border-color:#1868c9;color:#fff}
+.admin-stock-threshold{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:13px;margin:0 0 10px;color:inherit}
+.admin-stock-threshold[hidden]{display:none}
+.admin-stock-threshold input{width:75px;max-width:100%;padding:8px;border-radius:8px;border:1px solid #b9cce1;background:#fff;color:#152238}
 </style>
 </head>
 
@@ -291,7 +299,17 @@
             placeholder="Пошук за назвою або артикулом..."
         >
 
-        <div id="adminStockCount" class="admin-stock-count"></div>
+        <div class="admin-stock-filterbar" role="group" aria-label="Фільтр залишків">
+            <button type="button" class="admin-stock-filter active" data-stock-filter="all" aria-pressed="true">Усі</button>
+            <button type="button" class="admin-stock-filter" data-stock-filter="zero" aria-pressed="false">Нульові</button>
+            <button type="button" class="admin-stock-filter" data-stock-filter="low" aria-pressed="false">Малий залишок</button>
+        </div>
+        <label id="adminStockThresholdWrap" class="admin-stock-threshold" hidden>
+            Малий залишок: більше 0 і до
+            <input id="adminStockThreshold" type="number" min="0.001" step="any" value="5" inputmode="decimal" aria-label="Поріг малого залишку">
+            <span>кг / шт (за одиницею товару)</span>
+        </label>
+        <div id="adminStockCount" class="admin-stock-count" aria-live="polite"></div>
 
         <div
             id="adminStockList"
@@ -887,7 +905,7 @@
         </div>
     </form>
 </div>
-<script src="app.js?v=251"></script>
+<script src="app.js?v=252"></script>
 
 </body>
 </html> 

@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=246">
+   <link rel="stylesheet" href="style.css?v=248">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -28,6 +28,20 @@
 .route-secondary-button { background:#eef4fc; color:#1456a4; border:1px solid #c8d9ef; }
 .route-reason-select { width:100%; box-sizing:border-box; padding:10px; border:1px solid #d4dce5; border-radius:9px; background:white; color:#222; font-size:14px; }
 .route-saving { opacity:.65; pointer-events:none; }
+.route-search-input { width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #d4dce5; border-radius:11px; background:#fff; color:#222; font-size:15px; margin:0 0 8px; }
+.route-search-input:focus { outline:2px solid #1868c9; outline-offset:1px; }
+.route-search-count { font-size:12px; color:#64748b; margin-bottom:8px; }
+.route-shop-card[hidden] { display:none !important; }
+.route-shop-heading { display:flex; align-items:flex-start; gap:11px; }
+.route-heading-text { display:flex; flex-direction:column; gap:6px; min-width:0; flex:1; overflow-wrap:anywhere; }
+.route-status-pin { display:flex; align-items:center; justify-content:center; width:30px; height:30px; flex-shrink:0; border-radius:50% 50% 50% 3px; transform:rotate(-45deg); font-size:19px; line-height:1; font-weight:bold; border:2px solid currentColor; box-sizing:border-box; }
+.route-status-pin::first-letter { transform:rotate(45deg); }
+.route-pin-green { background:#16a34a; color:white; border-color:#16a34a; }
+.route-pin-red { background:#dc2626; color:white; border-color:#dc2626; }
+.route-pin-yellow { background:#f59e0b; color:white; border-color:#f59e0b; }
+.route-pin-blue { background:#2563eb; color:white; border-color:#2563eb; }
+.route-pin-gray { background:#e2e8f0; color:#64748b; border-color:#cbd5e1; }
+
 </style>
 </head>
 
@@ -818,7 +832,7 @@
 </button>
 
 
-<script src="app.js?v=247"></script>
+<script src="app.js?v=249"></script>
 
 </body>
 </html> 

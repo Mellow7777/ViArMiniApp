@@ -42,6 +42,16 @@
 .route-pin-blue { background:#2563eb; color:white; border-color:#2563eb; }
 .route-pin-gray { background:#e2e8f0; color:#64748b; border-color:#cbd5e1; }
 
+
+.route-progress { margin:0 0 14px; }
+.route-progress-label { font-size:13px; font-weight:700; color:#334155; margin-bottom:7px; }
+.route-progress-track { height:10px; border-radius:999px; background:#e2e8f0; overflow:hidden; }
+.route-progress-fill { height:100%; background:#16a34a; border-radius:999px; transition:width .2s ease; }
+.route-filter-bar { display:flex; gap:7px; overflow-x:auto; padding:2px 0 9px; scrollbar-width:thin; }
+.route-filter-button { flex:0 0 auto; border:1px solid #cbd5e1; border-radius:999px; background:#fff; color:#334155; padding:8px 11px; font-size:12px; font-weight:700; cursor:pointer; }
+.route-filter-button.active { background:#1868c9; border-color:#1868c9; color:#fff; }
+.route-sort-label { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#334155; margin:2px 0 12px; cursor:pointer; }
+.route-sort-label input { width:17px; height:17px; accent-color:#1868c9; }
 </style>
 </head>
 
@@ -832,7 +842,7 @@
 </button>
 
 
-<script src="app.js?v=249"></script>
+<script src="app.js?v=250"></script>
 
 </body>
 </html> 

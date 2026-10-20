@@ -8,7 +8,7 @@ let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
-    "https://api.via-r-order.com";
+    "https://dev-api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966
@@ -7524,6 +7524,7 @@ function formatStock(value) {
 
 // === Route visits: server stores timestamps and status ===
 let routeSaving = false;
+let routeSearchQuery = "";
 
 function initializeRouteUi() {
     const button = document.getElementById("myRouteButton");
@@ -7594,6 +7595,25 @@ async function loadTodayRoute() {
         summary.className = "route-summary";
         summary.textContent = `Маршрут на ${route.date || "сьогодні"} · Точок: ${items.length}`;
         panel.appendChild(summary);
+        if (items.length) {
+            const search = document.createElement("input");
+            search.type = "search";
+            search.className = "route-search-input";
+            search.placeholder = "🔎 Пошук магазину або адреси...";
+            search.autocomplete = "off";
+            search.setAttribute("aria-label", "Пошук точки маршруту");
+            search.value = routeSearchQuery;
+            panel.appendChild(search);
+
+            const searchCount = document.createElement("div");
+            searchCount.className = "route-search-count";
+            panel.appendChild(searchCount);
+
+            search.addEventListener("input", () => {
+                routeSearchQuery = search.value;
+                filterRouteCards(panel);
+            });
+        }
         if (!items.length) {
             const empty = document.createElement("p");
             empty.textContent = "На сьогодні торгових точок немає";
@@ -7618,6 +7638,23 @@ async function loadTodayRoute() {
         for (const item of items) {
             const card = document.createElement("div");
             card.className = "route-shop-card";
+            card.dataset.search = normalizeRouteSearch([
+                item.name, item.address, item.shopId
+            ].join(" "));
+            const heading = document.createElement("div");
+            heading.className = "route-shop-heading";
+            const pin = document.createElement("span");
+            pin.className = "route-status-pin";
+            pin.setAttribute("aria-hidden", "true");
+            const pinColors = {
+                ordered: "green", no_order: "red", closed: "red",
+                order_later: "yellow", started: "blue", pending: "gray"
+            };
+            pin.classList.add(`route-pin-${pinColors[item.status] || "gray"}`);
+            pin.textContent = "●";
+            const headingText = document.createElement("div");
+            headingText.className = "route-heading-text";
+            heading.append(pin, headingText);
             const title = document.createElement("strong");
             title.textContent = item.name || `Магазин ${item.shopId}`;
             const address = document.createElement("div");
@@ -7626,7 +7663,8 @@ async function loadTodayRoute() {
             const status = document.createElement("div");
             status.className = "route-shop-status";
             status.textContent = statusNames[item.status] || item.status || "Не відвідано";
-            card.append(title, address, status);
+            headingText.append(title, address, status);
+            card.append(heading);
             if (item.reason) {
                 const reasonText = document.createElement("div");
                 reasonText.className = "route-shop-address";
@@ -7702,6 +7740,7 @@ async function loadTodayRoute() {
             card.appendChild(select);
             panel.appendChild(card);
         }
+        filterRouteCards(panel);
     } catch (error) {
         panel.replaceChildren();
         const message = document.createElement("p");
@@ -7711,6 +7750,29 @@ async function loadTodayRoute() {
     }
 }
 
+
+function normalizeRouteSearch(value) {
+    return String(value || "")
+        .toLocaleLowerCase("uk-UA")
+        .replaceAll("ё", "е")
+        .replaceAll("ґ", "г")
+        .trim();
+}
+
+function filterRouteCards(panel) {
+    const query = normalizeRouteSearch(routeSearchQuery);
+    const cards = panel.querySelectorAll(".route-shop-card");
+    let visible = 0;
+    for (const card of cards) {
+        const matches = !query || card.dataset.search.includes(query);
+        card.hidden = !matches;
+        if (matches) visible++;
+    }
+    const count = panel.querySelector(".route-search-count");
+    if (count) {
+        count.textContent = query ? `Знайдено: ${visible} із ${cards.length}` : "";
+    }
+}
 
 // Адмін: перегляд збережених маршрутів (лише читання).
 let adminRouteReportInitialized = false;

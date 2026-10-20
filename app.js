@@ -3070,6 +3070,15 @@ if (priorityDrawerOverlay) {
         });
     });
 
+// Restore the last invoice form chosen on this device.
+try {
+    const savedInvoiceForm = localStorage.getItem("viar_invoice_form_preference_v1");
+    if (savedInvoiceForm === "1" || savedInvoiceForm === "2") {
+        state.invoiceForm = savedInvoiceForm;
+    }
+} catch (error) {
+    console.warn("Не вдалося відновити форму накладної", error);
+}
 setInvoiceForm(state.invoiceForm);
 
     document.addEventListener(
@@ -6928,6 +6937,11 @@ function setInvoiceForm(form) {
     }
 
     state.invoiceForm = form;
+    try {
+        localStorage.setItem("viar_invoice_form_preference_v1", form);
+    } catch (error) {
+        console.warn("Не вдалося зберегти форму накладної", error);
+    }
 
     document
         .querySelectorAll(".invoice-form-button")

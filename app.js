@@ -7525,6 +7525,8 @@ function formatStock(value) {
 // === Route visits: server stores timestamps and status ===
 let routeSaving = false;
 let routeSearchQuery = "";
+let routeStatusFilter = "all";
+let routeCompletedLast = true;
 
 function initializeRouteUi() {
     const button = document.getElementById("myRouteButton");
@@ -7596,6 +7598,25 @@ async function loadTodayRoute() {
         summary.textContent = `Маршрут на ${route.date || "сьогодні"} · Точок: ${items.length}`;
         panel.appendChild(summary);
         if (items.length) {
+            const completed = items.filter(item => isRouteCompleted(item.status)).length;
+            const percent = Math.round(completed / items.length * 100);
+            const progress = document.createElement("div");
+            progress.className = "route-progress";
+            const progressLabel = document.createElement("div");
+            progressLabel.className = "route-progress-label";
+            progressLabel.textContent = `Опрацьовано: ${completed} із ${items.length} (${percent}%)`;
+            const progressTrack = document.createElement("div");
+            progressTrack.className = "route-progress-track";
+            progressTrack.setAttribute("role", "progressbar");
+            progressTrack.setAttribute("aria-valuemin", "0");
+            progressTrack.setAttribute("aria-valuemax", String(items.length));
+            progressTrack.setAttribute("aria-valuenow", String(completed));
+            const progressFill = document.createElement("div");
+            progressFill.className = "route-progress-fill";
+            progressFill.style.width = `${percent}%`;
+            progressTrack.appendChild(progressFill);
+            progress.append(progressLabel, progressTrack);
+            panel.appendChild(progress);
             const search = document.createElement("input");
             search.type = "search";
             search.className = "route-search-input";
@@ -7608,6 +7629,43 @@ async function loadTodayRoute() {
             const searchCount = document.createElement("div");
             searchCount.className = "route-search-count";
             panel.appendChild(searchCount);
+
+            const filterBar = document.createElement("div");
+            filterBar.className = "route-filter-bar";
+            filterBar.setAttribute("role", "group");
+            filterBar.setAttribute("aria-label", "Фільтр маршруту");
+            const filters = [
+                ["all", "Усі"],
+                ["pending", "Не відвідано"],
+                ["ordered", "Із замовленням"],
+                ["no_order", "Без замовлення"]
+            ];
+            for (const [key, label] of filters) {
+                const filterButton = document.createElement("button");
+                filterButton.type = "button";
+                filterButton.className = "route-filter-button";
+                filterButton.dataset.filter = key;
+                filterButton.textContent = label;
+                filterButton.addEventListener("click", () => {
+                    routeStatusFilter = key;
+                    updateRouteFilterButtons(panel);
+                    filterRouteCards(panel);
+                });
+                filterBar.appendChild(filterButton);
+            }
+            panel.appendChild(filterBar);
+            const sortLabel = document.createElement("label");
+            sortLabel.className = "route-sort-label";
+            const sortCheckbox = document.createElement("input");
+            sortCheckbox.type = "checkbox";
+            sortCheckbox.checked = routeCompletedLast;
+            sortCheckbox.addEventListener("change", () => {
+                routeCompletedLast = sortCheckbox.checked;
+                sortRouteCards(panel);
+            });
+            sortLabel.append(sortCheckbox, document.createTextNode(" Виконані точки вниз"));
+            panel.appendChild(sortLabel);
+            updateRouteFilterButtons(panel);
 
             search.addEventListener("input", () => {
                 routeSearchQuery = search.value;
@@ -7635,9 +7693,11 @@ async function loadTodayRoute() {
             ["Зачинено", "Зачинено"],
             ["Інше", "Інше"]
         ];
-        for (const item of items) {
+        for (const [routeIndex, item] of items.entries()) {
             const card = document.createElement("div");
             card.className = "route-shop-card";
+            card.dataset.status = String(item.status || "pending").toLowerCase();
+            card.dataset.routeIndex = String(routeIndex);
             card.dataset.search = normalizeRouteSearch([
                 item.name, item.address, item.shopId
             ].join(" "));
@@ -7740,6 +7800,7 @@ async function loadTodayRoute() {
             card.appendChild(select);
             panel.appendChild(card);
         }
+        sortRouteCards(panel);
         filterRouteCards(panel);
     } catch (error) {
         panel.replaceChildren();
@@ -7759,18 +7820,49 @@ function normalizeRouteSearch(value) {
         .trim();
 }
 
+function isRouteCompleted(status) {
+    return ["ordered", "no_order", "closed"].includes(String(status || "").toLowerCase());
+}
+
+function updateRouteFilterButtons(panel) {
+    for (const button of panel.querySelectorAll(".route-filter-button")) {
+        const active = button.dataset.filter === routeStatusFilter;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+    }
+}
+
+function sortRouteCards(panel) {
+    const cards = [...panel.querySelectorAll(".route-shop-card")];
+    cards.sort((a, b) => {
+        if (routeCompletedLast) {
+            const completedDifference =
+                Number(isRouteCompleted(a.dataset.status)) -
+                Number(isRouteCompleted(b.dataset.status));
+            if (completedDifference !== 0) return completedDifference;
+        }
+        return Number(a.dataset.routeIndex) - Number(b.dataset.routeIndex);
+    });
+    for (const card of cards) panel.appendChild(card);
+}
+
 function filterRouteCards(panel) {
     const query = normalizeRouteSearch(routeSearchQuery);
     const cards = panel.querySelectorAll(".route-shop-card");
     let visible = 0;
     for (const card of cards) {
-        const matches = !query || card.dataset.search.includes(query);
+        const status = card.dataset.status;
+        const matchesStatus = routeStatusFilter === "all" ||
+            (routeStatusFilter === "pending" && !isRouteCompleted(status)) ||
+            (routeStatusFilter === "ordered" && status === "ordered") ||
+            (routeStatusFilter === "no_order" && (status === "no_order" || status === "closed"));
+        const matches = matchesStatus && (!query || card.dataset.search.includes(query));
         card.hidden = !matches;
         if (matches) visible++;
     }
     const count = panel.querySelector(".route-search-count");
     if (count) {
-        count.textContent = query ? `Знайдено: ${visible} із ${cards.length}` : "";
+        count.textContent = `Показано: ${visible} із ${cards.length}`;
     }
 }
 

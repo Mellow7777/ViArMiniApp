@@ -4341,6 +4341,28 @@ async function loadAdminRepresentatives() {
     }
 }
 
+const ADMIN_SECTION_IDS = {
+    stocks: "adminStocksSection", routes: "adminRouteReportSection",
+    sales: "adminSalesSection", finance: "adminFinanceSection"
+};
+function showAdminSection(section) {
+    const home = document.getElementById("adminHome");
+    const toolbar = document.getElementById("adminSectionToolbar");
+    if (home) home.hidden = Boolean(section);
+    if (toolbar) toolbar.hidden = !section;
+    Object.entries(ADMIN_SECTION_IDS).forEach(([name, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.hidden = name !== section;
+    });
+    if (section === "stocks") renderAdminStocks();
+    const panel = document.getElementById("adminPanel");
+    if (panel) panel.scrollTop = 0;
+}
+document.querySelectorAll("[data-admin-section]").forEach(button => {
+    button.addEventListener("click", () => showAdminSection(button.dataset.adminSection));
+});
+document.getElementById("adminBackButton")?.addEventListener("click", () => showAdminSection(null));
+
 function openAdminPanel() {
     const panel =
         document.getElementById(
@@ -4353,7 +4375,7 @@ function openAdminPanel() {
 
     panel.hidden = false;
 
-    renderAdminStocks();
+    showAdminSection(null);
 
     loadAdminRepresentatives();
     initializeAdminRouteReport();
@@ -4368,6 +4390,7 @@ function closeAdminPanel() {
     }
 
     panel.hidden = true;
+    showAdminSection(null);
 }
 
 async function loadAdminRepresentativeProfile(
@@ -4447,8 +4470,13 @@ function renderAdminStocks() {
         });
 
     container.innerHTML = "";
+    const count = document.getElementById("adminStockCount");
+    const visible = query ? filtered : filtered.slice(0, 30);
+    if (count) count.textContent = query
+        ? `Знайдено: ${filtered.length}`
+        : `Показано ${visible.length} з ${filtered.length}. Введіть назву для пошуку.`;
 
-    filtered.forEach(product => {
+    visible.forEach(product => {
         const item =
             document.createElement("div");
 
@@ -4501,6 +4529,35 @@ function renderAdminStocks() {
     });
 }
 
+let stockModalResolve = null;
+function askAdminStockValue(product, currentStock, unit) {
+    return new Promise(resolve => {
+        const modal = document.getElementById("adminStockModal");
+        const input = document.getElementById("adminStockModalInput");
+        if (!modal || !input) { resolve(null); return; }
+        stockModalResolve = resolve;
+        document.getElementById("adminStockModalTitle").textContent = product.name;
+        document.getElementById("adminStockModalCurrent").textContent =
+            `Артикул: ${product.article} · Зараз: ${formatStock(currentStock)} ${unit}`;
+        input.value = String(currentStock);
+        modal.hidden = false;
+        input.focus();
+        input.select();
+    });
+}
+function closeAdminStockModal(value = null) {
+    document.getElementById("adminStockModal").hidden = true;
+    const resolve = stockModalResolve;
+    stockModalResolve = null;
+    if (resolve) resolve(value);
+}
+document.getElementById("adminStockForm")?.addEventListener("submit", e => {
+    e.preventDefault();
+    closeAdminStockModal(document.getElementById("adminStockModalInput").value);
+});
+document.querySelectorAll("[data-close-stock-modal]").forEach(el =>
+    el.addEventListener("click", () => closeAdminStockModal()));
+
 async function updateProductStock(product) {
     const currentStock =
         Number(product.stock || 0);
@@ -4510,12 +4567,7 @@ async function updateProductStock(product) {
         product.unit1C ||
         "кг";
 
-    const enteredValue = prompt(
-        `${product.name}\n\n` +
-        `Текущий остаток: ${formatStock(currentStock)} ${unit}\n\n` +
-        `Введите новый остаток:`,
-        String(currentStock)
-    );
+    const enteredValue = await askAdminStockValue(product, currentStock, unit);
 
     if (enteredValue === null) {
         return;
@@ -4533,9 +4585,7 @@ async function updateProductStock(product) {
         !Number.isFinite(newStock) ||
         newStock < 0
     ) {
-        alert(
-            "Введите корректный остаток."
-        );
+        if (typeof showToast === "function") showToast("Введіть коректний залишок", "error");
 
         return;
     }
@@ -4604,19 +4654,13 @@ headers: {
         product.stock =
             newStock;
 
-        // Обновляем админку
-        renderAdminStocks();
-
-        // Обновляем карточки товаров
+        // Refresh only the edited row to preserve list and scroll position.
+        const row = [...document.querySelectorAll("#adminStockList .admin-stock-edit")]
+            .find(btn => btn.dataset.article === String(product.article))?.closest(".admin-stock-item");
+        const stockSpan = row?.querySelector(".admin-stock-info span:last-child");
+        if (stockSpan) stockSpan.textContent = `Залишок: ${formatStock(newStock)} ${unit}`;
         renderProducts();
-
-        alert(
-            `Остаток обновлён:\n\n` +
-            `${product.name}\n` +
-            `${formatStock(currentStock)} ${unit}` +
-            ` → ` +
-            `${formatStock(newStock)} ${unit}`
-        );
+        if (typeof showToast === "function") showToast("Залишок оновлено", "success");
     }
     catch (error) {
         console.error(

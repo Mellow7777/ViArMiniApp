@@ -4167,3 +4167,20 @@ body.priority-drawer-open {
 .admin-route-filterbar label { font-size:13px; font-weight:600; }
 .admin-route-filterbar select { width:100%; max-width:100%; }
 .admin-route-filter-count { font-size:12px; opacity:.75; }
+
+/* Admin route timeline */
+.admin-route-view-tabs { display:flex; gap:8px; margin:16px 0 10px; }
+.admin-route-view-button { flex:1; padding:11px 8px; border:1px solid var(--tg-theme-hint-color,#d2d7df); border-radius:11px; background:transparent; color:inherit; font-weight:600; cursor:pointer; }
+.admin-route-view-button.active { background:var(--tg-theme-button-color,#3285e6); color:var(--tg-theme-button-text-color,#fff); border-color:transparent; }
+.admin-route-timeline-list { margin:16px 0; }
+.admin-route-timeline-entry { position:relative; }
+.admin-route-timeline-gap { margin:7px 0 7px 83px; font-size:12px; color:var(--tg-theme-hint-color,#778); }
+.admin-route-timeline-point { display:grid; grid-template-columns:64px 12px minmax(0,1fr); gap:10px; align-items:start; }
+.admin-route-timeline-time { font-size:14px; font-weight:700; padding-top:13px; text-align:right; font-variant-numeric:tabular-nums; }
+.admin-route-timeline-dot { width:12px; height:12px; border-radius:50%; background:var(--tg-theme-button-color,#3285e6); margin-top:16px; position:relative; }
+.admin-route-timeline-dot:after { content:""; position:absolute; top:13px; left:5px; width:2px; height:calc(100% + 70px); min-height:45px; background:var(--tg-theme-hint-color,#d3d8df); opacity:.35; }
+.admin-route-timeline-entry:last-child .admin-route-timeline-dot:after { display:none; }
+.admin-route-timeline-content { min-width:0; padding:10px 12px; border-radius:12px; margin-bottom:8px; background:var(--tg-theme-secondary-bg-color,#f3f5f7); overflow-wrap:anywhere; }
+.admin-route-timeline-content strong { display:block; margin-bottom:5px; }
+.admin-route-timeline-note { font-size:13px; color:var(--tg-theme-hint-color,#778); margin:12px 0; }
+#adminRouteListView[hidden],#adminRouteTimelineView[hidden],#adminRouteListControls[hidden] { display:none!important; }

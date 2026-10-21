@@ -4155,3 +4155,9 @@ body.priority-drawer-open {
 .admin-stock-threshold{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-size:13px;margin:0 0 10px;color:inherit}
 .admin-stock-threshold[hidden]{display:none}
 .admin-stock-threshold input{width:75px;max-width:100%;padding:8px;border-radius:8px;border:1px solid #b9cce1;background:#fff;color:#152238}
+
+
+/* Admin route report: sorting */
+.admin-route-sortbar { display: flex; flex-direction: column; gap: 7px; margin: 14px 0; }
+.admin-route-sortbar label { font-size: 13px; font-weight: 600; }
+.admin-route-sortbar select { width: 100%; max-width: 100%; }

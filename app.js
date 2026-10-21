@@ -8,7 +8,7 @@ let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
-    "https://dev-api.via-r-order.com";
+    "https://api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966
@@ -8001,8 +8001,55 @@ function adminRouteCardsHtml(items) {
 
 }
 
+function adminRouteTimelineHtml() {
+    const entries = adminRouteCurrentItems
+        .map((item, index) => ({ item, index, timestamp: Date.parse(item.checkInUtc || "") }))
+        .filter(entry => Number.isFinite(entry.timestamp))
+        .sort((a, b) => a.timestamp - b.timestamp || a.index - b.index);
+    const missing = adminRouteCurrentItems.length - entries.length;
+    if (!entries.length) return '<p class="admin-route-empty">Немає точок із зафіксованим часом відмітки.</p>';
+    return `<div class="admin-route-timeline-list">${entries.map((entry, index) => {
+        const item = entry.item;
+        const prev = index ? entries[index - 1] : null;
+        const gap = prev ? Math.round((entry.timestamp - prev.timestamp) / 60000) : null;
+        const gapText = gap === null ? "" : gap >= 60
+            ? `${Math.floor(gap / 60)} год ${gap % 60} хв`
+            : `${gap} хв`;
+        const stamp = new Date(entry.timestamp).toLocaleTimeString("uk-UA", {hour:"2-digit",minute:"2-digit"});
+        return `<div class="admin-route-timeline-entry">
+            ${gap !== null ? `<div class="admin-route-timeline-gap">↕ ${gapText} між відмітками</div>` : ""}
+            <div class="admin-route-timeline-point">
+                <div class="admin-route-timeline-time">${escapeHtml(stamp)}</div>
+                <div class="admin-route-timeline-dot"></div>
+                <div class="admin-route-timeline-content">
+                    <strong>${escapeHtml(item.name || `Точка №${item.shopId}`)}</strong>
+                    <div class="admin-route-muted">${escapeHtml(item.address || "")}</div>
+                    <div class="admin-route-status">${adminRouteStatus(item.status)}</div>
+                    ${item.resultUtc ? `<div class="admin-route-muted">Результат: ${escapeHtml(adminRouteFormatTime(item.resultUtc))}</div>` : ""}
+                    ${item.reason ? `<div class="admin-route-muted">Причина: ${escapeHtml(item.reason)}</div>` : ""}
+                    ${item.orderId ? `<div class="admin-route-muted">Замовлення: ${escapeHtml(item.orderId)}</div>` : ""}
+                </div>
+            </div>
+        </div>`;
+    }).join("")}</div>${missing ? `<p class="admin-route-timeline-note">Без часу відмітки: ${missing} точок. Їх можна переглянути у списку точок.</p>` : ""}`;
+}
+
+let adminRouteViewMode = "list";
+
+function renderAdminRouteView(container) {
+    const list = container.querySelector("#adminRouteListView");
+    const timeline = container.querySelector("#adminRouteTimelineView");
+    const controls = container.querySelector("#adminRouteListControls");
+    if (list) list.hidden = adminRouteViewMode !== "list";
+    if (timeline) {
+        timeline.hidden = adminRouteViewMode !== "timeline";
+        if (adminRouteViewMode === "timeline") timeline.innerHTML = adminRouteTimelineHtml();
+    }
+    if (controls) controls.hidden = adminRouteViewMode !== "list";
+}
+
 function renderAdminRouteSortedCards(container) {
-    const target = container.querySelector(".admin-route-shops");
+    const target = container.querySelector("#adminRouteListView");
     if (target) target.innerHTML = adminRouteCardsHtml(adminRouteFilteredItems()) || '<p class="admin-route-empty">Немає точок із таким статусом.</p>';
     const count = container.querySelector("#adminRouteFilterCount");
     if (count) count.textContent = `Показано: ${adminRouteFilteredItems().length} із ${adminRouteCurrentItems.length}`;
@@ -8111,6 +8158,11 @@ async function loadAdminRouteReport() {
         adminRouteCurrentItems = report.items.slice();
         const cards = adminRouteCardsHtml(adminRouteFilteredItems());
         container.innerHTML = `<div class="admin-route-stats">${summary}</div>
+            <div class="admin-route-view-tabs">
+                <button type="button" class="admin-route-view-button" data-view="list">📋 Список точок</button>
+                <button type="button" class="admin-route-view-button" data-view="timeline">🕒 Хронологія</button>
+            </div>
+            <div id="adminRouteListControls">
             <div class="admin-route-sortbar">
                 <label for="adminRouteSort">Сортування точок</label>
                 <select id="adminRouteSort" class="admin-input">
@@ -8136,7 +8188,17 @@ async function loadAdminRouteReport() {
                     <option value="pending">⚪ Не завершені</option>
                 </select>
                 <span id="adminRouteFilterCount" class="admin-route-filter-count"></span>
-            </div><div class="admin-route-shops">${cards || '<p class="admin-route-empty">Немає точок із таким статусом.</p>'}</div>`;
+            </div></div><div id="adminRouteListView" class="admin-route-shops">${cards || '<p class="admin-route-empty">Немає точок із таким статусом.</p>'}</div>
+            <div id="adminRouteTimelineView" hidden></div>`;
+        container.querySelectorAll(".admin-route-view-button").forEach(button => {
+            button.addEventListener("click", () => {
+                adminRouteViewMode = button.dataset.view;
+                container.querySelectorAll(".admin-route-view-button").forEach(b => b.classList.toggle("active", b.dataset.view === adminRouteViewMode));
+                renderAdminRouteView(container);
+            });
+            button.classList.toggle("active", button.dataset.view === adminRouteViewMode);
+        });
+        renderAdminRouteView(container);
         const sortSelect = container.querySelector("#adminRouteSort");
         if (sortSelect) {
             sortSelect.value = adminRouteSortMode;

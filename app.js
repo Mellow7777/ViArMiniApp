@@ -8,7 +8,7 @@ let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
-    "https://api.via-r-order.com";
+    "https://dev-api.via-r-order.com";
     
 const ADMIN_TELEGRAM_IDS = [
     564525966
@@ -7953,6 +7953,50 @@ function filterRouteCards(panel) {
     }
 }
 
+
+let adminRouteCurrentItems = [];
+let adminRouteSortMode = "route";
+
+function adminRouteSortedItems() {
+    const items = adminRouteCurrentItems.map((item, index) => ({ item, index }));
+    const isVisited = item => ["ordered", "order_later", "no_order", "closed"].includes(String(item.status || "").toLowerCase());
+    const time = item => item.checkInUtc ? new Date(item.checkInUtc).getTime() || 0 : 0;
+    const statusOrder = { ordered: 0, order_later: 1, no_order: 2, closed: 3, pending: 4 };
+    items.sort((a, b) => {
+        const x = a.item, y = b.item;
+        let diff = 0;
+        switch (adminRouteSortMode) {
+            case "visited-first": diff = Number(isVisited(y)) - Number(isVisited(x)); break;
+            case "unvisited-first": diff = Number(isVisited(x)) - Number(isVisited(y)); break;
+            case "status": diff = (statusOrder[x.status] ?? 5) - (statusOrder[y.status] ?? 5); break;
+            case "checkin-asc": diff = (time(x) || Infinity) - (time(y) || Infinity); break;
+            case "checkin-desc": diff = time(y) - time(x); break;
+            case "name": diff = String(x.name || "").localeCompare(String(y.name || ""), "uk"); break;
+        }
+        return diff || a.index - b.index;
+    });
+    return items.map(x => x.item);
+}
+
+function adminRouteCardsHtml(items) {
+    return items.map(item => `
+            <article class="admin-route-shop">
+                <strong>${escapeHtml(item.name || `Точка №${item.shopId}`)}</strong>
+                <div class="admin-route-muted">${escapeHtml(item.address || "")}</div>
+                <div class="admin-route-status">${adminRouteStatus(item.status)}</div>
+                ${item.checkInUtc ? `<div class="admin-route-muted">📍 Відмітка: ${escapeHtml(adminRouteFormatTime(item.checkInUtc))}</div>` : '<div class="admin-route-muted">📍 Відмітки немає</div>'}
+                ${item.resultUtc ? `<div class="admin-route-muted">Результат: ${escapeHtml(adminRouteFormatTime(item.resultUtc))}</div>` : ""}
+                ${item.reason ? `<div class="admin-route-muted">Причина: ${escapeHtml(item.reason)}</div>` : ""}
+                ${item.orderId ? `<div class="admin-route-muted">Замовлення: ${escapeHtml(item.orderId)}</div>` : ""}
+            </article>`).join("");
+
+}
+
+function renderAdminRouteSortedCards(container) {
+    const target = container.querySelector(".admin-route-shops");
+    if (target) target.innerHTML = adminRouteCardsHtml(adminRouteSortedItems());
+}
+
 // Адмін: перегляд збережених маршрутів (лише читання).
 let adminRouteReportInitialized = false;
 
@@ -8053,17 +8097,29 @@ async function loadAdminRouteReport() {
             ["Зачинено", report.closed], ["Очікують", report.pending]
         ];
         const summary = stats.map(([label, value]) => `<div class="admin-route-stat"><strong>${Number(value) || 0}</strong><span>${label}</span></div>`).join("");
-        const cards = report.items.map(item => `
-            <article class="admin-route-shop">
-                <strong>${escapeHtml(item.name || `Точка №${item.shopId}`)}</strong>
-                <div class="admin-route-muted">${escapeHtml(item.address || "")}</div>
-                <div class="admin-route-status">${adminRouteStatus(item.status)}</div>
-                ${item.checkInUtc ? `<div class="admin-route-muted">📍 Відмітка: ${escapeHtml(adminRouteFormatTime(item.checkInUtc))}</div>` : '<div class="admin-route-muted">📍 Відмітки немає</div>'}
-                ${item.resultUtc ? `<div class="admin-route-muted">Результат: ${escapeHtml(adminRouteFormatTime(item.resultUtc))}</div>` : ""}
-                ${item.reason ? `<div class="admin-route-muted">Причина: ${escapeHtml(item.reason)}</div>` : ""}
-                ${item.orderId ? `<div class="admin-route-muted">Замовлення: ${escapeHtml(item.orderId)}</div>` : ""}
-            </article>`).join("");
-        container.innerHTML = `<div class="admin-route-stats">${summary}</div><div class="admin-route-shops">${cards}</div>`;
+        adminRouteCurrentItems = report.items.slice();
+        const cards = adminRouteCardsHtml(adminRouteSortedItems());
+        container.innerHTML = `<div class="admin-route-stats">${summary}</div>
+            <div class="admin-route-sortbar">
+                <label for="adminRouteSort">Сортування точок</label>
+                <select id="adminRouteSort" class="admin-input">
+                    <option value="route">За маршрутом</option>
+                    <option value="visited-first">Відвідані спочатку</option>
+                    <option value="unvisited-first">Не відвідані спочатку</option>
+                    <option value="status">За статусом</option>
+                    <option value="checkin-asc">За часом відмітки (раніше)</option>
+                    <option value="checkin-desc">За часом відмітки (пізніше)</option>
+                    <option value="name">За назвою (А–Я)</option>
+                </select>
+            </div><div class="admin-route-shops">${cards}</div>`;
+        const sortSelect = container.querySelector("#adminRouteSort");
+        if (sortSelect) {
+            sortSelect.value = adminRouteSortMode;
+            sortSelect.addEventListener("change", () => {
+                adminRouteSortMode = sortSelect.value;
+                renderAdminRouteSortedCards(container);
+            });
+        }
     } catch (error) {
         console.error("Контроль маршрутів: звіт", error);
         container.textContent = `Не вдалося завантажити звіт: ${error.message}`;

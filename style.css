@@ -4161,3 +4161,9 @@ body.priority-drawer-open {
 .admin-route-sortbar { display: flex; flex-direction: column; gap: 7px; margin: 14px 0; }
 .admin-route-sortbar label { font-size: 13px; font-weight: 600; }
 .admin-route-sortbar select { width: 100%; max-width: 100%; }
+
+/* Admin route report status filter */
+.admin-route-filterbar { display:flex; flex-direction:column; gap:7px; margin:12px 0 16px; }
+.admin-route-filterbar label { font-size:13px; font-weight:600; }
+.admin-route-filterbar select { width:100%; max-width:100%; }
+.admin-route-filter-count { font-size:12px; opacity:.75; }

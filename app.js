@@ -7956,6 +7956,7 @@ function filterRouteCards(panel) {
 
 let adminRouteCurrentItems = [];
 let adminRouteSortMode = "route";
+let adminRouteStatusFilter = "all";
 
 function adminRouteSortedItems() {
     const items = adminRouteCurrentItems.map((item, index) => ({ item, index }));
@@ -7978,6 +7979,14 @@ function adminRouteSortedItems() {
     return items.map(x => x.item);
 }
 
+function adminRouteFilteredItems() {
+    const items = adminRouteSortedItems();
+    if (adminRouteStatusFilter === "all") return items;
+    if (adminRouteStatusFilter === "unvisited") return items.filter(item => !item.checkInUtc && ["pending", ""].includes(String(item.status || "").toLowerCase()));
+    if (adminRouteStatusFilter === "visited") return items.filter(item => Boolean(item.checkInUtc) || ["ordered", "order_later", "no_order", "closed"].includes(String(item.status || "").toLowerCase()));
+    return items.filter(item => String(item.status || "").toLowerCase() === adminRouteStatusFilter);
+}
+
 function adminRouteCardsHtml(items) {
     return items.map(item => `
             <article class="admin-route-shop">
@@ -7994,7 +8003,9 @@ function adminRouteCardsHtml(items) {
 
 function renderAdminRouteSortedCards(container) {
     const target = container.querySelector(".admin-route-shops");
-    if (target) target.innerHTML = adminRouteCardsHtml(adminRouteSortedItems());
+    if (target) target.innerHTML = adminRouteCardsHtml(adminRouteFilteredItems()) || '<p class="admin-route-empty">Немає точок із таким статусом.</p>';
+    const count = container.querySelector("#adminRouteFilterCount");
+    if (count) count.textContent = `Показано: ${adminRouteFilteredItems().length} із ${adminRouteCurrentItems.length}`;
 }
 
 // Адмін: перегляд збережених маршрутів (лише читання).
@@ -8098,7 +8109,7 @@ async function loadAdminRouteReport() {
         ];
         const summary = stats.map(([label, value]) => `<div class="admin-route-stat"><strong>${Number(value) || 0}</strong><span>${label}</span></div>`).join("");
         adminRouteCurrentItems = report.items.slice();
-        const cards = adminRouteCardsHtml(adminRouteSortedItems());
+        const cards = adminRouteCardsHtml(adminRouteFilteredItems());
         container.innerHTML = `<div class="admin-route-stats">${summary}</div>
             <div class="admin-route-sortbar">
                 <label for="adminRouteSort">Сортування точок</label>
@@ -8111,7 +8122,21 @@ async function loadAdminRouteReport() {
                     <option value="checkin-desc">За часом відмітки (пізніше)</option>
                     <option value="name">За назвою (А–Я)</option>
                 </select>
-            </div><div class="admin-route-shops">${cards}</div>`;
+            </div>
+            <div class="admin-route-filterbar">
+                <label for="adminRouteStatusFilter">Фільтр за статусом</label>
+                <select id="adminRouteStatusFilter" class="admin-input">
+                    <option value="all">Усі точки</option>
+                    <option value="visited">Відвідані</option>
+                    <option value="unvisited">Не відвідані</option>
+                    <option value="ordered">📦 Із замовленням</option>
+                    <option value="order_later">🕒 Замовлення пізніше</option>
+                    <option value="no_order">🚫 Без замовлення</option>
+                    <option value="closed">🔒 Зачинені</option>
+                    <option value="pending">⚪ Не завершені</option>
+                </select>
+                <span id="adminRouteFilterCount" class="admin-route-filter-count"></span>
+            </div><div class="admin-route-shops">${cards || '<p class="admin-route-empty">Немає точок із таким статусом.</p>'}</div>`;
         const sortSelect = container.querySelector("#adminRouteSort");
         if (sortSelect) {
             sortSelect.value = adminRouteSortMode;
@@ -8120,6 +8145,15 @@ async function loadAdminRouteReport() {
                 renderAdminRouteSortedCards(container);
             });
         }
+        const filterSelect = container.querySelector("#adminRouteStatusFilter");
+        if (filterSelect) {
+            filterSelect.value = adminRouteStatusFilter;
+            filterSelect.addEventListener("change", () => {
+                adminRouteStatusFilter = filterSelect.value;
+                renderAdminRouteSortedCards(container);
+            });
+        }
+        renderAdminRouteSortedCards(container);
     } catch (error) {
         console.error("Контроль маршрутів: звіт", error);
         container.textContent = `Не вдалося завантажити звіт: ${error.message}`;

@@ -66,3 +66,12 @@ body.crm-mode:not(.profile-open) { overflow-y: auto !important; }
 .crm-home-links button{flex:1;background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:14px 10px;color:#284567;font-weight:700;text-align:left}
 .crm-home-links button span{float:right}
 .crm-home [hidden]{display:none!important}
+
+/* v9: don't float navigation and basket above the mobile soft keyboard. */
+@media (max-width: 799px) {
+  body.crm-keyboard-open #crmBottomNav,
+  body.crm-keyboard-open #floatingCartButton { display: none !important; }
+  body.crm-keyboard-open.crm-mode,
+  body.crm-keyboard-open.crm-order { padding-bottom: 16px !important; }
+  body.crm-keyboard-open .bottom-space { height: 20px !important; }
+}

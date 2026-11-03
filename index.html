@@ -41,7 +41,14 @@
 
 <section id="crmHome" class="crm-home" aria-label="Головна сторінка CRM">
   <div class="crm-hello"><span class="crm-eyebrow">VIAR / РОБОЧИЙ ПРОСТІР</span><h2 id="crmGreeting">Вітаємо у ViAr CRM</h2><p id="crmToday"></p></div>
-  <div class="crm-feature"><span>Ваш робочий день</span><h3>Усе для роботи — в одному місці</h3><p>Замовлення, маршрути, клієнти та керування компанією.</p><button type="button" data-crm-go="order">＋ Створити замовлення →</button></div>
+  <div class="crm-feature"><span id="crmRevenueLabel">Замовлення сьогодні</span><h3 id="crmRevenue">Завантаження…</h3><p id="crmRevenueHint">Сума оформлених замовлень, не підтверджена виручка</p><button type="button" data-crm-go="order">＋ Створити замовлення →</button></div>
+  <div class="crm-stats" aria-label="Показники за сьогодні">
+    <div><span>📦 Замовлень</span><strong id="crmOrders">—</strong></div>
+    <div><span>🏪 Точок із замовленням</span><strong id="crmShops">—</strong></div>
+    <div><span>🗺️ Маршрут: виконано</span><strong id="crmRoute">—</strong></div>
+    <div><span>⏳ Залишилось точок</span><strong id="crmPending">—</strong></div>
+  </div>
+  <p class="crm-data-status" id="crmDataStatus" role="status">Оновлюємо показники…</p>
   <h3 class="crm-title">Швидкі дії</h3>
   <div class="crm-grid">
     <button type="button" data-crm-go="order"><span>📦</span><strong>Замовлення</strong><small>Створити або продовжити</small></button>
@@ -859,8 +866,8 @@
 </div>
 <script src="app.js?v=261"></script>
 <nav id="crmBottomNav" class="crm-bottom-nav" aria-label="Навігація CRM"><button type="button" data-crm-go="home" class="active">⌂<small>Головна</small></button><button type="button" data-crm-go="order">▣<small>Замовлення</small></button><button type="button" data-crm-go="route">◇<small>Маршрут</small></button><button type="button" data-crm-go="menu">☰<small>Меню</small></button></nav>
-<link rel="stylesheet" href="crm.css?v=1">
-<script src="crm.js?v=1"></script>
+<link rel="stylesheet" href="crm.css?v=2">
+<script src="crm.js?v=2"></script>
 
 </body>
 </html> 

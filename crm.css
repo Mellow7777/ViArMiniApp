@@ -41,3 +41,7 @@ body.crm-order #myRoutePanel { scroll-margin-bottom: calc(var(--crm-tab-height) 
   .crm-bottom-nav button small { font-size: 11px; }
   body.crm-order #floatingCartButton { right: 12px !important; }
 }
+
+/* v5: CRM pages must scroll after closing the full-screen profile. */
+body.crm-mode:not(.profile-open) { overflow-y: auto !important; }
+#profilePanel[hidden] { display: none !important; }

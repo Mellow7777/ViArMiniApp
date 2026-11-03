@@ -86,5 +86,23 @@
  }
  go('home');
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDashboard();});
+ // Mobile soft keyboard: hide fixed tabs and basket while editing fields.
+ // visualViewport catches keyboard resize; focus is a fallback for Telegram iOS WebView.
+ (() => {
+   const editable = el => el && (el.matches?.('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, [contenteditable="true"]'));
+   const mobile = () => window.matchMedia('(max-width: 799px)').matches;
+   const syncKeyboard = () => {
+     const vv = window.visualViewport;
+     const viewportShrunk = vv && (window.innerHeight - vv.height - vv.offsetTop > 130);
+     const editing = editable(document.activeElement);
+     document.body.classList.toggle('crm-keyboard-open', mobile() && (viewportShrunk || editing));
+   };
+   document.addEventListener('focusin', syncKeyboard);
+   document.addEventListener('focusout', () => setTimeout(syncKeyboard, 180));
+   window.visualViewport?.addEventListener('resize', syncKeyboard);
+   window.visualViewport?.addEventListener('scroll', syncKeyboard);
+   window.addEventListener('resize', syncKeyboard);
+   syncKeyboard();
+ })();
  window.ViArCRM={go,refreshDashboard:loadDashboard};
 })();

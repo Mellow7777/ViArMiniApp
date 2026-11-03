@@ -7,7 +7,7 @@
  const name=user?.first_name?.trim();
  document.getElementById('crmGreeting').textContent=name?`Вітаємо, ${name}!`:'Вітаємо у ViAr CRM';
  document.getElementById('crmToday').textContent=new Intl.DateTimeFormat('uk-UA',{weekday:'long',day:'numeric',month:'long'}).format(new Date());
- const isAdmin=Boolean(user&&[564525966,587588909].includes(Number(user.id)));
+ const isAdmin=Boolean(user&&[587588909].includes(Number(user.id)));
  document.querySelectorAll('.crm-admin-only').forEach(el=>el.hidden=!isAdmin);
  function closeProfileOnNavigation(){
   const panel=document.getElementById('profilePanel');

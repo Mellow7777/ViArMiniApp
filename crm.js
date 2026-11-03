@@ -25,6 +25,26 @@
   if(page==='home'||page==='menu')window.scrollTo(0,0);
  }
  document.querySelectorAll('[data-crm-go]').forEach(button=>button.addEventListener('click',()=>go(button.dataset.crmGo)));
+ async function loadDashboard(){
+  const status=document.getElementById('crmDataStatus');
+  const initData=window.Telegram?.WebApp?.initData||'';
+  if(!initData){status.textContent='Відкрийте застосунок через Telegram для отримання показників.';return;}
+  try{
+   const response=await fetch(`${API_BASE_URL}/api/crm/dashboard`,{headers:{'X-Telegram-Init-Data':initData},cache:'no-store'});
+   if(!response.ok)throw new Error(`HTTP ${response.status}`);
+   const data=await response.json();
+   const money=new Intl.NumberFormat('uk-UA',{style:'currency',currency:'UAH',maximumFractionDigits:0});
+   document.getElementById('crmRevenue').textContent=money.format(data.orderAmountToday||0);
+   document.getElementById('crmOrders').textContent=data.ordersToday??0;
+   document.getElementById('crmShops').textContent=data.shopsToday??0;
+   document.getElementById('crmRoute').textContent=`${data.routeCompleted??0} / ${data.routeTotal??0}`;
+   document.getElementById('crmPending').textContent=data.routePending??0;
+   document.getElementById('crmRevenueLabel').textContent=data.isAdmin?'Замовлення компанії сьогодні':'Мої замовлення сьогодні';
+   status.textContent='Дані за сьогодні · час Києва. Сума оформлених замовлень.';
+  }catch(e){status.textContent='Не вдалося завантажити показники. Перевірте API та спробуйте знову.';document.getElementById('crmRevenue').textContent='—';console.warn('CRM dashboard',e);}
+ }
  go('home');
- window.ViArCRM={go};
+ loadDashboard();
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDashboard();});
+ window.ViArCRM={go,refreshDashboard:loadDashboard};
 })();

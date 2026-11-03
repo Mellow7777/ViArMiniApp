@@ -1,4 +1,4 @@
-ё<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -41,22 +41,26 @@
 
 <section id="crmHome" class="crm-home" aria-label="Головна сторінка CRM">
   <div class="crm-hello"><span class="crm-eyebrow">VIAR / РОБОЧИЙ ПРОСТІР</span><h2 id="crmGreeting">Вітаємо у ViAr CRM</h2><p id="crmToday"></p></div>
-  <div class="crm-feature"><span id="crmRevenueLabel">Замовлення сьогодні</span><h3 id="crmRevenue">Завантаження…</h3><p id="crmRevenueHint">Сума оформлених замовлень, не підтверджена виручка</p><button type="button" data-crm-go="order">＋ Створити замовлення →</button></div>
+  <div class="crm-home-heading"><h3 id="crmHomeTitle">Мій робочий день</h3><span class="crm-badge" id="crmHomeRole">Сьогодні</span></div>
+  <section class="crm-work-card" id="crmRouteCard" aria-label="Маршрут на сьогодні">
+    <div class="crm-work-top"><span>🗺️ Маршрут на сьогодні</span><strong id="crmRoute">—</strong></div>
+    <div class="crm-progress" role="progressbar" aria-label="Виконання маршруту" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="crmRouteProgress"><span id="crmRouteProgressFill"></span></div>
+    <p><span id="crmPending">—</span> точок залишилося відвідати</p>
+    <button type="button" class="crm-action-primary" data-crm-go="route">Відкрити маршрут →</button>
+  </section>
+  <section class="crm-work-card crm-company-card" id="crmCompanyCard" hidden aria-label="Показники компанії">
+    <span class="crm-overline" id="crmRevenueLabel">Замовлення компанії сьогодні</span>
+    <strong class="crm-company-money" id="crmRevenue">—</strong>
+    <p>Сума оформлених замовлень, не підтверджена виручка</p>
+  </section>
   <div class="crm-stats" aria-label="Показники за сьогодні">
     <div><span>📦 Замовлень</span><strong id="crmOrders">—</strong></div>
     <div><span>🏪 Точок із замовленням</span><strong id="crmShops">—</strong></div>
-    <div><span>🗺️ Маршрут: виконано</span><strong id="crmRoute">—</strong></div>
-    <div><span>⏳ Залишилось точок</span><strong id="crmPending">—</strong></div>
   </div>
+  <div id="crmRepAmount" class="crm-rep-amount" hidden><span>Сума моїх замовлень сьогодні</span><strong id="crmRepRevenue">—</strong><small>Не підтверджена виручка</small></div>
   <p class="crm-data-status" id="crmDataStatus" role="status">Оновлюємо показники…</p>
-  <h3 class="crm-title">Швидкі дії</h3>
-  <div class="crm-grid">
-    <button type="button" data-crm-go="order"><span>📦</span><strong>Замовлення</strong><small>Створити або продовжити</small></button>
-    <button type="button" data-crm-go="route"><span>🗺️</span><strong>Мій маршрут</strong><small>Точки на сьогодні</small></button>
-    <button type="button" data-crm-go="profile"><span>👤</span><strong>Мій профіль</strong><small>План і результати</small></button>
-    <button type="button" data-crm-go="admin" class="crm-admin-only" hidden><span>⚙️</span><strong>Керування</strong><small>Адмін-панель</small></button>
-  </div>
-  <div class="crm-note"><strong>📊 Аналітика</strong><p>Повний розділ аналітики додамо наступним етапом. Поточні звіти доступні через керування.</p></div>
+  <button type="button" class="crm-main-order" data-crm-go="order">＋ Створити замовлення</button>
+  <div class="crm-home-links"><button type="button" data-crm-go="profile">👤 Мій профіль <span>→</span></button><button type="button" data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Керування <span>→</span></button></div>
 </section>
 <section id="crmMenu" class="crm-menu" hidden aria-label="Меню CRM"><h2>Розділи ViAr CRM</h2><button data-crm-go="order">📦 Оформлення замовлення <span>→</span></button><button data-crm-go="route">🗺️ Мій маршрут <span>→</span></button><button data-crm-go="profile">👤 Мій профіль <span>→</span></button><button data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Керування компанією <span>→</span></button><p>Нові розділи CRM будуть з'являтися тут поступово.</p></section>
 
@@ -866,8 +870,8 @@
 </div>
 <script src="app.js?v=261"></script>
 <nav id="crmBottomNav" class="crm-bottom-nav" aria-label="Навігація CRM"><button type="button" data-crm-go="home" class="active">⌂<small>Головна</small></button><button type="button" data-crm-go="order">▣<small>Замовлення</small></button><button type="button" data-crm-go="route">◇<small>Маршрут</small></button><button type="button" data-crm-go="menu">☰<small>Меню</small></button></nav>
-<link rel="stylesheet" href="crm.css?v=6">
-<script src="crm.js?v=6"></script>
+<link rel="stylesheet" href="crm.css?v=7">
+<script src="crm.js?v=7"></script>
 
 </body>
 </html> 

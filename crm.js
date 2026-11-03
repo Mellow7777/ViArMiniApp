@@ -86,23 +86,42 @@
  }
  go('home');
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDashboard();});
- // Mobile soft keyboard: hide fixed tabs and basket while editing fields.
- // visualViewport catches keyboard resize; focus is a fallback for Telegram iOS WebView.
+ // Keep fixed controls out of the way while any text field is active.
+ // iOS Telegram may resize either visualViewport or the layout viewport.
  (() => {
-   const editable = el => el && (el.matches?.('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, [contenteditable="true"]'));
-   const mobile = () => window.matchMedia('(max-width: 799px)').matches;
-   const syncKeyboard = () => {
+   const isEditable = el => !!el?.closest?.('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]');
+   const mobile = () => matchMedia('(max-width: 799px), (pointer: coarse)').matches;
+   const initialHeight = Math.max(window.innerHeight, document.documentElement.clientHeight);
+   let lastFocusAt = 0;
+   let blurTimer;
+   const update = () => {
      const vv = window.visualViewport;
-     const viewportShrunk = vv && (window.innerHeight - vv.height - vv.offsetTop > 130);
-     const editing = editable(document.activeElement);
-     document.body.classList.toggle('crm-keyboard-open', mobile() && (viewportShrunk || editing));
+     const visibleHeight = vv?.height || window.innerHeight;
+     const covered = Math.max(0, window.innerHeight - visibleHeight - (vv?.offsetTop || 0));
+     const resized = initialHeight - Math.min(window.innerHeight, visibleHeight) > 145;
+     const focused = isEditable(document.activeElement);
+     const keyboardOpen = mobile() && (focused || covered > 120 || resized);
+     document.documentElement.classList.toggle('crm-keyboard-open', keyboardOpen);
+     document.body.classList.toggle('crm-keyboard-open', keyboardOpen);
    };
-   document.addEventListener('focusin', syncKeyboard);
-   document.addEventListener('focusout', () => setTimeout(syncKeyboard, 180));
-   window.visualViewport?.addEventListener('resize', syncKeyboard);
-   window.visualViewport?.addEventListener('scroll', syncKeyboard);
-   window.addEventListener('resize', syncKeyboard);
-   syncKeyboard();
+   document.addEventListener('focusin', e => {
+     if(isEditable(e.target)) {
+       lastFocusAt=Date.now();
+       clearTimeout(blurTimer);
+       document.documentElement.classList.add('crm-keyboard-open');
+       document.body.classList.add('crm-keyboard-open');
+     }
+     update();
+   }, true);
+   document.addEventListener('focusout', () => {
+     clearTimeout(blurTimer);
+     blurTimer=setTimeout(update, 350);
+   }, true);
+   window.visualViewport?.addEventListener('resize', update);
+   window.visualViewport?.addEventListener('scroll', update);
+   window.addEventListener('resize', update);
+   window.addEventListener('pageshow', update);
+   update();
  })();
  window.ViArCRM={go,refreshDashboard:loadDashboard};
 })();

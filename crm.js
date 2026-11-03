@@ -17,10 +17,18 @@
   panel.hidden=true;
   document.body.classList.remove('profile-open');
  }
+ function closeRouteOnNavigation(){
+  const panel=document.getElementById('myRoutePanel');
+  if(!panel || panel.hidden)return;
+  // Route panel belongs to legacy app.js. Hide it without resetting route data.
+  panel.hidden=true;
+  document.getElementById('myRouteButton')?.setAttribute('aria-expanded','false');
+ }
  function go(page){
   if(page==='admin'&&!isAdmin)return;
   // Profile is a full-screen overlay. Close it before changing CRM pages.
   if(page!=='profile')closeProfileOnNavigation();
+  if(page!=='route')closeRouteOnNavigation();
   document.body.classList.toggle('crm-order',page==='order'||page==='route'||page==='profile'||page==='admin');
   document.body.classList.toggle('crm-mode',page==='home'||page==='menu');
   home.hidden=page!=='home';menu.hidden=page!=='menu';

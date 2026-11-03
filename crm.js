@@ -9,8 +9,18 @@
  document.getElementById('crmToday').textContent=new Intl.DateTimeFormat('uk-UA',{weekday:'long',day:'numeric',month:'long'}).format(new Date());
  const isAdmin=Boolean(user&&[564525966,587588909].includes(Number(user.id)));
  document.querySelectorAll('.crm-admin-only').forEach(el=>el.hidden=!isAdmin);
+ function closeProfileOnNavigation(){
+  const panel=document.getElementById('profilePanel');
+  if(!panel || panel.hidden)return;
+  // Use the existing app.js close handler; it also clears profile-open.
+  document.getElementById('closeProfileButton')?.click();
+  panel.hidden=true;
+  document.body.classList.remove('profile-open');
+ }
  function go(page){
   if(page==='admin'&&!isAdmin)return;
+  // Profile is a full-screen overlay. Close it before changing CRM pages.
+  if(page!=='profile')closeProfileOnNavigation();
   document.body.classList.toggle('crm-order',page==='order'||page==='route'||page==='profile'||page==='admin');
   document.body.classList.toggle('crm-mode',page==='home'||page==='menu');
   home.hidden=page!=='home';menu.hidden=page!=='menu';
@@ -22,7 +32,14 @@
   }
   if(page==='profile')document.getElementById('profileButton')?.click();
   if(page==='admin')adminButton?.click();
-  if(page==='home'||page==='menu')window.scrollTo(0,0);
+  if(page==='home'||page==='menu'){
+   // The old profile CSS locks body scrolling; restore it after navigation.
+   document.body.classList.remove('profile-open');
+   if(!document.querySelector('.cart-drawer.show, .product-modal.show')){
+    document.body.style.overflow='';
+   }
+   window.scrollTo({top:0,left:0,behavior:'instant'});
+  }
   if(page==='home')loadDashboard();
  }
  document.querySelectorAll('[data-crm-go]').forEach(button=>button.addEventListener('click',()=>go(button.dataset.crmGo)));

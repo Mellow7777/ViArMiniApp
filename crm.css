@@ -45,3 +45,24 @@ body.crm-order #myRoutePanel { scroll-margin-bottom: calc(var(--crm-tab-height) 
 /* v5: CRM pages must scroll after closing the full-screen profile. */
 body.crm-mode:not(.profile-open) { overflow-y: auto !important; }
 #profilePanel[hidden] { display: none !important; }
+
+/* v7: distinct operational home screens. Existing ordering/profile/routes remain unchanged. */
+.crm-home-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}
+.crm-home-heading h3{font-size:21px;margin:0;color:#1b345b}
+.crm-badge{background:#e8eef9;color:#315c9d;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:700;white-space:nowrap}
+.crm-work-card{background:white;border:1px solid #e4ebf5;border-radius:20px;padding:19px;margin-bottom:14px;box-shadow:0 6px 20px #203f6510}
+.crm-work-top{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#314461;font-weight:700}
+.crm-work-top strong{font-size:23px;color:#183d75}
+.crm-work-card p{font-size:13px;color:#718198;margin:12px 0}
+.crm-progress{height:10px;background:#e8eef7;border-radius:99px;overflow:hidden;margin-top:15px}
+.crm-progress span{display:block;height:100%;width:0;background:#3478c9;border-radius:99px;transition:width .25s ease}
+.crm-action-primary,.crm-main-order{display:block;width:100%;border:0;border-radius:14px;background:#2458a3;color:#fff;padding:15px;font-weight:800;font-size:15px;cursor:pointer}
+.crm-company-card{background:linear-gradient(135deg,#142b59,#305ba5);color:#fff}
+.crm-overline{font-size:12px;opacity:.85}.crm-company-money{display:block;font-size:31px;margin:10px 0}.crm-company-card p{color:#e2ebfa}
+.crm-rep-amount{display:flex;flex-direction:column;gap:6px;background:#eaf0fa;padding:16px;border-radius:16px;margin-top:14px;color:#2a456c}
+.crm-rep-amount strong{font-size:22px}.crm-rep-amount small{color:#6d7c92}
+.crm-main-order{margin-top:20px;background:#1d4f99}
+.crm-home-links{display:flex;gap:10px;margin-top:12px}
+.crm-home-links button{flex:1;background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:14px 10px;color:#284567;font-weight:700;text-align:left}
+.crm-home-links button span{float:right}
+.crm-home [hidden]{display:none!important}

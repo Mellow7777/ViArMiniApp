@@ -1,8 +1,8 @@
 /* Додатковий шар CRM: існуючі стилі замовника не змінюємо */
 body.crm-mode {background:#f4f7fb;padding-bottom:86px}
 body.crm-mode .sticky-top-panel,body.crm-mode #crmOrderWorkspace,body.crm-mode #floatingCartButton{display:none!important}
-body.crm-order #crmHome,body.crm-order #crmMenu,body.crm-order #crmBottomNav{display:none!important}
-body.crm-order{padding-bottom:0}
+body.crm-order #crmHome,body.crm-order #crmMenu{display:none!important}
+body.crm-order{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
 #crmHome[hidden],#crmMenu[hidden],.crm-admin-only[hidden]{display:none!important}
 .crm-home,.crm-menu{max-width:850px;margin:auto;padding:25px 18px 110px;font-family:inherit;color:#18243a}
 .crm-eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:#5175b6}.crm-hello h2{font-size:27px;line-height:1.2;margin:10px 0}.crm-hello p{color:#6c7c94;margin:0 0 20px}

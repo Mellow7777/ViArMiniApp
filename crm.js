@@ -123,5 +123,20 @@
    window.addEventListener('pageshow', update);
    update();
  })();
+ // Track the legacy cart class directly; this works even if CSS :has is unsupported.
+ (() => {
+   const drawer=document.getElementById('cartDrawer');
+   if(!drawer)return;
+   const sync=()=>{
+     const opened=drawer.classList.contains('show');
+     document.body.classList.toggle('crm-cart-open',opened);
+     document.documentElement.classList.toggle('crm-cart-open',opened);
+     // Inline display is intentionally cleared when cart closes.
+     const nav=document.getElementById('crmBottomNav');
+     if(nav)nav.style.display=opened?'none':'';
+   };
+   new MutationObserver(sync).observe(drawer,{attributes:true,attributeFilter:['class']});
+   sync();
+ })();
  window.ViArCRM={go,refreshDashboard:loadDashboard};
 })();

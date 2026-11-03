@@ -14,3 +14,30 @@ body.crm-order{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
 @media(min-width:800px){.crm-home,.crm-menu{padding-top:40px}.crm-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.crm-bottom-nav{max-width:850px;left:50%;transform:translateX(-50%);border-radius:18px 18px 0 0}}
 
 .crm-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.crm-stats>div{background:#fff;border:1px solid #e5ebf4;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:9px}.crm-stats span{font-size:12px;color:#63738a}.crm-stats strong{font-size:25px;color:#1b345b}.crm-data-status{font-size:12px;color:#74849a;margin:12px 2px}.crm-feature h3{font-size:32px;margin:9px 0}.crm-feature p{font-size:12px;margin:0}
+
+/* ===== ViAr CRM: mobile usability bundle v4 ===== */
+:root { --crm-tab-height: 76px; }
+/* Preserve safe-area spacing; keep bottom tabs reachable on iPhone. */
+body.crm-mode, body.crm-order { padding-bottom: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 20px); }
+.crm-bottom-nav { min-height: var(--crm-tab-height); box-sizing: border-box; padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+.crm-bottom-nav button { min-height: 50px; cursor: pointer; touch-action: manipulation; }
+.crm-bottom-nav button:focus-visible, .crm-grid button:focus-visible { outline: 2px solid #2c74da; outline-offset: 2px; }
+/* Show basket only on working screens; position above tabs, never behind them. */
+body.crm-mode #floatingCartButton { display: none !important; }
+body.crm-order #floatingCartButton {
+  display: flex !important;
+  position: fixed !important;
+  bottom: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 14px) !important;
+  right: 14px !important;
+  z-index: 1200 !important;
+}
+body.crm-order .bottom-space { height: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 110px); }
+/* Route cards and cart must have enough scroll clearance. */
+body.crm-order #myRoutePanel { scroll-margin-bottom: calc(var(--crm-tab-height) + 30px); }
+/* Avoid a hidden CRM navigation under ordinary page content. */
+#crmBottomNav[hidden] { display: none !important; }
+@media (max-width: 390px) {
+  .crm-bottom-nav button { min-width: 0; flex: 1; padding-left: 2px; padding-right: 2px; }
+  .crm-bottom-nav button small { font-size: 11px; }
+  body.crm-order #floatingCartButton { right: 12px !important; }
+}

@@ -23,10 +23,12 @@
   if(page==='profile')document.getElementById('profileButton')?.click();
   if(page==='admin')adminButton?.click();
   if(page==='home'||page==='menu')window.scrollTo(0,0);
+  if(page==='home')loadDashboard();
  }
  document.querySelectorAll('[data-crm-go]').forEach(button=>button.addEventListener('click',()=>go(button.dataset.crmGo)));
  async function loadDashboard(){
   const status=document.getElementById('crmDataStatus');
+  status.textContent='Оновлюємо показники…';
   const initData=window.Telegram?.WebApp?.initData||'';
   if(!initData){status.textContent='Відкрийте застосунок через Telegram для отримання показників.';return;}
   try{
@@ -41,10 +43,10 @@
    document.getElementById('crmPending').textContent=data.routePending??0;
    document.getElementById('crmRevenueLabel').textContent=data.isAdmin?'Замовлення компанії сьогодні':'Мої замовлення сьогодні';
    status.textContent='Дані за сьогодні · час Києва. Сума оформлених замовлень.';
-  }catch(e){status.textContent='Не вдалося завантажити показники. Перевірте API та спробуйте знову.';document.getElementById('crmRevenue').textContent='—';console.warn('CRM dashboard',e);}
+  }catch(e){status.textContent='Не вдалося завантажити показники. Перевірте API та спробуйте знову.';document.getElementById('crmRevenue').textContent='—';
+   ['crmOrders','crmShops','crmRoute','crmPending'].forEach(id=>document.getElementById(id).textContent='—');console.warn('CRM dashboard',e);}
  }
  go('home');
- loadDashboard();
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadDashboard();});
  window.ViArCRM={go,refreshDashboard:loadDashboard};
 })();

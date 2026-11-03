@@ -61,14 +61,27 @@
    if(!response.ok)throw new Error(`HTTP ${response.status}`);
    const data=await response.json();
    const money=new Intl.NumberFormat('uk-UA',{style:'currency',currency:'UAH',maximumFractionDigits:0});
-   document.getElementById('crmRevenue').textContent=money.format(data.orderAmountToday||0);
+   const amount=money.format(data.orderAmountToday||0);
+   document.getElementById('crmRevenue').textContent=amount;
+   document.getElementById('crmRepRevenue').textContent=amount;
+   const admin=Boolean(data.isAdmin);
+   document.getElementById('crmHomeTitle').textContent=admin?'Стан компанії':'Мій робочий день';
+   document.getElementById('crmHomeRole').textContent=admin?'Компанія · сьогодні':'Мій день';
+   document.getElementById('crmCompanyCard').hidden=!admin;
+   document.getElementById('crmRepAmount').hidden=admin;
+   document.getElementById('crmRouteCard').hidden=admin;
+   const routeTotal=Number(data.routeTotal)||0;
+   const routeDone=Number(data.routeCompleted)||0;
+   const progress=routeTotal>0?Math.max(0,Math.min(100,Math.round(100*routeDone/routeTotal))):0;
+   document.getElementById('crmRouteProgressFill').style.width=progress+'%';
+   document.getElementById('crmRouteProgress').setAttribute('aria-valuenow',String(progress));
    document.getElementById('crmOrders').textContent=data.ordersToday??0;
    document.getElementById('crmShops').textContent=data.shopsToday??0;
    document.getElementById('crmRoute').textContent=`${data.routeCompleted??0} / ${data.routeTotal??0}`;
    document.getElementById('crmPending').textContent=data.routePending??0;
-   document.getElementById('crmRevenueLabel').textContent=data.isAdmin?'Замовлення компанії сьогодні':'Мої замовлення сьогодні';
+   document.getElementById('crmRevenueLabel').textContent='Замовлення компанії сьогодні';
    status.textContent='Дані за сьогодні · час Києва. Сума оформлених замовлень.';
-  }catch(e){status.textContent='Не вдалося завантажити показники. Перевірте API та спробуйте знову.';document.getElementById('crmRevenue').textContent='—';
+  }catch(e){status.textContent='Не вдалося завантажити показники. Перевірте API та спробуйте знову.';document.getElementById('crmRevenue').textContent='—';document.getElementById('crmRepRevenue').textContent='—';
    ['crmOrders','crmShops','crmRoute','crmPending'].forEach(id=>document.getElementById(id).textContent='—');console.warn('CRM dashboard',e);}
  }
  go('home');

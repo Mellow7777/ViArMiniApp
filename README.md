@@ -1,0 +1,15 @@
+[crm.css](https://github.com/user-attachments/files/34296889/crm.css)
+/* Додатковий шар CRM: існуючі стилі замовника не змінюємо */
+body.crm-mode {background:#f4f7fb;padding-bottom:86px}
+body.crm-mode .sticky-top-panel,body.crm-mode #crmOrderWorkspace,body.crm-mode #floatingCartButton{display:none!important}
+body.crm-order #crmHome,body.crm-order #crmMenu,body.crm-order #crmBottomNav{display:none!important}
+body.crm-order{padding-bottom:0}
+#crmHome[hidden],#crmMenu[hidden],.crm-admin-only[hidden]{display:none!important}
+.crm-home,.crm-menu{max-width:850px;margin:auto;padding:25px 18px 110px;font-family:inherit;color:#18243a}
+.crm-eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:#5175b6}.crm-hello h2{font-size:27px;line-height:1.2;margin:10px 0}.crm-hello p{color:#6c7c94;margin:0 0 20px}
+.crm-feature{background:linear-gradient(135deg,#142b59,#305ba5);border-radius:24px;color:white;padding:25px;box-shadow:0 14px 30px #142b5926}.crm-feature>span{font-size:12px;opacity:.8}.crm-feature h3{font-size:24px;margin:12px 0}.crm-feature p{opacity:.83;line-height:1.5}.crm-feature button{margin-top:12px;border:0;border-radius:13px;padding:14px 18px;background:white;color:#19396b;font-weight:800;width:100%;font-size:15px}
+.crm-title{margin:28px 0 14px;font-size:19px}.crm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.crm-grid button{min-height:140px;text-align:left;border:1px solid #e5ebf4;border-radius:20px;padding:17px;background:white;box-shadow:0 5px 18px #1d31520a;display:flex;flex-direction:column;gap:7px;color:#192d4b}.crm-grid button>span{font-size:29px}.crm-grid strong{font-size:16px}.crm-grid small{font-size:12px;color:#718198}
+.crm-note{background:#eaf0fa;padding:17px 19px;border-radius:18px;margin-top:20px}.crm-note p{margin:8px 0 0;color:#60718b;font-size:13px;line-height:1.5}
+.crm-menu h2{margin:0 0 25px}.crm-menu>button{display:flex;justify-content:space-between;width:100%;border:1px solid #e6ecf4;border-radius:15px;background:white;margin:10px 0;padding:19px;font-size:16px;text-align:left;color:#203351}.crm-menu>p{font-size:13px;color:#7d8999;margin-top:25px}
+.crm-bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-around;align-items:center;padding:8px 8px max(8px,env(safe-area-inset-bottom));background:#fff;box-shadow:0 -6px 25px #1b2b4415;border-top:1px solid #e8edf4}.crm-bottom-nav button{background:transparent;border:0;min-width:65px;color:#8390a5;font-size:23px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 6px}.crm-bottom-nav button small{font-size:11px}.crm-bottom-nav button.active{color:#2757a6;font-weight:800}
+@media(min-width:800px){.crm-home,.crm-menu{padding-top:40px}.crm-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.crm-bottom-nav{max-width:850px;left:50%;transform:translateX(-50%);border-radius:18px 18px 0 0}}

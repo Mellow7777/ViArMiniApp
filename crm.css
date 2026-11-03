@@ -75,3 +75,21 @@ body.crm-mode:not(.profile-open) { overflow-y: auto !important; }
   body.crm-keyboard-open.crm-order { padding-bottom: 16px !important; }
   body.crm-keyboard-open .bottom-space { height: 20px !important; }
 }
+
+/* v10: keyboard visibility fallback even when iOS viewport events are unreliable. */
+@media (max-width: 799px), (pointer: coarse) {
+  html.crm-keyboard-open #crmBottomNav,
+  body.crm-keyboard-open #crmBottomNav,
+  html.crm-keyboard-open #floatingCartButton,
+  body.crm-keyboard-open #floatingCartButton,
+  body:has(input:focus) #crmBottomNav,
+  body:has(textarea:focus) #crmBottomNav,
+  body:has([contenteditable]:focus) #crmBottomNav,
+  body:has(input:focus) #floatingCartButton,
+  body:has(textarea:focus) #floatingCartButton,
+  body:has([contenteditable]:focus) #floatingCartButton {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}

@@ -9,12 +9,12 @@ let priorityProducts = [];
 
 const API_BASE_URL =
     "https://dev-api.via-r-order.com";
-/*   
+
 const ADMIN_TELEGRAM_IDS = [
     564525966,
     587588909
 ];
-*/
+
 
 const productGroups = [
     "Все",

@@ -1,0 +1,12 @@
+#shopRequestsPanel[hidden]{display:none!important}
+#shopRequestsPanel{position:fixed;inset:0;z-index:100000;background:var(--bg,#f7f8fa);color:var(--text,#18212c);overflow-y:auto;padding:20px 16px 70px;box-sizing:border-box}
+#shopRequestsPanel .shop-request-top{display:flex;justify-content:space-between;align-items:center;gap:15px;max-width:650px;margin:0 auto 20px}
+#shopRequestsPanel .shop-request-top h2{font-size:21px;margin:0}
+#shopRequestsPanel button{cursor:pointer;border:1px solid #d3d8df;background:#fff;border-radius:12px;padding:11px 14px;font:inherit;color:inherit}
+#shopRequestsPanel button[type=submit],#shopRequestsPanel button[data-review=approved]{background:#1969d2;color:#fff;border-color:#1969d2}
+#shopRequestsPanel #shopRequestContent{max-width:650px;margin:auto}
+#shopRequestsPanel form label{display:block;font-size:14px;margin:0 0 14px;font-weight:600}
+#shopRequestsPanel input,#shopRequestsPanel textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #cbd2dc;background:#fff;color:#18212c;border-radius:10px;padding:12px;margin-top:6px;font:inherit}
+#shopRequestsPanel .shop-request-card{border:1px solid #dbe0e7;background:#fff;color:#18212c;border-radius:14px;padding:16px;margin-bottom:12px;overflow-wrap:anywhere}
+#shopRequestsPanel .shop-request-card small{display:block;margin-top:6px;color:#697586}
+#shopRequestsPanel .shop-request-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}

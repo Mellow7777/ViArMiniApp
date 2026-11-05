@@ -922,7 +922,25 @@ async function loadShops() {
             );
         }
 
-        shops = loadedShops;
+        // Combine legacy GitHub shops with live SQLite-backed request shops.
+        // If the API is temporarily offline, keep the legacy catalog available.
+        let requestShops = [];
+        try {
+            const initData = window.Telegram?.WebApp?.initData || "";
+            if (initData) {
+                const apiResponse = await fetch(`${API_BASE_URL}/api/crm/shops/visible`, {
+                    cache: "no-store", headers: { "X-Telegram-Init-Data": initData }
+                });
+                if (!apiResponse.ok) throw new Error(`HTTP ${apiResponse.status}`);
+                requestShops = await apiResponse.json();
+                if (!Array.isArray(requestShops)) requestShops = [];
+            }
+        } catch (error) {
+            console.warn("Нові торгові точки тимчасово недоступні:", error);
+        }
+        const shopMap = new Map(loadedShops.map(shop => [Number(shop.id), shop]));
+        requestShops.forEach(shop => shopMap.set(Number(shop.id), shop));
+        shops = [...shopMap.values()];
 
         console.log(
             `Загружено точек: ${shops.length}`

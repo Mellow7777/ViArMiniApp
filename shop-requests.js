@@ -22,6 +22,11 @@
       adminButton.innerHTML = '📝 <strong>Заявки на підтвердження</strong><small>Нові торгові точки</small>';
       adminButton.addEventListener('click', () => openPanel('admin'));
       grid.appendChild(adminButton);
+      const shopsButton = document.createElement('button');
+      shopsButton.type='button';
+      shopsButton.innerHTML='🏪 <strong>Торгові точки</strong><small>Редагування та коди 1С</small>';
+      shopsButton.addEventListener('click', () => openPanel('shops'));
+      grid.appendChild(shopsButton);
     }
   }
   const panel = document.createElement('section');
@@ -51,7 +56,7 @@
   }
   function openPanel(mode) {
     panel.hidden = false;
-    title.textContent = mode === 'new' ? 'Нова торгова точка' : mode === 'admin' ? 'Заявки на підтвердження' : 'Мої заявки';
+    title.textContent = mode === 'new' ? 'Нова торгова точка' : mode === 'admin' ? 'Заявки на підтвердження' : mode === 'shops' ? 'Торгові точки' : 'Мої заявки';
     if (mode === 'new') {
       content.innerHTML = `<form id="newShopRequestForm">
         <label>Назва магазину<input name="name" maxlength="150" required minlength="2" placeholder="Назва точки"></label>
@@ -72,7 +77,49 @@
         } catch (err) { message.textContent = err.message; }
         finally { button.disabled = false; }
       });
-    } else loadList(mode);
+    } else if (mode === 'shops') loadShopAdmin();
+    else loadList(mode);
+  }
+  async function loadShopAdmin() {
+    content.textContent='Завантаження…';
+    try {
+      const rows=await request('/api/crm/shops/all');
+      content.innerHTML=`<input id="shopAdminSearch" placeholder="Пошук за назвою, адресою або ID" style="width:100%;padding:12px;margin-bottom:12px" /><div id="shopAdminList"></div>`;
+      const search=content.querySelector('#shopAdminSearch'), list=content.querySelector('#shopAdminList');
+      function draw() {
+        const q=search.value.trim().toLowerCase();
+        const selected=rows.filter(r=>[r.id,r.name,r.address,r.district].join(' ').toLowerCase().includes(q)).slice(0,70);
+        list.innerHTML=selected.map(r=>`<article class="shop-request-card">
+          <strong>${escapeHtml(r.name)}</strong><div>${escapeHtml(r.address)}</div>
+          <small>ID ${r.id} · ${r.isRequestShop?'Нова точка':'Excel'} · ${r.requestStatus==='pending'?'Очікує підтвердження':''} ${r.isActive?'':'· Вимкнено'}</small>
+          <button type="button" data-shop-edit="${r.id}">Редагувати</button></article>`).join('') || '<p>Точок не знайдено</p>';
+        list.querySelectorAll('[data-shop-edit]').forEach(b=>b.addEventListener('click',()=>editShop(rows.find(r=>String(r.id)===b.dataset.shopEdit))));
+      }
+      search.addEventListener('input',draw);draw();
+    } catch(e) {content.textContent=e.message;}
+  }
+  function editShop(shop) {
+    if (!shop) return;
+    content.innerHTML=`<button type="button" id="shopEditBack">← До списку</button><h3>Точка №${shop.id}</h3>
+      <form id="shopEditForm">
+      <label>Назва<input name="name" maxlength="150" minlength="2" required value="${escapeHtml(shop.name)}"></label>
+      <label>Адреса<input name="address" maxlength="250" minlength="5" required value="${escapeHtml(shop.address)}"></label>
+      <label>Район<input name="district" maxlength="100" value="${escapeHtml(shop.district)}"></label>
+      <label>Тип ціни<select name="priceType"><option value="Розница" ${shop.priceType!=='Опт'?'selected':''}>Розница</option><option value="Опт" ${shop.priceType==='Опт'?'selected':''}>Опт</option></select></label>
+      <label>Код торгової точки в 1С<input name="code1C" maxlength="80" value="${escapeHtml(shop.code1C)}" placeholder="Код з 1С"></label>
+      <label><input name="isActive" type="checkbox" ${shop.isActive?'checked':''}> Активна точка</label>
+      <button type="submit">Зберегти зміни</button><p id="shopEditMessage" role="status"></p></form>`;
+    content.querySelector('#shopEditBack').addEventListener('click',loadShopAdmin);
+    const form=content.querySelector('#shopEditForm');
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();const btn=form.querySelector('[type=submit]');btn.disabled=true;
+      const data=Object.fromEntries(new FormData(form));data.isActive=form.elements.isActive.checked;
+      try {await request(`/api/crm/shops/${shop.id}`,'PUT',data);
+        content.querySelector('#shopEditMessage').textContent='Збережено';
+        if(typeof loadShops==='function') await loadShops();
+      } catch(err) {content.querySelector('#shopEditMessage').textContent=err.message;}
+      finally {btn.disabled=false;}
+    });
   }
   async function loadList(mode) {
     content.textContent = 'Завантаження…';

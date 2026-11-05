@@ -66,7 +66,8 @@
         const message = document.getElementById('shopRequestMessage');
         try {
           await request('/api/crm/shop-requests', 'POST', Object.fromEntries(new FormData(form)));
-          message.textContent = 'Заявку надіслано. Очікуйте підтвердження адміністратора.';
+          message.textContent = 'Заявку надіслано. Точку можна обрати для замовлення вже зараз.';
+          if (typeof loadShops === 'function') await loadShops();
           form.reset();
         } catch (err) { message.textContent = err.message; }
         finally { button.disabled = false; }
@@ -91,7 +92,7 @@
         const comment = status === 'rejected' ? window.prompt('Причина відхилення (необов’язково):', '') : '';
         if (comment === null) return;
         button.disabled = true;
-        try { await request(`/api/crm/shop-requests/${button.dataset.id}/review`, 'POST', {status,comment}); await loadList(mode); }
+        try { await request(`/api/crm/shop-requests/${button.dataset.id}/review`, 'POST', {status,comment}); if (typeof loadShops === 'function') await loadShops(); await loadList(mode); }
         catch (err) { window.alert(err.message); button.disabled = false; }
       }));
     } catch (err) { content.textContent = err.message; }

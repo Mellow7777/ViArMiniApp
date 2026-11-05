@@ -938,7 +938,18 @@ async function loadShops() {
         } catch (error) {
             console.warn("Нові торгові точки тимчасово недоступні:", error);
         }
-        const shopMap = new Map(loadedShops.map(shop => [Number(shop.id), shop]));
+        // Apply admin changes to legacy shops without rewriting GitHub shops.json.
+        let effectiveLegacy = loadedShops;
+        try {
+            const initData = window.Telegram?.WebApp?.initData || "";
+            if (initData) {
+                const r = await fetch(`${API_BASE_URL}/api/crm/shops/legacy`, {
+                    cache: "no-store", headers: { "X-Telegram-Init-Data": initData }
+                });
+                if (r.ok) { const data = await r.json(); if (Array.isArray(data)) effectiveLegacy = data; }
+            }
+        } catch (error) { console.warn("Зміни точок тимчасово недоступні:", error); }
+        const shopMap = new Map(effectiveLegacy.map(shop => [Number(shop.id), shop]));
         requestShops.forEach(shop => shopMap.set(Number(shop.id), shop));
         shops = [...shopMap.values()];
 

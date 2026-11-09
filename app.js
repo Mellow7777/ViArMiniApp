@@ -8268,6 +8268,13 @@ async function loadAdminRouteReport() {
   let activeTab = "analytics";
   const esc = value => escapeHtml(String(value ?? ""));
   const empty = value => value === null || value === undefined || String(value).trim() === "" ? "Не вказано" : String(value);
+  const normalizePhone = value => {
+    const digits = String(value || '').replace(/\D/g, '');
+    if (/^0\d{9}$/.test(digits)) return '+38' + digits;
+    if (/^380\d{9}$/.test(digits)) return '+' + digits;
+    if (/^80\d{9}$/.test(digits)) return '+3' + digits;
+    return digits.length >= 9 && digits.length <= 15 ? (String(value).trim().startsWith('+') ? '+' : '') + digits : '';
+  };
   const money = value => `${Number(value || 0).toLocaleString("uk-UA", {maximumFractionDigits:2})} ₴`;
   const formatDate = value => { if (!value) return "Ще немає"; const d = new Date(value); return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString("uk-UA"); };
   const line = (label, value, icon) => `<div class="sc-info-row"><span class="sc-row-icon" aria-hidden="true">${icon}</span><div><small>${esc(label)}</small><strong>${esc(empty(value))}</strong></div></div>`;
@@ -8287,6 +8294,7 @@ async function loadAdminRouteReport() {
     const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.address || d.name || "")}`;
     let html = `<div class="sc-hero"><span class="sc-eyebrow">ТОРГОВА ТОЧКА · #${esc(d.id)}</span><h2>${esc(d.name)}</h2><div class="sc-location">📍 ${esc(empty(d.district))} · ${esc(empty(d.address))}</div></div>`;
     html += `<div class="sc-actions"><${phone ? 'a' : 'button'} class="sc-action${phone ? '' : ' is-disabled'}" ${phone ? `href="tel:${esc(phone)}"` : 'type="button" disabled'}><span>📞</span>Зателефонувати</${phone ? 'a' : 'button'}><a class="sc-action" href="${esc(mapUrl)}" target="_blank" rel="noopener noreferrer"><span>📍</span>На карті</a><button class="sc-action" id="scHistory" type="button"><span>🕘</span>Історія</button></div>`;
+    if (phone) html += `<button type="button" class="sc-action" id="scCopyPhone" style="width:100%;margin:8px 0 0">📋 Скопіювати номер</button>`;
     html += `<section class="sc-panel"><h3>Контактна інформація</h3>${line("Адреса",d.address,"📍")}${phone ? `<div class="sc-info-row"><span class="sc-row-icon" aria-hidden="true">📞</span><div><small>Телефон</small><a href="tel:${esc(phone)}" style="color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:650">${esc(d.phone)}</a></div></div>` : line("Телефон",d.phone,"📞")}${line("Контактна особа",d.contactPerson,"👤")}${d.note ? line("Коментар",d.note,"📝") : ''}</section>`;
     html += `<div class="sc-stats"><div><small>Усього замовлень</small><strong>${esc(d.orderCount ?? 0)}</strong></div><div><small>Останнє замовлення</small><strong class="sc-date">${esc(formatDate(d.lastOrder))}</strong></div></div>`;
     if (admin) {
@@ -8301,6 +8309,13 @@ async function loadAdminRouteReport() {
     details.innerHTML = html;
     details.querySelectorAll('[data-sc-tab]').forEach(button => button.addEventListener('click', () => { activeTab = button.dataset.scTab; render(); }));
     details.querySelector('#scHistory')?.addEventListener('click', () => { dismiss(); document.getElementById('historyButton')?.click(); });
+    details.querySelector('#scCopyPhone')?.addEventListener('click', async () => {
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(phone);
+        else { const input = document.createElement('textarea'); input.value = phone; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.select(); if (!document.execCommand('copy')) throw new Error('copy'); input.remove(); }
+        window.Telegram?.WebApp?.showAlert?.('Номер скопійовано: ' + phone);
+      } catch (_) { window.Telegram?.WebApp?.showAlert?.('Номер: ' + phone + '. Скопіюйте його вручну.'); }
+    });
     // Let the native tel: anchor handle the tap. Preventing its default action
     // and assigning location.href is unreliable in Telegram's iOS WebView.
     // Do not call Telegram.WebApp.openLink here: it only supports HTTP(S) URLs.

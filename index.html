@@ -27,15 +27,6 @@
         </div>
     </header>
 
-    <div class="large-text-container">
-        <button
-            type="button"
-            id="largeTextToggle"
-            class="large-text-toggle"
-        >
-            🔎 Крупный текст
-        </button>
-    </div>
 </div>
 
 
@@ -60,9 +51,9 @@
   <div id="crmRepAmount" class="crm-rep-amount" hidden><span>Сума моїх замовлень сьогодні</span><strong id="crmRepRevenue">—</strong><small>Не підтверджена виручка</small></div>
   <p class="crm-data-status" id="crmDataStatus" role="status">Оновлюємо показники…</p>
   <button type="button" class="crm-main-order" data-crm-go="order">＋ Створити замовлення</button>
-  <div class="crm-home-links"><button type="button" data-crm-go="profile">👤 Мій профіль <span>→</span></button><button type="button" data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Керування <span>→</span></button></div>
+  <div class="crm-home-links"><button type="button" data-crm-go="profile">👤 Мій профіль <span>→</span></button><button type="button" data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Адмін-панель <span>→</span></button></div>
 </section>
-<section id="crmMenu" class="crm-menu" hidden aria-label="Меню CRM"><h2>Розділи ViAr CRM</h2><button data-crm-go="order">📦 Оформлення замовлення <span>→</span></button><button data-crm-go="route">🗺️ Мій маршрут <span>→</span></button><button data-crm-go="profile">👤 Мій профіль <span>→</span></button><button data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Керування компанією <span>→</span></button><p>Нові розділи CRM будуть з'являтися тут поступово.</p></section>
+<section id="crmMenu" class="crm-menu" hidden aria-label="Меню CRM"><h2>Розділи ViAr CRM</h2><button data-crm-go="order">📦 Оформлення замовлення <span>→</span></button><button data-crm-go="route">🗺️ Мій маршрут <span>→</span></button><button data-crm-go="profile">👤 Мій профіль <span>→</span></button><button data-crm-go="admin" class="crm-admin-only" hidden>⚙️ Адмін-панель <span>→</span></button><p>Нові розділи CRM будуть з'являтися тут поступово.</p></section>
 
 <main class="container" id="crmOrderWorkspace">
 
@@ -377,6 +368,7 @@
     id="profileButton"
     type="button"
     class="profile-button"
+    hidden
 >
     👤 Профиль
 </button>
@@ -876,10 +868,10 @@
         </div>
     </form>
 </div>
-<script src="app.js?v=14_6"></script>
-<nav id="crmBottomNav" class="crm-bottom-nav" aria-label="Навігація CRM"><button type="button" data-crm-go="home" class="active">⌂<small>Головна</small></button><button type="button" data-crm-go="order">▣<small>Замовлення</small></button><button type="button" data-crm-go="route">◇<small>Маршрут</small></button><button type="button" data-crm-go="menu">☰<small>Меню</small></button></nav>
-<link rel="stylesheet" href="crm.css?v=12">
-<script src="crm.js?v=12"></script>
+<script src="app.js?v=14_7"></script>
+<nav id="crmBottomNav" class="crm-bottom-nav" aria-label="Навігація CRM"><button type="button" data-crm-go="home" class="active">⌂<small>Головна</small></button><button type="button" data-crm-go="order">▣<small>Замовлення</small></button><button type="button" data-crm-go="route">◇<small>Маршрут</small></button><button type="button" data-crm-go="menu">☰<small>Меню</small></button><button type="button" data-crm-go="admin" class="crm-admin-only" hidden>⚙<small>Адмін</small></button></nav>
+<link rel="stylesheet" href="crm.css?v=14_7">
+<script src="crm.js?v=14_7"></script>
 
 <link rel="stylesheet" href="shop-requests.css?v=13a">
 <script src="shop-requests.js?v=14_2"></script>

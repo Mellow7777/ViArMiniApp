@@ -15,113 +15,29 @@ body.crm-order{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
 
 .crm-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.crm-stats>div{background:#fff;border:1px solid #e5ebf4;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:9px}.crm-stats span{font-size:12px;color:#63738a}.crm-stats strong{font-size:25px;color:#1b345b}.crm-data-status{font-size:12px;color:#74849a;margin:12px 2px}.crm-feature h3{font-size:32px;margin:9px 0}.crm-feature p{font-size:12px;margin:0}
 
-/* ===== ViAr CRM: mobile usability bundle v4 ===== */
-:root { --crm-tab-height: 76px; }
-/* Preserve safe-area spacing; keep bottom tabs reachable on iPhone. */
-body.crm-mode, body.crm-order { padding-bottom: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 20px); }
-.crm-bottom-nav { min-height: var(--crm-tab-height); box-sizing: border-box; padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
-.crm-bottom-nav button { min-height: 50px; cursor: pointer; touch-action: manipulation; }
-.crm-bottom-nav button:focus-visible, .crm-grid button:focus-visible { outline: 2px solid #2c74da; outline-offset: 2px; }
-/* Show basket only on working screens; position above tabs, never behind them. */
-body.crm-mode #floatingCartButton { display: none !important; }
+/* iPhone / Telegram: keep the floating basket above the CRM tab bar. */
 body.crm-order #floatingCartButton {
-  display: flex !important;
-  position: fixed !important;
-  bottom: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 14px) !important;
-  right: 14px !important;
-  z-index: 1200 !important;
+    bottom: calc(94px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px;
+    z-index: 1100;
 }
-body.crm-order .bottom-space { height: calc(var(--crm-tab-height) + env(safe-area-inset-bottom, 0px) + 110px); }
-/* Route cards and cart must have enough scroll clearance. */
-body.crm-order #myRoutePanel { scroll-margin-bottom: calc(var(--crm-tab-height) + 30px); }
-/* Avoid a hidden CRM navigation under ordinary page content. */
-#crmBottomNav[hidden] { display: none !important; }
-@media (max-width: 390px) {
-  .crm-bottom-nav button { min-width: 0; flex: 1; padding-left: 2px; padding-right: 2px; }
-  .crm-bottom-nav button small { font-size: 11px; }
-  body.crm-order #floatingCartButton { right: 12px !important; }
+/* Reserve space for basket and bottom navigation while scrolling. */
+body.crm-order .bottom-space {
+    height: calc(175px + env(safe-area-inset-bottom, 0px));
+}
+@media (max-width: 380px) {
+    body.crm-order #floatingCartButton {
+        bottom: calc(94px + env(safe-area-inset-bottom, 0px)) !important;
+    }
 }
 
-/* v5: CRM pages must scroll after closing the full-screen profile. */
-body.crm-mode:not(.profile-open) { overflow-y: auto !important; }
-#profilePanel[hidden] { display: none !important; }
-
-/* v7: distinct operational home screens. Existing ordering/profile/routes remain unchanged. */
-.crm-home-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}
-.crm-home-heading h3{font-size:21px;margin:0;color:#1b345b}
-.crm-badge{background:#e8eef9;color:#315c9d;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:700;white-space:nowrap}
-.crm-work-card{background:white;border:1px solid #e4ebf5;border-radius:20px;padding:19px;margin-bottom:14px;box-shadow:0 6px 20px #203f6510}
-.crm-work-top{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#314461;font-weight:700}
-.crm-work-top strong{font-size:23px;color:#183d75}
-.crm-work-card p{font-size:13px;color:#718198;margin:12px 0}
-.crm-progress{height:10px;background:#e8eef7;border-radius:99px;overflow:hidden;margin-top:15px}
-.crm-progress span{display:block;height:100%;width:0;background:#3478c9;border-radius:99px;transition:width .25s ease}
-.crm-action-primary,.crm-main-order{display:block;width:100%;border:0;border-radius:14px;background:#2458a3;color:#fff;padding:15px;font-weight:800;font-size:15px;cursor:pointer}
-.crm-company-card{background:linear-gradient(135deg,#142b59,#305ba5);color:#fff}
-.crm-overline{font-size:12px;opacity:.85}.crm-company-money{display:block;font-size:31px;margin:10px 0}.crm-company-card p{color:#e2ebfa}
-.crm-rep-amount{display:flex;flex-direction:column;gap:6px;background:#eaf0fa;padding:16px;border-radius:16px;margin-top:14px;color:#2a456c}
-.crm-rep-amount strong{font-size:22px}.crm-rep-amount small{color:#6d7c92}
-.crm-main-order{margin-top:20px;background:#1d4f99}
-.crm-home-links{display:flex;gap:10px;margin-top:12px}
-.crm-home-links button{flex:1;background:#fff;border:1px solid #e3eaf3;border-radius:13px;padding:14px 10px;color:#284567;font-weight:700;text-align:left}
-.crm-home-links button span{float:right}
-.crm-home [hidden]{display:none!important}
-
-/* v9: don't float navigation and basket above the mobile soft keyboard. */
-@media (max-width: 799px) {
-  body.crm-keyboard-open #crmBottomNav,
-  body.crm-keyboard-open #floatingCartButton { display: none !important; }
-  body.crm-keyboard-open.crm-mode,
-  body.crm-keyboard-open.crm-order { padding-bottom: 16px !important; }
-  body.crm-keyboard-open .bottom-space { height: 20px !important; }
-}
-
-/* v10: keyboard visibility fallback even when iOS viewport events are unreliable. */
-@media (max-width: 799px), (pointer: coarse) {
-  html.crm-keyboard-open #crmBottomNav,
-  body.crm-keyboard-open #crmBottomNav,
-  html.crm-keyboard-open #floatingCartButton,
-  body.crm-keyboard-open #floatingCartButton,
-  body:has(input:focus) #crmBottomNav,
-  body:has(textarea:focus) #crmBottomNav,
-  body:has([contenteditable]:focus) #crmBottomNav,
-  body:has(input:focus) #floatingCartButton,
-  body:has(textarea:focus) #floatingCartButton,
-  body:has([contenteditable]:focus) #floatingCartButton {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-}
-
-/* v11: cart is a full-screen workflow; CRM tabs must never cover Send Order. */
-body:has(#cartDrawer.show) #crmBottomNav {
-  display: none !important;
-}
-#cartDrawer.cart-drawer {
-  z-index: 2100 !important;
-}
-#cartDrawer .cart-drawer-content {
-  box-sizing: border-box;
-  height: min(92dvh, 92%);
-  max-height: 92dvh;
-  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
-}
-#cartDrawer .drawer-footer {
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-}
-
-/* v12: explicit state set by JS; no reliance on :has() in Telegram WebView. */
-html.crm-cart-open #crmBottomNav,
-body.crm-cart-open #crmBottomNav,
-body.crm-cart-open .crm-bottom-nav { display:none !important; visibility:hidden !important; pointer-events:none !important; }
-body.crm-cart-open #cartDrawer.show { z-index: 9999 !important; }
-body.crm-cart-open #cartDrawer.show .cart-drawer-content {
-  height: min(92dvh, 92%);
-  max-height: 92dvh;
-  box-sizing: border-box;
-  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
-}
-body.crm-cart-open #cartDrawer.show .drawer-footer { flex-shrink:0 !important; }
+/* v14.7: admin is a separate CRM screen, not a control in the order form. */
+#adminButton,#profileButton,.large-text-container{display:none!important}
+#adminPanel[hidden]{display:none!important}
+#adminPanel:not([hidden]){position:fixed!important;inset:0 0 calc(68px + env(safe-area-inset-bottom,0px)) 0!important;z-index:990!important;overflow-y:auto!important;overscroll-behavior:contain;background:var(--tg-theme-bg-color,#f4f7fb)!important;padding:16px 16px 30px!important;box-sizing:border-box!important}
+#adminPanel .admin-panel-header{position:sticky;top:-16px;z-index:2;background:var(--tg-theme-bg-color,#f4f7fb);padding:12px 0 16px;display:flex;align-items:center;justify-content:space-between}
+#adminPanel .admin-panel-header h2{margin:0;font-size:21px}
+#adminPanel .admin-close-button{min-width:40px;min-height:40px}
+body:has(#adminPanel:not([hidden])) #floatingCartButton{display:none!important}
+.crm-bottom-nav .crm-admin-only[hidden]{display:none!important}
+.crm-bottom-nav button{min-width:0;flex:1;padding-left:2px;padding-right:2px}

@@ -146,9 +146,9 @@
 
 
 <button id="openShopCardButton" type="button" class="shop-card-open" hidden>🏪 Інформація про точку</button>
-<section id="shopCardModal" class="shop-card-modal" hidden aria-label="Інформація про торгову точку">
+<section id="shopCardModal" class="shop-card-modal" hidden aria-label="Інформація про торгову точку" role="dialog" aria-modal="true">
   <div class="shop-card-modal-inner">
-    <div class="shop-card-heading"><h2>Торгова точка</h2><button id="closeShopCardButton" type="button">✕</button></div>
+    <div class="shop-card-heading"><span>Картка торгової точки</span><button id="closeShopCardButton" type="button" aria-label="Закрити">✕</button></div>
     <div id="shopCardDetails" aria-live="polite"></div>
   </div>
 </section>

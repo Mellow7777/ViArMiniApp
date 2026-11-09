@@ -8288,14 +8288,11 @@ async function loadAdminRouteReport() {
     const admin = Object.prototype.hasOwnProperty.call(d, "code1C");
     const rawPhone = String(d.phone || "").trim();
     // Only a saved contact number can be dialed; retain one leading + for international calls.
-    const phoneDigits = rawPhone.replace(/\D/g, "");
-    const phone = phoneDigits.length >= 7 && phoneDigits.length <= 15
-      ? (rawPhone.startsWith("+") ? "+" : "") + phoneDigits : "";
+    const phone = normalizePhone(rawPhone);
     const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.address || d.name || "")}`;
     let html = `<div class="sc-hero"><span class="sc-eyebrow">ТОРГОВА ТОЧКА · #${esc(d.id)}</span><h2>${esc(d.name)}</h2><div class="sc-location">📍 ${esc(empty(d.district))} · ${esc(empty(d.address))}</div></div>`;
-    html += `<div class="sc-actions"><${phone ? 'a' : 'button'} class="sc-action${phone ? '' : ' is-disabled'}" ${phone ? `href="tel:${esc(phone)}"` : 'type="button" disabled'}><span>📞</span>Зателефонувати</${phone ? 'a' : 'button'}><a class="sc-action" href="${esc(mapUrl)}" target="_blank" rel="noopener noreferrer"><span>📍</span>На карті</a><button class="sc-action" id="scHistory" type="button"><span>🕘</span>Історія</button></div>`;
-    if (phone) html += `<button type="button" class="sc-action" id="scCopyPhone" style="width:100%;margin:8px 0 0">📋 Скопіювати номер</button>`;
-    html += `<section class="sc-panel"><h3>Контактна інформація</h3>${line("Адреса",d.address,"📍")}${phone ? `<div class="sc-info-row"><span class="sc-row-icon" aria-hidden="true">📞</span><div><small>Телефон</small><a href="tel:${esc(phone)}" style="color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:650">${esc(d.phone)}</a></div></div>` : line("Телефон",d.phone,"📞")}${line("Контактна особа",d.contactPerson,"👤")}${d.note ? line("Коментар",d.note,"📝") : ''}</section>`;
+    html += `<div class="sc-actions"><button type="button" id="scCallCopy" class="sc-action${phone ? '' : ' is-disabled'}" ${phone ? '' : 'disabled'}><span>📞</span>Зателефонувати</button><a class="sc-action" href="${esc(mapUrl)}" target="_blank" rel="noopener noreferrer"><span>📍</span>На карті</a><button class="sc-action" id="scHistory" type="button"><span>🕘</span>Історія</button></div>`;
+    html += `<section class="sc-panel"><h3>Контактна інформація</h3>${line("Адреса",d.address,"📍")}${phone ? `<div class="sc-info-row"><span class="sc-row-icon" aria-hidden="true">📞</span><div><small>Телефон</small><button type="button" id="scPhoneCopy" style="border:0;background:transparent;padding:0;color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:650;font:inherit;cursor:pointer">${esc(d.phone)}</button></div></div>` : line("Телефон",d.phone,"📞")}${line("Контактна особа",d.contactPerson,"👤")}${d.note ? line("Коментар",d.note,"📝") : ''}</section>`;
     html += `<div class="sc-stats"><div><small>Усього замовлень</small><strong>${esc(d.orderCount ?? 0)}</strong></div><div><small>Останнє замовлення</small><strong class="sc-date">${esc(formatDate(d.lastOrder))}</strong></div></div>`;
     if (admin) {
       html += `<section class="sc-panel sc-admin"><div class="sc-panel-head"><h3>Для адміністратора</h3><span>🛡️</span></div><div class="sc-tabs" role="tablist"><button type="button" data-sc-tab="analytics" class="${activeTab === 'analytics' ? 'active' : ''}">Аналітика</button><button type="button" data-sc-tab="data" class="${activeTab === 'data' ? 'active' : ''}">Дані 1С</button></div>`;
@@ -8309,16 +8306,34 @@ async function loadAdminRouteReport() {
     details.innerHTML = html;
     details.querySelectorAll('[data-sc-tab]').forEach(button => button.addEventListener('click', () => { activeTab = button.dataset.scTab; render(); }));
     details.querySelector('#scHistory')?.addEventListener('click', () => { dismiss(); document.getElementById('historyButton')?.click(); });
-    details.querySelector('#scCopyPhone')?.addEventListener('click', async () => {
+    const showCopyToast = (message) => {
+      let toast = document.getElementById('scCopyToast');
+      if (!toast) {
+        toast = document.createElement('div'); toast.id = 'scCopyToast';
+        toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite');
+        Object.assign(toast.style, {position:'fixed',bottom:'max(24px, env(safe-area-inset-bottom))',left:'50%',transform:'translateX(-50%)',background:'#202b38',color:'#fff',padding:'11px 18px',borderRadius:'12px',boxShadow:'0 6px 24px #0004',fontSize:'14px',fontWeight:'600',zIndex:'2147483647',maxWidth:'90vw',textAlign:'center',pointerEvents:'none',transition:'opacity .2s'});
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message; toast.style.opacity = '1';
+      clearTimeout(showCopyToast.timer);
+      showCopyToast.timer = setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+    };
+    const copyNumber = async () => {
+      if (!phone) return;
       try {
         if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(phone);
-        else { const input = document.createElement('textarea'); input.value = phone; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.select(); if (!document.execCommand('copy')) throw new Error('copy'); input.remove(); }
-        window.Telegram?.WebApp?.showAlert?.('Номер скопійовано: ' + phone);
-      } catch (_) { window.Telegram?.WebApp?.showAlert?.('Номер: ' + phone + '. Скопіюйте його вручну.'); }
-    });
-    // Let the native tel: anchor handle the tap. Preventing its default action
-    // and assigning location.href is unreliable in Telegram's iOS WebView.
-    // Do not call Telegram.WebApp.openLink here: it only supports HTTP(S) URLs.
+        else {
+          const input = document.createElement('textarea'); input.value = phone;
+          Object.assign(input.style,{position:'fixed',opacity:'0',left:'-9999px'});
+          document.body.appendChild(input); input.focus(); input.select();
+          const ok = document.execCommand('copy'); input.remove();
+          if (!ok) throw new Error('copy');
+        }
+        showCopyToast('✓ Номер скопійовано');
+      } catch (_) { showCopyToast('Не вдалося скопіювати номер'); }
+    };
+    details.querySelector('#scCallCopy')?.addEventListener('click', copyNumber);
+    details.querySelector('#scPhoneCopy')?.addEventListener('click', copyNumber);
 
   }
   open.addEventListener('click', async () => {

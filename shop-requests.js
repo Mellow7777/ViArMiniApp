@@ -98,13 +98,25 @@
       search.addEventListener('input',draw);draw();
     } catch(e) {content.textContent=e.message;}
   }
-  function editShop(shop) {
+  async function editShop(shop) {
     if (!shop) return;
+    // Contacts are stored separately in ShopContacts and loaded via the existing admin-protected card API.
+    let contact = {phone:'', contactPerson:'', note:''};
+    content.textContent = 'Завантажуємо дані точки…';
+    try {
+      contact = await request(`/api/crm/shop-card/${shop.id}`);
+    } catch (err) {
+      content.textContent = `Не вдалося завантажити контакти: ${err.message}`;
+      return; // Never show blank contact inputs that could overwrite existing data.
+    }
     content.innerHTML=`<button type="button" id="shopEditBack">← До списку</button><h3>Точка №${shop.id}</h3>
       <form id="shopEditForm">
       <label>Назва<input name="name" maxlength="150" minlength="2" required value="${escapeHtml(shop.name)}"></label>
       <label>Адреса<input name="address" maxlength="250" minlength="5" required value="${escapeHtml(shop.address)}"></label>
       <label>Район<input name="district" maxlength="100" value="${escapeHtml(shop.district)}"></label>
+      <label>Телефон<input type="tel" name="phone" maxlength="40" value="${escapeHtml(contact.phone)}" placeholder="+380..."></label>
+      <label>Контактна особа<input name="contactPerson" maxlength="120" value="${escapeHtml(contact.contactPerson)}" placeholder="Ім’я та прізвище"></label>
+      <label>Коментар для точки<textarea name="note" maxlength="1000" rows="3" placeholder="Інформація для торгового">${escapeHtml(contact.note)}</textarea></label>
       <label>Тип ціни<select name="priceType"><option value="Розница" ${shop.priceType!=='Опт'?'selected':''}>Розница</option><option value="Опт" ${shop.priceType==='Опт'?'selected':''}>Опт</option></select></label>
       <label>Код торгової точки в 1С<input name="code1C" maxlength="80" value="${escapeHtml(shop.code1C)}" placeholder="Код з 1С"></label>
       <label><input name="isActive" type="checkbox" ${shop.isActive?'checked':''}> Активна точка</label>
@@ -114,8 +126,15 @@
     form.addEventListener('submit',async e=>{
       e.preventDefault();const btn=form.querySelector('[type=submit]');btn.disabled=true;
       const data=Object.fromEntries(new FormData(form));data.isActive=form.elements.isActive.checked;
-      try {await request(`/api/crm/shops/${shop.id}`,'PUT',data);
-        content.querySelector('#shopEditMessage').textContent='Збережено';
+      const contacts={phone:data.phone,contactPerson:data.contactPerson,note:data.note};
+      delete data.phone;delete data.contactPerson;delete data.note;
+      const message=content.querySelector('#shopEditMessage');
+      try {
+        // Save contacts first. If the second request fails, tell the admin about partial saving.
+        await request(`/api/crm/shop-card/${shop.id}/contact`,'PUT',contacts);
+        try { await request(`/api/crm/shops/${shop.id}`,'PUT',data); }
+        catch (err) {throw new Error(`Контакти збережено, але інші дані точки — ні: ${err.message}`);}
+        message.textContent='Усі зміни збережено';
         if(typeof loadShops==='function') await loadShops();
       } catch(err) {content.querySelector('#shopEditMessage').textContent=err.message;}
       finally {btn.disabled=false;}

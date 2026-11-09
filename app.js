@@ -308,10 +308,7 @@ async function initializeApp() {
             );
         });
 
-    const largeTextEnabled =
-        localStorage.getItem(
-            "viar-large-text"
-        ) === "1";
+    const largeTextEnabled = false;
 
     if (largeTextEnabled) {
         document.body.classList.add(
@@ -894,8 +891,7 @@ function initializeAdminAccess() {
             telegramId
         );
 
-    adminButton.hidden =
-        !isAdmin;
+    adminButton.hidden = true; // CRM admin page is accessed through navigation only.
 }
 
 async function loadShops() {

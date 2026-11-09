@@ -41,3 +41,43 @@ body.crm-order .bottom-space {
 body:has(#adminPanel:not([hidden])) #floatingCartButton{display:none!important}
 .crm-bottom-nav .crm-admin-only[hidden]{display:none!important}
 .crm-bottom-nav button{min-width:0;flex:1;padding-left:2px;padding-right:2px}
+
+/* v14.8 — dashboard layout repair, scoped to CRM home */
+#crmHome {display:block;max-width:720px;margin:0 auto;padding:25px 18px 115px;color:#18243a}
+#crmHome[hidden] {display:none!important}
+#crmHome .crm-hello {margin-bottom:24px}
+#crmHome .crm-hello h2 {font-size:clamp(25px,6vw,32px);letter-spacing:-.7px;font-weight:800;margin:11px 0 8px}
+#crmHome .crm-hello p {font-size:14px;color:#74839a;margin:0}
+#crmHome .crm-home-heading {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+#crmHome .crm-home-heading h3 {font-size:19px;line-height:1.3;margin:0;font-weight:800}
+#crmHome .crm-badge {font-size:11px;font-weight:700;color:#315b9a;background:#e5eefc;border-radius:999px;padding:7px 10px;white-space:nowrap}
+#crmHome .crm-work-card {background:#fff;border:1px solid #e2e9f3;border-radius:20px;padding:20px;box-shadow:0 8px 25px rgba(35,63,110,.05);margin:0 0 14px}
+#crmHome .crm-work-card[hidden],#crmHome .crm-rep-amount[hidden] {display:none!important}
+#crmHome .crm-work-top {display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:700}
+#crmHome .crm-work-top strong {font-size:21px;color:#2459a9}
+#crmHome .crm-progress {height:9px;overflow:hidden;border-radius:99px;background:#e8eff8;margin:17px 0 12px}
+#crmHome .crm-progress span {display:block;height:100%;background:#3478e3;border-radius:99px;transition:width .25s}
+#crmHome .crm-work-card p {font-size:13px;line-height:1.5;color:#738198;margin:10px 0}
+#crmHome .crm-action-primary {width:100%;display:block;border:0;background:#eaf2ff;color:#2459a9;border-radius:13px;padding:14px 16px;font-weight:750;margin-top:15px;text-align:center}
+#crmHome .crm-company-card {background:linear-gradient(135deg,#1d3768,#305ba3);color:white;border:0;padding:22px}
+#crmHome .crm-company-card .crm-overline {display:block;font-size:13px;color:#dce8ff;font-weight:650}
+#crmHome .crm-company-money {display:block;font-size:clamp(29px,8vw,40px);letter-spacing:-1px;margin:12px 0 6px;color:#fff;overflow-wrap:anywhere}
+#crmHome .crm-company-card p {color:#dbe5f7;font-size:12px;margin:0}
+#crmHome .crm-stats {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+#crmHome .crm-stats>div {min-width:0;min-height:116px;padding:17px;border-radius:18px;border:1px solid #e3eaf3;background:white;box-shadow:0 6px 20px rgba(35,63,110,.035)}
+#crmHome .crm-stats span {font-size:12px;line-height:1.45;color:#72819a}
+#crmHome .crm-stats strong {font-size:29px;line-height:1.1;color:#1b3764}
+#crmHome .crm-rep-amount {background:#fff;border:1px solid #e3eaf3;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px}
+#crmHome .crm-rep-amount span {font-size:13px;color:#718198}
+#crmHome .crm-rep-amount strong {font-size:28px;color:#1b3764}
+#crmHome .crm-rep-amount small {color:#718198}
+#crmHome .crm-data-status {font-size:11px;line-height:1.5;margin:12px 2px 20px;color:#8290a5}
+#crmHome .crm-main-order {display:block;width:100%;min-height:54px;background:#2563c5;color:#fff;border:0;border-radius:15px;padding:15px 18px;font-size:16px;font-weight:750;text-align:center;box-shadow:0 8px 18px rgba(37,99,197,.18)}
+#crmHome .crm-home-links {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:12px}
+#crmHome .crm-home-links button {min-width:0;min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:12px;border:1px solid #e3eaf3;border-radius:15px;background:#fff;color:#253d60;font-size:13px;font-weight:700;text-align:left;white-space:normal;line-height:1.3}
+#crmHome .crm-home-links button[hidden] {display:none!important}
+#crmHome .crm-home-links button span {flex-shrink:0;color:#6b83a7}
+.crm-bottom-nav {gap:3px}
+.crm-bottom-nav button {flex:1;min-width:0;min-height:50px;font-size:23px}
+.crm-bottom-nav button small {font-size:11px}
+@media(max-width:350px){#crmHome .crm-home-links{grid-template-columns:1fr}}

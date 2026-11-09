@@ -28,6 +28,7 @@
   if(page==='admin'&&!isAdmin)return;
   // Profile is a full-screen overlay. Close it before changing CRM pages.
   if(page!=='profile')closeProfileOnNavigation();
+  if(page!=='admin')document.getElementById('closeAdminButton')?.click();
   if(page!=='route')closeRouteOnNavigation();
   document.body.classList.toggle('crm-order',page==='order'||page==='route'||page==='profile'||page==='admin');
   document.body.classList.toggle('crm-mode',page==='home'||page==='menu');
@@ -39,7 +40,10 @@
    document.getElementById('myRouteButton')?.scrollIntoView({block:'start'});
   }
   if(page==='profile')document.getElementById('profileButton')?.click();
-  if(page==='admin')adminButton?.click();
+  if(page==='admin'){
+   adminButton?.click();
+   window.scrollTo({top:0,left:0,behavior:'instant'});
+  }
   if(page==='home'||page==='menu'){
    // The old profile CSS locks body scrolling; restore it after navigation.
    document.body.classList.remove('profile-open');
@@ -51,6 +55,10 @@
   if(page==='home')loadDashboard();
  }
  document.querySelectorAll('[data-crm-go]').forEach(button=>button.addEventListener('click',()=>go(button.dataset.crmGo)));
+ document.getElementById('closeAdminButton')?.addEventListener('click',()=>go('menu'));
+ // Keep the legacy admin/profile trigger buttons for app.js, but out of the order screen.
+ adminButton?.setAttribute('aria-hidden','true');
+ document.getElementById('profileButton')?.setAttribute('aria-hidden','true');
  async function loadDashboard(){
   const status=document.getElementById('crmDataStatus');
   status.textContent='Оновлюємо показники…';

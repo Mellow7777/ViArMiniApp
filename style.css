@@ -4184,3 +4184,17 @@ body.priority-drawer-open {
 .admin-route-timeline-content strong { display:block; margin-bottom:5px; }
 .admin-route-timeline-note { font-size:13px; color:var(--tg-theme-hint-color,#778); margin:12px 0; }
 #adminRouteListView[hidden],#adminRouteTimelineView[hidden],#adminRouteListControls[hidden] { display:none!important; }
+
+/* ViAr CRM v14 shop card */
+.shop-card-open {width:100%;margin:10px 0;padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--tg-theme-secondary-bg-color,#fff);color:var(--tg-theme-text-color,#222);font-weight:700}
+.shop-card-modal[hidden] {display:none!important}
+.shop-card-modal {position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.58);display:flex;align-items:flex-end;justify-content:center}
+.shop-card-modal-inner {width:100%;max-width:700px;max-height:90dvh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px;background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#222)}
+.shop-card-heading {display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.shop-card-heading button {width:38px;height:38px;border:0;border-radius:10px;background:var(--tg-theme-secondary-bg-color,#eee)}
+.shop-card-field {padding:10px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;overflow-wrap:anywhere}
+.shop-card-field small,.shop-card-note {color:var(--tg-theme-hint-color,#777)}
+.shop-card-modal h3 {margin:18px 0 10px}
+.shop-card-call,#shopContactForm button {display:block;text-align:center;width:100%;padding:12px;margin-top:14px;border:0;border-radius:12px;background:var(--primary);color:white;text-decoration:none;font-weight:700}
+#shopContactForm label {display:block;margin:10px 0;font-size:13px}
+#shopContactForm input,#shopContactForm textarea {display:block;width:100%;margin-top:5px}

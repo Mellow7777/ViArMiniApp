@@ -1,4 +1,4 @@
-"use strict";
+ "use strict";
 
 const telegram = window.Telegram?.WebApp;
 
@@ -8292,29 +8292,12 @@ async function loadAdminRouteReport() {
       } else {
         html += `<div class="sc-data-line"><span>Код 1С</span><strong>${esc(empty(d.code1C))}</strong></div><div class="sc-data-line"><span>Тип ціни</span><strong>${esc(empty(d.priceType))}</strong></div>`;
       }
-      html += `</section><button id="scEdit" class="sc-edit-btn" type="button">✎ Редагувати контакти</button>`;
+      html += `</section><p class="sc-muted">Контакти редагуються в адмінці: Керування → Торгові точки.</p>`;
     }
     details.innerHTML = html;
     details.querySelectorAll('[data-sc-tab]').forEach(button => button.addEventListener('click', () => { activeTab = button.dataset.scTab; render(); }));
     details.querySelector('#scHistory')?.addEventListener('click', () => { dismiss(); document.getElementById('historyButton')?.click(); });
-    details.querySelector('#scEdit')?.addEventListener('click', renderEditor);
-  }
-  function renderEditor() {
-    if (!cardData || !Object.prototype.hasOwnProperty.call(cardData, 'code1C')) return;
-    const d = cardData;
-    details.innerHTML = `<div class="sc-edit-header"><button type="button" id="scBack">← Назад</button><h2>Редагування контактів</h2><p>${esc(d.name)}</p></div><form id="scContactForm" class="sc-form"><label>Телефон<input type="tel" name="phone" maxlength="40" value="${esc(d.phone)}" placeholder="+380..."></label><label>Контактна особа<input name="contactPerson" maxlength="120" value="${esc(d.contactPerson)}" placeholder="Ім’я контактної особи"></label><label>Коментар<textarea name="note" maxlength="1000" placeholder="Важлива інформація про точку">${esc(d.note)}</textarea></label><p id="scSaveStatus" role="status"></p><button class="sc-edit-btn" type="submit">Зберегти зміни</button></form>`;
-    details.querySelector('#scBack').addEventListener('click', render);
-    details.querySelector('#scContactForm').addEventListener('submit', async event => {
-      event.preventDefault(); const form = event.currentTarget;
-      const button = form.querySelector('button[type=submit]'); const status = form.querySelector('#scSaveStatus');
-      button.disabled = true; status.textContent = 'Збереження…';
-      const payload = Object.fromEntries(new FormData(form).entries());
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/crm/shop-card/${d.id}/contact`, {method:'PUT',headers:{'Content-Type':'application/json','X-Telegram-Init-Data':window.Telegram?.WebApp?.initData || ''},body:JSON.stringify(payload)});
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        Object.assign(cardData, payload); render();
-      } catch (error) { status.textContent = `Не вдалося зберегти: ${error.message}`; button.disabled = false; }
-    });
+
   }
   open.addEventListener('click', async () => {
     const shop = getSelectedShop(); if (!shop) return;

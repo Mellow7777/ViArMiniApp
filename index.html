@@ -10,7 +10,7 @@
 
     <title>Заказ продукции</title>
 
-   <link rel="stylesheet" href="style.css?v=257">
+   <link rel="stylesheet" href="style.css?v=280">
 
     <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -144,6 +144,14 @@
     </button>
 </div>
 
+
+<button id="openShopCardButton" type="button" class="shop-card-open" hidden>🏪 Інформація про точку</button>
+<section id="shopCardModal" class="shop-card-modal" hidden aria-label="Інформація про торгову точку">
+  <div class="shop-card-modal-inner">
+    <div class="shop-card-heading"><h2>Торгова точка</h2><button id="closeShopCardButton" type="button">✕</button></div>
+    <div id="shopCardDetails" aria-live="polite"></div>
+  </div>
+</section>
 
 <!-- История -->
 <button
@@ -868,7 +876,7 @@
         </div>
     </form>
 </div>
-<script src="app.js?v=266"></script>
+<script src="app.js?v=280"></script>
 <nav id="crmBottomNav" class="crm-bottom-nav" aria-label="Навігація CRM"><button type="button" data-crm-go="home" class="active">⌂<small>Головна</small></button><button type="button" data-crm-go="order">▣<small>Замовлення</small></button><button type="button" data-crm-go="route">◇<small>Маршрут</small></button><button type="button" data-crm-go="menu">☰<small>Меню</small></button></nav>
 <link rel="stylesheet" href="crm.css?v=12">
 <script src="crm.js?v=12"></script>

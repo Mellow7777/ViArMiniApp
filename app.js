@@ -1169,6 +1169,7 @@ recalculateCartPrices();
 // Обновляем цены в каталоге
 renderProducts();
 
+    document.getElementById("openShopCardButton")?.removeAttribute("hidden");
     triggerHaptic("success");
 }
 
@@ -1197,6 +1198,7 @@ function clearSelectedShop() {
     const shopSearchResults =
         document.getElementById("shopSearchResults");
 
+    document.getElementById("openShopCardButton")?.setAttribute("hidden", "");
     // Убираем выбранную точку
     if (selectedShopId) {
         selectedShopId.value = "";
@@ -8254,3 +8256,56 @@ async function loadAdminRouteReport() {
         button.disabled = false;
     }
 }
+
+// ViAr CRM v14: server-filtered shop details. Never read internal shop fields from local JSON.
+(function initializeShopCardV14() {
+  const open = document.getElementById("openShopCardButton");
+  const modal = document.getElementById("shopCardModal");
+  const close = document.getElementById("closeShopCardButton");
+  const details = document.getElementById("shopCardDetails");
+  if (!open || !modal || !details) return;
+  close?.addEventListener("click", () => { modal.hidden = true; });
+  modal.addEventListener("click", e => { if (e.target === modal) modal.hidden = true; });
+  const e = value => escapeHtml(String(value ?? ""));
+  const row = (label, value) => `<div class="shop-card-field"><small>${e(label)}</small><strong>${e(value || "Не вказано")}</strong></div>`;
+  const money = v => `${Number(v || 0).toLocaleString("uk-UA", {maximumFractionDigits:2})} ₴`;
+  async function fetchCard(id) {
+    const initData = window.Telegram?.WebApp?.initData || "";
+    if (!initData) throw new Error("Відкрийте CRM через Telegram");
+    const response = await fetch(`${API_BASE_URL}/api/crm/shop-card/${id}`, {cache:"no-store",headers:{"X-Telegram-Init-Data":initData}});
+    if (!response.ok) throw new Error(`Не вдалося завантажити точку (${response.status})`);
+    return await response.json();
+  }
+  open.addEventListener("click", async () => {
+    const shop = getSelectedShop(); if (!shop) return;
+    modal.hidden = false; details.textContent = "Завантаження…";
+    try {
+      const data = await fetchCard(Number(shop.id));
+      const isAdminCard = Object.prototype.hasOwnProperty.call(data,"code1C");
+      let html = row("Назва",data.name) + row("Адреса",data.address) + row("Район",data.district)
+        + row("Телефон",data.phone) + row("Контактна особа",data.contactPerson)
+        + row("Коментар",data.note) + row("Замовлень за весь час",data.orderCount)
+        + row("Останнє замовлення",data.lastOrder ? new Date(data.lastOrder).toLocaleString("uk-UA") : "Ще немає");
+      if (data.phone) html += `<a class="shop-card-call" href="tel:${encodeURIComponent(data.phone.replace(/[^+0-9]/g,""))}">📞 Зателефонувати</a>`;
+      if (isAdminCard) {
+        html += `<h3>Тільки для адміністратора</h3>` + row("Код 1С",data.code1C)
+          + row("Тип ціни",data.priceType) + row("Завершених продажів за 30 днів",data.completedCount30)
+          + row("Виручка за 30 днів",money(data.revenue30)) + row("Прибуток за 30 днів",money(data.profit30));
+        html += `<p class="shop-card-note">Фінансові показники зіставляються за кодом 1С. Якщо код не прив'язаний, суми можуть бути неповними.</p>`;
+        html += `<form id="shopContactForm"><h3>Редагування контактів</h3><label>Телефон<input name="phone" maxlength="40" value="${e(data.phone)}"></label><label>Контактна особа<input name="contactPerson" maxlength="120" value="${e(data.contactPerson)}"></label><label>Коментар<textarea name="note" maxlength="1000">${e(data.note)}</textarea></label><button type="submit">Зберегти контакти</button><p id="shopContactStatus"></p></form>`;
+      }
+      details.innerHTML = html;
+      details.querySelector("#shopContactForm")?.addEventListener("submit", async event => {
+        event.preventDefault(); const form=event.currentTarget; const status=form.querySelector("#shopContactStatus");
+        const payload=Object.fromEntries(new FormData(form).entries()); status.textContent="Збереження…";
+        try {
+          const response=await fetch(`${API_BASE_URL}/api/crm/shop-card/${data.id}/contact`,{method:"PUT",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":window.Telegram.WebApp.initData},body:JSON.stringify(payload)});
+          if(!response.ok) throw new Error(`HTTP ${response.status}`);
+          status.textContent="Контакти збережено";
+        } catch(error) { status.textContent=`Помилка: ${error.message}`; }
+      });
+    } catch (error) { details.textContent = error.message; }
+  });
+  const update = () => { open.hidden = !getSelectedShop(); };
+  setTimeout(update, 0);
+})();

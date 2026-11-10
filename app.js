@@ -4,7 +4,6 @@ const telegram = window.Telegram?.WebApp;
 
 let products = [];
 let shops = [];
-let specialPrices = [];
 let priorityProducts = [];
 
 const API_BASE_URL =
@@ -286,7 +285,6 @@ async function initializeApp() {
     await Promise.all([
     loadProducts(),
     loadShops(),
-    loadSpecialPrices(),
     loadPriorityProducts()
 ]);
     restoreSelectedShop();
@@ -562,6 +560,9 @@ async function loadProducts() {
             price:
                 Number(product.price || 0),
 
+            smallWholesalePrice:
+                Number(product.smallWholesalePrice || 0),
+
             approximateWeightPerPiece:
                 Number(
                     product.approximateWeightPerPiece || 0
@@ -596,110 +597,6 @@ async function loadProducts() {
     }
 }
 
-async function loadSpecialPrices() {
-    try {
-        const response = await fetch(
-            `./special_prices.json?v=${Date.now()}`,
-            {
-                cache: "no-store"
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                `Ошибка загрузки спеццен: ${response.status}`
-            );
-        }
-
-        const loadedSpecialPrices =
-            await response.json();
-
-        if (!Array.isArray(loadedSpecialPrices)) {
-            throw new Error(
-                "special_prices.json должен содержать массив"
-            );
-        }
-
-        specialPrices =
-            loadedSpecialPrices.map(item => ({
-                shopArticle:
-                    String(
-                        item.shopArticle ||
-                        item.ShopArticle ||
-                        ""
-                    ).trim(),
-
-                productArticle:
-                    String(
-                        item.productArticle ||
-                        item.ProductArticle ||
-                        ""
-                    ).trim(),
-
-                price:
-                    Number(
-                        item.price ??
-                        item.Price ??
-                        0
-                    )
-            }));
-
-        console.log(
-            `Загружено спеццен: ${specialPrices.length}`
-        );
-
-        console.log(
-            "Первая спеццена:",
-            specialPrices[0]
-        );
-    }
-    catch (error) {
-        console.error(
-            "Ошибка загрузки спеццен:",
-            error
-        );
-
-        specialPrices = [];
-    }
-}
-
-function getSpecialPrice(
-    shopId,
-    productArticle
-) {
-    if (!shopId || !productArticle) {
-        return null;
-    }
-
-    const shopKey =
-        String(shopId).trim();
-
-    const productKey =
-        String(productArticle).trim();
-
-    const specialPrice =
-        specialPrices.find(item =>
-            String(item.shopArticle).trim() ===
-                shopKey &&
-            String(item.productArticle).trim() ===
-                productKey
-        );
-
-    if (!specialPrice) {
-        return null;
-    }
-
-    const price =
-        Number(specialPrice.price);
-
-    if (!Number.isFinite(price) ||
-        price <= 0) {
-        return null;
-    }
-
-    return price;
-}
-
 function getSelectedShop() {
     const selectedShopIdElement =
         document.getElementById(
@@ -732,61 +629,16 @@ function getSelectedShop() {
 }
 
 function getProductPrice(product) {
-    if (!product) {
-        return 0;
-    }
-
-    const retailPrice =
-        Number(product.price || 0);
-
-    const wholesalePrice =
-        Number(
-            product.wholesalePrice || 0
-        );
-
-    const selectedShop =
-        getSelectedShop();
-
-
-    // Если точка не выбрана —
-    // показываем обычную розничную цену
-    if (!selectedShop) {
-        return retailPrice;
-    }
-
-    // 1. Сначала проверяем спеццену
-    const specialPrice =
-        getSpecialPrice(
-            selectedShop.id,
-            product.article
-        );
-
-    if (specialPrice !== null) {
-        return specialPrice;
-    }
-
-    // 2. Если спеццены нет —
-    // проверяем тип цены точки
-    const priceType =
-        String(
-            selectedShop.priceType || "Розница"
-        )
-            .trim()
-            .toLowerCase();
-
-    if (priceType === "опт") {
-        // Если вдруг оптовая цена
-        // у товара не заполнена,
-        // не отдаём 0, а используем розницу
-        if (
-            Number.isFinite(wholesalePrice) &&
-            wholesalePrice > 0
-        ) {
-            return wholesalePrice;
-        }
-    }
-
-    // 3. Всё остальное — розница
+    if (!product) return 0;
+    const retailPrice = Number(product.price) || 0;
+    const wholesalePrice = Number(product.wholesalePrice) || 0;
+    const smallWholesalePrice = Number(product.smallWholesalePrice) || 0;
+    const priceType = String(getSelectedShop()?.priceType || "Розница")
+        .trim().toLowerCase().replace(/\s+/g, " ");
+    // Never sell at zero if a tier has not yet been populated in Excel.
+    if (priceType === "опт" && wholesalePrice > 0) return wholesalePrice;
+    if (["мелкий опт", "мелкоопт", "дрібний опт", "дрібний гурт"].includes(priceType)
+        && smallWholesalePrice > 0) return smallWholesalePrice;
     return retailPrice;
 }
 

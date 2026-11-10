@@ -117,7 +117,7 @@
       <label>Телефон<input type="tel" name="phone" maxlength="40" value="${escapeHtml(contact.phone)}" placeholder="+380..."></label>
       <label>Контактна особа<input name="contactPerson" maxlength="120" value="${escapeHtml(contact.contactPerson)}" placeholder="Ім’я та прізвище"></label>
       <label>Коментар для точки<textarea name="note" maxlength="1000" rows="3" placeholder="Інформація для торгового">${escapeHtml(contact.note)}</textarea></label>
-      <label>Тип ціни<select name="priceType"><option value="Розница" ${shop.priceType!=='Опт'?'selected':''}>Розница</option><option value="Опт" ${shop.priceType==='Опт'?'selected':''}>Опт</option></select></label>
+      <label>Тип ціни<select name="priceType"><option value="Розница" ${!(["Опт","Мелкий опт"].includes(shop.priceType))?"selected":""}>Розница</option><option value="Мелкий опт" ${shop.priceType==="Мелкий опт"?"selected":""}>Мелкий опт</option><option value="Опт" ${shop.priceType==="Опт"?"selected":""}>Опт</option></select></label>
       <label>Код торгової точки в 1С<input name="code1C" maxlength="80" value="${escapeHtml(shop.code1C)}" placeholder="Код з 1С"></label>
       <label><input name="isActive" type="checkbox" ${shop.isActive?'checked':''}> Активна точка</label>
       <button type="submit">Зберегти зміни</button><p id="shopEditMessage" role="status"></p></form>`;

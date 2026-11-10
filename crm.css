@@ -81,3 +81,10 @@ body:has(#adminPanel:not([hidden])) #floatingCartButton{display:none!important}
 .crm-bottom-nav button {flex:1;min-width:0;min-height:50px;font-size:23px}
 .crm-bottom-nav button small {font-size:11px}
 @media(max-width:350px){#crmHome .crm-home-links{grid-template-columns:1fr}}
+
+/* v301: prevent the order shop search from overlaying the admin screen.
+   Do not hide .shop-picker: #adminPanel is nested inside it. */
+body:has(#adminPanel:not([hidden])) .shop-picker > .shop-search-wrapper,
+body:has(#adminPanel:not([hidden])) .shop-picker > #shopSearchResults {
+    display: none !important;
+}

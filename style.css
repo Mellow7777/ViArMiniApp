@@ -4216,3 +4216,13 @@ body.shop-profile-open .sticky-top-panel {display:none!important}
 .sc-stats {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.sc-stats>div {border:1px solid var(--border);border-radius:15px;background:var(--tg-theme-secondary-bg-color,#fff);padding:15px;min-width:0}.sc-stats strong {font-size:25px;display:block;overflow-wrap:anywhere}.sc-stats strong.sc-date {font-size:16px;margin-top:6px}
 .sc-panel-head {display:flex;align-items:center;justify-content:space-between}.sc-tabs {display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;border-radius:12px;background:var(--tg-theme-bg-color,#f3f4f6);margin-bottom:15px}.sc-tabs button {height:38px;border:0;border-radius:9px;background:transparent;color:var(--tg-theme-hint-color,#777);font-size:13px;font-weight:700}.sc-tabs button.active {background:var(--tg-theme-secondary-bg-color,#fff);color:var(--tg-theme-text-color,#222);box-shadow:0 1px 5px #0001}.sc-finance {display:grid;grid-template-columns:1fr 1fr;gap:12px}.sc-finance strong {font-size:19px;overflow-wrap:anywhere}.sc-muted {font-size:12px;line-height:1.5;color:var(--tg-theme-hint-color,#777);margin-top:14px}.sc-data-line {display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px}.sc-data-line:last-child {border:0}.sc-data-line span {color:var(--tg-theme-hint-color,#777)}
 .sc-edit-btn {display:block;width:100%;min-height:48px;padding:12px;border:0;border-radius:13px;background:var(--primary,#2d8cff);color:#fff;font-size:14px;font-weight:750;margin:12px 0 20px}.sc-edit-header {padding:10px 0 20px}.sc-edit-header>button {width:auto;padding:10px 0;border:0;background:transparent;color:var(--primary);font-weight:700}.sc-edit-header h2 {font-size:22px;margin:12px 0 5px}.sc-edit-header p {color:var(--tg-theme-hint-color,#777);font-size:13px}.sc-form {padding:18px;border:1px solid var(--border);border-radius:17px;background:var(--tg-theme-secondary-bg-color,#fff)}.sc-form label {display:block;margin-bottom:16px;font-size:13px;font-weight:650}.sc-form input,.sc-form textarea {display:block;width:100%;margin-top:7px;background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#222)}.sc-form textarea {min-height:110px}.sc-form button:disabled {opacity:.6}.sc-loading,.sc-error {padding:35px 10px;text-align:center;color:var(--tg-theme-hint-color,#777)}
+
+
+/* ViAr CRM v301: hide fixed navigation while the mobile keyboard is active.
+   crm.js already toggles crm-keyboard-open on html/body. */
+html.crm-keyboard-open #crmBottomNav,
+body.crm-keyboard-open #crmBottomNav,
+html.crm-keyboard-open #floatingCartButton,
+body.crm-keyboard-open #floatingCartButton {
+    display: none !important;
+}
